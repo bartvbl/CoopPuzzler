@@ -21,6 +21,7 @@ public class PuzzleLoader {
 		}
 		return null;
 	}
+	
 	private static PuzzleField[][] loadFile(String src) throws IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(src));
@@ -40,6 +41,7 @@ public class PuzzleLoader {
 		
 		return parsePuzzleTable(board, rows, columns);
 	}
+	
 	private static PuzzleField[][] parsePuzzleTable(char[][] board, int rows, int columns)
 	{
 		char fieldChar;
@@ -50,15 +52,54 @@ public class PuzzleLoader {
 		{
 			for(int column = 0; column < columns; column++)
 			{
+				fieldChar = board[row][column];
 				if(fieldChar == '*')
 				{
 					puzzle[row][column] = new PuzzleField(true, -1);
 				} else if (fieldChar == ' ')
 				{
-					boolean isReferencedField = false;
-					puzzle[row][column] = new PuzzleField(false, )
+					if(locationHasReference(board, row, column))
+					{
+						puzzle[row][column] = new PuzzleField(false, referenceID);
+						referenceID++;
+					} else {
+						puzzle[row][column] = new PuzzleField(false, -1);
+					}
 				}
 			}
+		}
+		return puzzle;
+	}
+	
+	private static boolean locationHasReference(char[][] board, int row, int column) {
+		boolean north = fieldIsFree(board, row - 1, column);
+		boolean east = fieldIsFree(board, row, column + 1);
+		boolean south = fieldIsFree(board, row + 1, column);
+		boolean west = fieldIsFree(board, row, column - 1);
+		if((north && !south) || (east && !west))
+		{
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private static boolean fieldIsFree(char[][] board, int row, int column)
+	{
+		if(row < 0)
+		{
+			return false;
+		} else if(row >= board.length)
+		{
+			return false;
+		} else if (column < 0)
+		{
+			return false;
+		} else if (column >= board[0].length)
+		{
+			return false;
+		} else {
+			return true;
 		}
 	}
 }
