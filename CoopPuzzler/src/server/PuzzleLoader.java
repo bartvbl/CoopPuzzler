@@ -58,7 +58,7 @@ public class PuzzleLoader {
 					puzzle[row][column] = new PuzzleField(true, -1);
 				} else if (fieldChar == ' ')
 				{
-					if(locationHasReference(board, row, column))
+					if(fieldHasReference(board, row, column))
 					{
 						puzzle[row][column] = new PuzzleField(false, referenceID);
 						referenceID++;
@@ -70,26 +70,21 @@ public class PuzzleLoader {
 		}
 		return puzzle;
 	}
-	
-	private static boolean locationHasReference(char[][] board, int row, int column) {
-		boolean north = fieldIsFree(board, row - 1, column);
-		boolean east = fieldIsFree(board, row, column + 1);
-		boolean south = fieldIsFree(board, row + 1, column);
-		boolean west = fieldIsFree(board, row, column - 1);
-		if((north && !south) || (east && !west))
-		{
-			return true;
-		} else {
-			return false;
-		}
+
+	private static boolean fieldHasReference(char[][] board, int row, int column) {
+		boolean north = fieldIsInBounds(board, row-1, column);
+		boolean south = fieldIsInBounds(board, row+1, column);
+		boolean east = fieldIsInBounds(board, row, column+1);
+		boolean west = fieldIsInBounds(board, row, column-1);
+		return ((north && !south) || (west && !east));
 	}
 	
-	private static boolean fieldIsFree(char[][] board, int row, int column)
+	private static boolean fieldIsInBounds(char[][] board, int row, int column)
 	{
 		if(row < 0)
 		{
 			return false;
-		} else if(row >= board.length)
+		} else if (row >= board.length)
 		{
 			return false;
 		} else if (column < 0)
