@@ -50,15 +50,48 @@ public class PuzzleLoader {
 		{
 			for(int column = 0; column < columns; column++)
 			{
+				fieldChar = board[row][column];
 				if(fieldChar == '*')
 				{
 					puzzle[row][column] = new PuzzleField(true, -1);
 				} else if (fieldChar == ' ')
 				{
-					boolean isReferencedField = false;
-					puzzle[row][column] = new PuzzleField(false, )
+					if(fieldHasReference(board, row, column))
+					{
+						puzzle[row][column] = new PuzzleField(false, referenceID);
+						referenceID++;
+					} else {
+						puzzle[row][column] = new PuzzleField(false, -1);
+					}
 				}
 			}
+		}
+		return puzzle;
+	}
+	private static boolean fieldHasReference(char[][] board, int row, int column) {
+		boolean north = fieldIsInBounds(board, row-1, column);
+		boolean south = fieldIsInBounds(board, row+1, column);
+		boolean east = fieldIsInBounds(board, row, column+1);
+		boolean west = fieldIsInBounds(board, row, column-1);
+		return ((north && !south) || (west && !east));
+	}
+	
+	private static boolean fieldIsInBounds(char[][] board, int row, int column)
+	{
+		if(row < 0)
+		{
+			return false;
+		} else if (row >= board.length)
+		{
+			return false;
+		} else if (column < 0)
+		{
+			return false;
+		} else if (column >= board[0].length)
+		{
+			return false;
+		} else {
+			return true;
 		}
 	}
 }
