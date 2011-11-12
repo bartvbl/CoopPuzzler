@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
-public class ServerMain {
+public class ServerMain implements Runnable{
 	private ServerSocket serverSocket = null;
 	private ArrayList<ClientHandlingThread> clients = new ArrayList<ClientHandlingThread>();
 	private ServerWindow window;
