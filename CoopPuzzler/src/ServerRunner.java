@@ -6,6 +6,7 @@ public class ServerRunner {
 		// TODO Auto-generated method stub
 		ServerMain main = new ServerMain();
 		main.initialize();
-		main.run();
+		Thread server = new Thread(main);
+		server.start();
 	}
 }
