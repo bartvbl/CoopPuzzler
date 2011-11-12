@@ -1,0 +1,80 @@
+package client.gl;
+
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+
+public class GLFont
+{
+	private int fontSize;
+	@SuppressWarnings("unused")
+	private Graphics2D graphic;
+	private float[] fgColour;
+	private float[] bgColour;
+	private Font font;
+	
+	public GLFont(Font font, float[] fgColour, float[] bgColour) 
+	{
+		this.fontSize = font.getSize();
+		this.fgColour = fgColour;
+		this.bgColour = bgColour;
+		this.font = font;
+	}
+	public void setFont(Font font)
+	{
+		this.font = font;
+	}
+	public void setSize(int size)
+	{
+		this.fontSize = size;
+	}
+	public void setBgColour(float[] bgColour)
+	{
+		this.bgColour = bgColour;
+	}
+	public void setFgColour(float[] fgColour)
+	{
+		this.fgColour = fgColour;
+	}
+	public Texture createFontTexture(String msg) {
+		Color bg = bgColour==null? new Color(0,0,0,1) : (bgColour.length==3? new Color(bgColour[0],bgColour[1],bgColour[2],1) : new Color(bgColour[0],bgColour[1],bgColour[2],bgColour[3]));
+		Color fg = fgColour==null? new Color(1,1,1,1) : (fgColour.length==3? new Color(fgColour[0],fgColour[1],fgColour[2],1) : new Color(fgColour[0],fgColour[1],fgColour[2],fgColour[3]));
+		boolean isAntiAliased = true;
+		boolean usesFractionalMetrics = false;
+		
+		// get size of texture image neaded to hold 10x10 character grid
+		int textureSize = (int)(6*msg.length());
+		
+		// create a buffered image to hold charset
+		BufferedImage image = new BufferedImage(textureSize, (int)(1.5*fontSize), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = image.createGraphics();
+		
+		// Clear image with background color (make transparent if color has alpha value)
+		if (bg.getAlpha() < 255) {
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, (float)bg.getAlpha()/255f));
+		}
+		g.setColor(bg);
+		g.fillRect(0,0,textureSize,textureSize);
+		
+		// prepare to draw characters in foreground color
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+		g.setColor(fg);
+		g.setFont(font);
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, isAntiAliased? RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, usesFractionalMetrics? RenderingHints.VALUE_FRACTIONALMETRICS_ON : RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		
+		// get font measurements
+		g.drawString(msg, 5, fontSize + 1);
+		
+		Texture tex = new Texture();
+		tex.setImage(image);
+
+		// draw the grid of 100 characters
+		graphic = g;
+		return tex;
+	}
+}
