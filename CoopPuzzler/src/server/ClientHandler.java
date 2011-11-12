@@ -29,15 +29,16 @@ public class ClientHandler implements Runnable {
 	public void run()
 	{
 		try {
+			clientSocket.getOutputStream().write(0);
 			output.write("INVITE");
 			output.newLine();
+			output.flush();
 			int waits = 0;
 			while(!input.ready() && waits < 200){
 				waits++;
 				try {Thread.sleep(100);} catch (InterruptedException e) {}
 			}
-			String response = input.readLine();
-			if(!response.equals("ACK") || waits >= 200){
+			if(!input.ready() || !input.readLine().equals("ACK") || waits >= 2000){
 				output.write("CANCEL");
 				output.newLine();
 				output.flush();
@@ -48,6 +49,7 @@ public class ClientHandler implements Runnable {
 			output.newLine();
 			output.write("BOARD");
 			output.newLine();
+			output.flush();
 			//TODO: Handle giving clients the board data.
 			String request = "";
 			while(!request.equals("BYE")){
@@ -58,7 +60,7 @@ public class ClientHandler implements Runnable {
 				//TODO: Handle board update requests from clients.
 				processMessages();
 			}
-			output.write("BYE ACK");
+			output.write("BYE");
 			output.newLine();
 			output.flush();
 			clientSocket.close();
@@ -83,7 +85,7 @@ public class ClientHandler implements Runnable {
 		String message = null;
 		synchronized(this.messagesToProcess)
 		{
-			message = this.messagesToProcess.remove(0);
+			message = (this.messagesToProcess.isEmpty() ? null : this.messagesToProcess.remove(0));
 		}
 		return message;
 	}

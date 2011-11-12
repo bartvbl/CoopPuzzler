@@ -23,20 +23,22 @@ public class ServerMain implements Runnable{
 	{
 		this.window = new ServerWindow();
 		this.threadpool = Executors.newCachedThreadPool();
+		try{this.serverSocket = new ServerSocket(4444);}
+		catch(IOException e){e.printStackTrace();}
 	}
 
 	public void run()
 	{
 		Socket clientSocket = null;
+		this.window.writeMessage("starting server..");
 		while(true){
 			try {
-				this.window.writeMessage("starting server..");
-				this.serverSocket = new ServerSocket(4444);
 				clientSocket = this.serverSocket.accept();
 				ClientHandler handler = new ClientHandler(clientSocket);
 				this.threadpool.execute(handler);
 			} catch (IOException e) {
 				System.out.println("Accept failed: 4444");
+				e.printStackTrace();
 				System.exit(-1);
 			} 
 //			finally
