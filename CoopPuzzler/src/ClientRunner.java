@@ -1,3 +1,5 @@
+import client.ClientMain;
+
 
 public class ClientRunner {
 
@@ -5,8 +7,7 @@ public class ClientRunner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		ClientMain main = new ClientMain();
 	}
 
 }
