@@ -68,8 +68,6 @@ public class ClientWindow {
 	public void mainLoop()
 	{
 		while (!Display.isCloseRequested() && running) {
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
 			Dimension newDim = canvasSize.getAndSet(null);
 			if(newDim != null) {
 				

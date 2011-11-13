@@ -13,8 +13,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class InputHandler {
 	private float zoomLevel = 0.20f;
-	private float x = -6.5f;
-	private float y = -4.5f;
+	private float x = 0.5f;
+	private float y = 0.5f;
 	private int mapWidth, mapHeight;
 	private CoordConverter converter = new CoordConverter();
 	private ClientWindow window;
@@ -57,10 +57,22 @@ public class InputHandler {
 			float rawY = 0;//((this.window.windowHeight - Mouse.getY())*this.zoomLevel)-this.y;
 			float[] coords = this.getMapCoordinates(Mouse.getX(), Mouse.getY());
 			coords = this.converter.getScreenCoords(this.x, this.y);
-			coords[0] += this.window.windowWidth/2;
-			coords[1] += this.window.windowHeight/2;
+		//	coords[0] += this.window.windowWidth/4;
+		//	coords[1] += this.window.windowHeight/4;
 			this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
-			System.out.println("("+this.x+", "+this.y+", "+Mouse.getX()+", "+Mouse.getY()+", "+this.zoomLevel+", "+coords[0]+", "+coords[1]+", "+this.x/this.zoomLevel+")");
+			float xval = this.x;
+			float yval = this.y;
+			glLoadIdentity();
+			glBegin(GL_QUADS);
+			glColor3f(1.0f, 0.0f, 0.0f);
+			float aspect = this.window.windowWidth / this.window.windowHeight;
+			glVertex2f(((xval-0.1f)*this.zoomLevel)/aspect, (yval-0.1f)*this.zoomLevel);
+			glVertex2f(((xval+0.1f)*this.zoomLevel)/aspect, (yval-0.1f)*this.zoomLevel);
+			glVertex2f(((xval+0.1f)*this.zoomLevel)/aspect, (yval+0.1f)*this.zoomLevel);
+			glVertex2f(((xval-0.1f)*this.zoomLevel)/aspect, (yval+0.1f)*this.zoomLevel);
+			glEnd();
+			System.out.println("("+(((xval-0.1f)*this.zoomLevel)/aspect)+", "+((yval-0.1f)*this.zoomLevel)+")");
+			//System.out.println("("+this.x+", "+this.y+", "+Mouse.getX()+", "+Mouse.getY()+", "+this.zoomLevel+", "+coords[0]+", "+coords[1]+", "+this.x/this.zoomLevel+")");
 		}
 	}
 	
@@ -70,8 +82,8 @@ public class InputHandler {
 		float windowHeight = 480;
 		float xCoord = ((float)mouseX / this.window.windowWidth)*windowWidth;
 		float yCoord = ((float)(this.window.windowHeight - mouseY) / this.window.windowHeight)*windowHeight;
-		xCoord = xCoord - (windowWidth / 2);
-		yCoord = yCoord - (windowHeight / 2);
+		xCoord = xCoord - (windowWidth);
+		yCoord = yCoord - (windowHeight);
 		xCoord = xCoord * this.zoomLevel;
 		yCoord = yCoord * this.zoomLevel;
 		//System.out.println(xCoord + ", " +yCoord +", "+ this.x);
