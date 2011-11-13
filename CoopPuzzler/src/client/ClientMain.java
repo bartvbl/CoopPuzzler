@@ -1,6 +1,7 @@
 package client;
 
 
+import common.ProtocolConstants;
 import common.PuzzleTable;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,7 +12,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ClientMain {
+public class ClientMain implements ProtocolConstants{
 	private ClientWindow window;
 	private PuzzleTable puzzleTable;
 	private PuzzleDrawer puzzleDrawer;
@@ -20,6 +21,9 @@ public class ClientMain {
 	private Socket socket;
 	private BufferedReader input;
 	private BufferedWriter output;
+	/** When waiting for a response from the server, check back this many times a second */
+	private static final int FREQUENCY = 10;
+	
 	public ClientMain()
 	{
 		try {
@@ -52,27 +56,27 @@ public class ClientMain {
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = new BufferedWriter(new PrintWriter(socket.getOutputStream()));
 		int waits = 0;
-		while(!input.ready() && waits < 2000){
+		while(!input.ready() && waits < HANDSHAKE_TIMEOUT/FREQUENCY){
 			waits++;
-			try {Thread.sleep(100);} catch (InterruptedException e) {}
+			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
 		}
-		if(!input.ready() || !input.readLine().equals("INVITE") || waits >= 2000){
-			output.write("CANCEL");
+		if(!input.ready() || !input.readLine().equals(HANDSHAKE_SYN) || waits >= 2000){
+			output.write(HANDSHAKE_CANCEL);
 			output.newLine();
 			output.flush();
 			socket.close();
 			return;
 		}
-		output.write("ACK");
+		output.write(HANDSHAKE_SYNACK);
 		output.newLine();
 		output.flush();
 		waits = 0;
-		while(!input.ready() && waits < 2000){
+		while(!input.ready() && waits < HANDSHAKE_TIMEOUT/FREQUENCY){
 			waits++;
-			try {Thread.sleep(100);} catch (InterruptedException e) {}
+			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
 		}
-		if(!input.ready() || !input.readLine().equals("ACK") || waits >= 2000){
-			output.write("CANCEL");
+		if(!input.ready() || !input.readLine().equals(HANDSHAKE_ACK) || waits >= 2000){
+			output.write(HANDSHAKE_CANCEL);
 			output.newLine();
 			output.flush();
 			socket.close();
@@ -81,7 +85,7 @@ public class ClientMain {
 		
 		//Having completed the handshake, log this to sysout and immediately close the connection.
 		System.out.println("Client shook hands successfully.");
-		output.write("BYE");
+		output.write(SESSION_TEARDOWN);
 		output.newLine();
 		output.flush();
 		socket.close();

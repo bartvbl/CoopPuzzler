@@ -8,10 +8,17 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ClientHandler implements Runnable {
+import common.ProtocolConstants;
+
+public class ClientHandler implements Runnable,ProtocolConstants {
 	private Socket clientSocket;
 	private BufferedWriter output;
 	private BufferedReader input;
+	/** 
+	 * When this task is waiting for a response from client,
+	 * it will check again this many times a second.
+	 */
+	private static final int FREQUENCY = 10;
 	
 	private ArrayList<String> messagesToProcess = new ArrayList<String>();
 	
@@ -29,29 +36,29 @@ public class ClientHandler implements Runnable {
 	public void run()
 	{
 		try {
-			output.write("INVITE");
+			output.write(HANDSHAKE_SYN);
 			output.newLine();
 			output.flush();
 			int waits = 0;
-			while(!input.ready() && waits < 2000){
+			while(!input.ready() && waits < HANDSHAKE_TIMEOUT/FREQUENCY){
 				waits++;
-				try {Thread.sleep(100);} catch (InterruptedException e) {}
+				try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
 			}
-			if(!input.ready() || !input.readLine().equals("ACK") || waits >= 2000){
-				output.write("CANCEL");
+			if(!input.ready() || !input.readLine().equals(HANDSHAKE_SYNACK) || waits >= HANDSHAKE_TIMEOUT/FREQUENCY){
+				output.write(HANDSHAKE_CANCEL);
 				output.newLine();
 				output.flush();
 				clientSocket.close();
 				return;
 			}
-			output.write("ACK");
+			output.write(HANDSHAKE_ACK);
 			output.newLine();
-			output.write("BOARD");
+			output.write(BOARD_TRANSFER_START);
 			output.newLine();
 			output.flush();
 			//TODO: Handle giving clients the board data.
 			String request = "";
-			while(!request.equals("BYE")){
+			while(!request.equals(SESSION_TEARDOWN)){
 				while(!input.ready()){
 					try {Thread.sleep(100);} catch (InterruptedException e) {}
 				}
@@ -59,7 +66,7 @@ public class ClientHandler implements Runnable {
 				//TODO: Handle board update requests from clients.
 				processMessages();
 			}
-			output.write("BYE");
+			output.write(SESSION_TEARDOWN_ACK);
 			output.newLine();
 			output.flush();
 			clientSocket.close();
