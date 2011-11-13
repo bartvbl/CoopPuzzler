@@ -12,7 +12,7 @@ import client.gl.CoordConverter;
 import static org.lwjgl.opengl.GL11.*;
 
 public class InputHandler {
-	private float zoomLevel = 0.01f;
+	private float zoomLevel = 0.1f;
 	private float x = 0.0f;
 	private float y = 0.0f;
 	private int mapWidth, mapHeight;
@@ -41,8 +41,8 @@ public class InputHandler {
 	{
 		this.handleMouse();
 		this.handleKeyboard();
-		glTranslatef(x, y, 0.0f);
 		glScalef(zoomLevel, zoomLevel, 0.0f);
+		glTranslatef(x, y, 0.0f);
 		
 	}
 
@@ -53,12 +53,12 @@ public class InputHandler {
 		{
 			
 		} else {
-			float[] coords = converter.getMapCoords(Mouse.getX(), Mouse.getY());
-			System.out.println("("+coords[0]+", "+coords[1]+")");
-			//float rawX = (int)Math.floor(PuzzleDrawer.FIELD_SIZE*((Mouse.getX()-this.x)/this.zoomLevel));
-			//int xCoord = (int)Math.floor(rawX / PuzzleDrawer.FIELD_SIZE);
-			//int yCoord = (int)Math.floor((this.window.windowHeight - Mouse.getY())/(PuzzleDrawer.FIELD_SIZE*220*this.zoomLevel));
-			//this.selectionArray.add(new Point(yCoord,xCoord));
+			float rawX = ((Mouse.getX()-(this.x/this.zoomLevel))*this.zoomLevel);
+			float rawY = 0;//((this.window.windowHeight - Mouse.getY())*this.zoomLevel)-this.y;
+			int xCoord = (int)Math.floor(rawX);
+			int yCoord = (int)Math.floor(rawY);
+			this.selectionArray.add(new Point(yCoord,xCoord));
+			System.out.println("("+this.x+","+this.y+","+Mouse.getX()+","+Mouse.getY()+","+this.zoomLevel+", "+rawX+")");
 		}
 	}
 
@@ -79,34 +79,33 @@ public class InputHandler {
 		{
 			this.x -= MOVE_SPEED;
 		}
-		if(x < -0.5f)
-		{
-			x = -0.5f;
-		}
-		if(x > 1.5f)
-		{
-			x = 1.5f;
-		}
-		if(y < -0.5f)
-		{
-			y = -0.5f;
-		}
-		if(y > 1.5f)
-		{
-			y = 1.5f;
-		}
-		//System.out.println("("+x+", "+y+")");
+//		if(x < -0.5f)
+//		{
+//			x = -0.5f;
+//		}
+//		if(x > 1.5f)
+//		{
+//			x = 1.5f;
+//		}
+//		if(y < -0.5f)
+//		{
+//			y = -0.5f;
+//		}
+//		if(y > 1.5f)
+//		{
+//			y = 1.5f;
+//		}
 	}
 
 	private void handleMouse() {
-		this.zoomLevel += ((float)Mouse.getDWheel())/100000;
-		if(this.zoomLevel > 0.03f)
+		this.zoomLevel += ((float)Mouse.getDWheel())/10000;
+		if(this.zoomLevel > 0.5f)
 		{
-			this.zoomLevel = 0.03f;
+			this.zoomLevel = 0.5f;
 		}
-		if(this.zoomLevel < 0.002)
+		if(this.zoomLevel < 0.05f)
 		{
-			this.zoomLevel = 0.002f;
+			this.zoomLevel = 0.05f;
 		}
 	}
 }

@@ -39,7 +39,7 @@ public class CoordConverter {
 		gluProject(x, y, z, modelView, projection, viewport, location);
 		return new float[] {location.get(0), location.get(1), location.get(2)};
 	}
-	public float[] getMapCoords(int x, int y)
+	public float[] getMapCoords(int x, int y, float f)
 	{
 		modelView.clear().rewind();
 		projection.clear().rewind();
@@ -52,7 +52,8 @@ public class CoordConverter {
 		glGetInteger(GL_VIEWPORT, viewport);
 		
 		glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, winZ);
-		gluUnProject(x, y, 1.0f, modelView, projection, viewport, location);
+		System.out.println("depth component: " + winZ.get(0));
+		gluUnProject(x, y, f, modelView, projection, viewport, location);
 		return new float[] {location.get(0), location.get(1)};
 	}
 	public void setBillboard()

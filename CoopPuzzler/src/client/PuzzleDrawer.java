@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class PuzzleDrawer {
 	private TextureLibrary textureLibrary = new TextureLibrary();
 	private PuzzleTable puzzleTable;
-	public static final int FIELD_SIZE = 20;
+	public static final int FIELD_SIZE = 1;
 	private InputHandler inputHandler;
 	
 	public PuzzleDrawer(PuzzleTable puzzleTable, InputHandler inputHandler)
@@ -74,6 +74,7 @@ public class PuzzleDrawer {
 	{
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+		final float OFFSET = 0.03f;
 		for(int i = 0; i < table.length; i++)
 		{
 			for(int j = 0; j < table[0].length; j++)
@@ -84,13 +85,13 @@ public class PuzzleDrawer {
 					glBindTexture(GL_TEXTURE_2D, tex.texRef);
 					glBegin(GL_QUADS);
 					glTexCoord2f(1,0);
-					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - 1, i * FIELD_SIZE + 1);
+					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET, i * FIELD_SIZE + OFFSET);
 					glTexCoord2f(0,0);
-					this.drawVertex(j * FIELD_SIZE + 1, i * FIELD_SIZE + 1);
+					this.drawVertex(j * FIELD_SIZE + OFFSET, i * FIELD_SIZE + OFFSET);
 					glTexCoord2f(0,1);
-					this.drawVertex(j * FIELD_SIZE + 1, i * FIELD_SIZE + FIELD_SIZE - 1);
+					this.drawVertex(j * FIELD_SIZE + OFFSET, i * FIELD_SIZE + FIELD_SIZE - OFFSET);
 					glTexCoord2f(1,1);
-					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - 1, i * FIELD_SIZE + FIELD_SIZE - 1);
+					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET, i * FIELD_SIZE + FIELD_SIZE - OFFSET);
 					glEnd();
 					
 				}
@@ -151,6 +152,6 @@ public class PuzzleDrawer {
 	
 	private void drawVertex(float x, float y)
 	{
-		glVertex2f(x - 100, 100 - y);
+		glVertex2f(x, -1*y);
 	}
 }
