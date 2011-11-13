@@ -15,9 +15,11 @@ public class PuzzleLoader {
 			return loadFile(src);
 		} catch(IOException e)
 		{
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "fatal: failed to load puzzle file", "Error", JOptionPane.ERROR_MESSAGE);
 		} catch(Exception e)
 		{
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "fatal: failed to load puzzle file", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		return null;

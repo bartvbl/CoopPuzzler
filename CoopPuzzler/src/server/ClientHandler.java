@@ -66,6 +66,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 				//TODO: Handle board update requests from clients.
 				processMessages();
 			}
+			
 			output.write(SESSION_TEARDOWN_ACK);
 			output.newLine();
 			output.flush();
@@ -77,14 +78,16 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			e.printStackTrace();
 		}
 	}
-	private void processMessages()
+	private void processMessages() throws IOException
 	{
 		String message = this.getNextMessage();
 		while(message != null)
 		{
-			
+			output.write(message);
+			output.newLine();
 			message = this.getNextMessage();
 		}
+		output.flush();
 	}
 	private String getNextMessage()
 	{
