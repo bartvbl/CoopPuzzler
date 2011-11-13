@@ -26,13 +26,13 @@ public class ClientMain implements ProtocolConstants{
 	
 	public ClientMain()
 	{
-		try {
-			shakeHands(InetAddress.getLocalHost());
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			shakeHands(InetAddress.getLocalHost());
+//		} catch (UnknownHostException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		this.window = new ClientWindow(this);
 		this.puzzleTable = new PuzzleTable();
 		this.puzzleTable.initialize();

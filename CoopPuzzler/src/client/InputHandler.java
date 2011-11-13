@@ -12,14 +12,14 @@ import client.gl.CoordConverter;
 import static org.lwjgl.opengl.GL11.*;
 
 public class InputHandler {
-	private float zoomLevel = 0.1f;
-	private float x = 0.0f;
-	private float y = 0.0f;
+	private float zoomLevel = 0.20f;
+	private float x = -6.5f;
+	private float y = -4.5f;
 	private int mapWidth, mapHeight;
 	private CoordConverter converter = new CoordConverter();
 	private ClientWindow window;
 	
-	private static final float MOVE_SPEED = 0.03f;
+	private static final float MOVE_SPEED = 0.3f;
 	
 	public ArrayList<Point> selectionArray = new ArrayList<Point>();
 	public boolean isTyping = false;
@@ -41,9 +41,9 @@ public class InputHandler {
 	{
 		this.handleMouse();
 		this.handleKeyboard();
+		
 		glScalef(zoomLevel, zoomLevel, 0.0f);
 		glTranslatef(x, y, 0.0f);
-		
 	}
 
 	public void handleSelection() {
@@ -55,11 +55,29 @@ public class InputHandler {
 		} else {
 			float rawX = ((Mouse.getX()-(this.x/this.zoomLevel))*this.zoomLevel);
 			float rawY = 0;//((this.window.windowHeight - Mouse.getY())*this.zoomLevel)-this.y;
-			int xCoord = (int)Math.floor(rawX);
-			int yCoord = (int)Math.floor(rawY);
-			this.selectionArray.add(new Point(yCoord,xCoord));
-			System.out.println("("+this.x+","+this.y+","+Mouse.getX()+","+Mouse.getY()+","+this.zoomLevel+", "+rawX+")");
+			float[] coords = this.getMapCoordinates(Mouse.getX(), Mouse.getY());
+			coords = this.converter.getScreenCoords(this.x, this.y);
+			coords[0] += this.window.windowWidth/2;
+			coords[1] += this.window.windowHeight/2;
+			this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
+			System.out.println("("+this.x+", "+this.y+", "+Mouse.getX()+", "+Mouse.getY()+", "+this.zoomLevel+", "+coords[0]+", "+coords[1]+", "+this.x/this.zoomLevel+")");
 		}
+	}
+	
+	private float[] getMapCoordinates(float mouseX, float mouseY)
+	{
+		float windowWidth = 640;
+		float windowHeight = 480;
+		float xCoord = ((float)mouseX / this.window.windowWidth)*windowWidth;
+		float yCoord = ((float)(this.window.windowHeight - mouseY) / this.window.windowHeight)*windowHeight;
+		xCoord = xCoord - (windowWidth / 2);
+		yCoord = yCoord - (windowHeight / 2);
+		xCoord = xCoord * this.zoomLevel;
+		yCoord = yCoord * this.zoomLevel;
+		//System.out.println(xCoord + ", " +yCoord +", "+ this.x);
+		//xCoord -= (this.x/this.zoomLevel);
+		
+		return new float[]{xCoord, yCoord};
 	}
 
 	private void handleKeyboard() {

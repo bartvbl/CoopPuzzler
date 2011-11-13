@@ -58,14 +58,10 @@ public class PuzzleDrawer {
 		
 		for(Point point : selectionList)
 		{
-//			this.drawVertex(0, 0);
-//			this.drawVertex(0, FIELD_SIZE);
-//			this.drawVertex(FIELD_SIZE, FIELD_SIZE);
-//			this.drawVertex(FIELD_SIZE, 0);
-			this.drawVertex(FIELD_SIZE * point.getY(), FIELD_SIZE * point.getX());
-			this.drawVertex(FIELD_SIZE * point.getY() + FIELD_SIZE, FIELD_SIZE * point.getX());
-			this.drawVertex(FIELD_SIZE * point.getY() + FIELD_SIZE, FIELD_SIZE * point.getX() + FIELD_SIZE);
-			this.drawVertex(FIELD_SIZE * point.getY(), FIELD_SIZE * point.getX() + FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * point.getX(), FIELD_SIZE * point.getY());
+			this.drawVertex(FIELD_SIZE * point.getX() + FIELD_SIZE, FIELD_SIZE * point.getY());
+			this.drawVertex(FIELD_SIZE * point.getX() + FIELD_SIZE, FIELD_SIZE * point.getY() + FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * point.getX(), FIELD_SIZE * point.getY() + FIELD_SIZE);
 		}
 		glEnd();
 	}
@@ -84,14 +80,14 @@ public class PuzzleDrawer {
 					Texture tex = this.textureLibrary.getReferenceTexture(table[i][j].questionReference);
 					glBindTexture(GL_TEXTURE_2D, tex.texRef);
 					glBegin(GL_QUADS);
-					glTexCoord2f(1,0);
-					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET, i * FIELD_SIZE + OFFSET);
-					glTexCoord2f(0,0);
-					this.drawVertex(j * FIELD_SIZE + OFFSET, i * FIELD_SIZE + OFFSET);
-					glTexCoord2f(0,1);
-					this.drawVertex(j * FIELD_SIZE + OFFSET, i * FIELD_SIZE + FIELD_SIZE - OFFSET);
 					glTexCoord2f(1,1);
-					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET, i * FIELD_SIZE + FIELD_SIZE - OFFSET);
+					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET, (table.length - i-1) * FIELD_SIZE + OFFSET);
+					glTexCoord2f(0,1);
+					this.drawVertex(j * FIELD_SIZE + OFFSET, (table.length - i-1) * FIELD_SIZE + OFFSET);
+					glTexCoord2f(0,0);
+					this.drawVertex(j * FIELD_SIZE + OFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET);
+					glTexCoord2f(1,0);
+					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET);
 					glEnd();
 					
 				}
@@ -107,8 +103,8 @@ public class PuzzleDrawer {
 		glColor3f(0.0f, 0.0f, 0.0f);
 		for(int i = 0; i <= table.length; i++)
 		{
-			this.drawVertex(0, i*FIELD_SIZE);
-			this.drawVertex(FIELD_SIZE * table[0].length, i*FIELD_SIZE);
+			this.drawVertex(0, (table.length - i)*FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * table[0].length, (table.length - i)*FIELD_SIZE);
 		}
 		for(int j = 0; j <= table[0].length; j++)
 		{
@@ -128,10 +124,10 @@ public class PuzzleDrawer {
 			{
 				if(table[i][j].isFilled)
 				{
-					this.drawVertex(FIELD_SIZE * j, FIELD_SIZE * i);
-					this.drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * i);
-					this.drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * i + FIELD_SIZE);
-					this.drawVertex(FIELD_SIZE * j, FIELD_SIZE * i + FIELD_SIZE);
+					this.drawVertex(FIELD_SIZE * j, FIELD_SIZE * (table.length - i-1));
+					this.drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * (table.length - i-1));
+					this.drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * (table.length - i-1) + FIELD_SIZE);
+					this.drawVertex(FIELD_SIZE * j, FIELD_SIZE * (table.length - i-1) + FIELD_SIZE);
 				}
 			}
 		}
@@ -152,6 +148,6 @@ public class PuzzleDrawer {
 	
 	private void drawVertex(float x, float y)
 	{
-		glVertex2f(x, -1*y);
+		glVertex2f(x, y);
 	}
 }

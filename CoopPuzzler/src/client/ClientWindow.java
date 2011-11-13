@@ -59,7 +59,7 @@ public class ClientWindow {
 		gluOrtho2D(0f, 640f, 0f, 480f);
 		glMatrixMode(GL_MODELVIEW);
 		glClearColor(94.0f/255.0f, 161.0f/255.0f, 255.0f/255.0f, 0.5f);
-		glClearDepth(1.0);
+		//glClearDepth(1.0);
 		glEnable (GL_BLEND);
 		glDepthFunc(GL_NEVER);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -72,10 +72,9 @@ public class ClientWindow {
 			glLoadIdentity();
 			Dimension newDim = canvasSize.getAndSet(null);
 			if(newDim != null) {
-				gluOrtho2D(0f, 640f, 0f, 480f);
-				glViewport(0, 0, newDim.width, newDim.height);
+				
 				try {
-					DisplayMode mode = new DisplayMode(newDim.width, newDim.height);
+					DisplayMode mode = new DisplayMode(newDim.width, newDim.width);
 					Display.setDisplayMode(mode);
 					this.windowHeight = newDim.height;
 					this.windowWidth = newDim.width;
@@ -86,16 +85,18 @@ public class ClientWindow {
 			}
 			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
+			
+			float aspectRatio = this.windowWidth/this.windowHeight;
+			glViewport(0, 0, (int)this.windowWidth, (int)this.windowHeight);
+			gluOrtho2D(-1 * aspectRatio, 1*aspectRatio, -1, 1);
+			
 			main.doFrame();
 			Display.update();
-			// no need to run at full speed
-			try {
-				Thread.sleep(1000/60);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			Display.sync(50);
 		}
 	}
 	
