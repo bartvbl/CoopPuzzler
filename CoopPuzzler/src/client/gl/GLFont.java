@@ -15,17 +15,18 @@ public class GLFont
 	private float[] fgColour;
 	private float[] bgColour;
 	private Font font;
+	private static final float QUALITY = 3.0f;
 	
 	public GLFont(Font font, float[] fgColour, float[] bgColour) 
 	{
 		this.fontSize = font.getSize();
 		this.fgColour = fgColour;
 		this.bgColour = bgColour;
-		this.font = font;
+		this.font = font.deriveFont((float)(font.getSize()*QUALITY));
 	}
 	public void setFont(Font font)
 	{
-		this.font = font;
+		this.font = font.deriveFont((float)(font.getSize()*QUALITY));
 	}
 	public void setSize(int size)
 	{
@@ -40,16 +41,16 @@ public class GLFont
 		this.fgColour = fgColour;
 	}
 	public Texture createFontTexture(String msg) {
+		
 		Color bg = bgColour==null? new Color(0,0,0,1) : (bgColour.length==3? new Color(bgColour[0],bgColour[1],bgColour[2],1) : new Color(bgColour[0],bgColour[1],bgColour[2],bgColour[3]));
 		Color fg = fgColour==null? new Color(1,1,1,1) : (fgColour.length==3? new Color(fgColour[0],fgColour[1],fgColour[2],1) : new Color(fgColour[0],fgColour[1],fgColour[2],fgColour[3]));
-		boolean isAntiAliased = true;
+		boolean isAntiAliased = false;
 		boolean usesFractionalMetrics = false;
 		
 		// get size of texture image neaded to hold 10x10 character grid
-		int textureSize = (int)(6*msg.length());
-		
+		int textureSize = (int)(QUALITY*30);
 		// create a buffered image to hold charset
-		BufferedImage image = new BufferedImage(textureSize, (int)(1.5*fontSize), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(textureSize, (int)(2.6*QUALITY*fontSize), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = image.createGraphics();
 		
 		// Clear image with background color (make transparent if color has alpha value)
@@ -57,7 +58,8 @@ public class GLFont
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, (float)bg.getAlpha()/255f));
 		}
 		g.setColor(bg);
-		g.fillRect(0,0,textureSize,textureSize);
+		g.fillRect(0,0,textureSize,4*textureSize);
+		
 		
 		// prepare to draw characters in foreground color
 		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
@@ -68,7 +70,7 @@ public class GLFont
 		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
 		// get font measurements
-		g.drawString(msg, 5, fontSize + 1);
+		g.drawString(msg, 0, fontSize + 4*QUALITY);
 		
 		Texture tex = new Texture();
 		tex.setImage(image);

@@ -1,10 +1,11 @@
-package server;
+package common;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.JOptionPane;
+
 
 public class PuzzleLoader {
 
@@ -65,6 +66,9 @@ public class PuzzleLoader {
 					} else {
 						puzzle[row][column] = new PuzzleField(false, -1);
 					}
+				} else if (fieldChar == 'i') //i for ignore
+				{
+					puzzle[row][column] = new PuzzleField(false, -1);
 				}
 			}
 		}
@@ -76,7 +80,7 @@ public class PuzzleLoader {
 		boolean south = fieldIsInBounds(board, row+1, column);
 		boolean east = fieldIsInBounds(board, row, column+1);
 		boolean west = fieldIsInBounds(board, row, column-1);
-		return ((north && !south) || (west && !east));
+		return ((!north && south) || (!west && east));
 	}
 	
 	private static boolean fieldIsInBounds(char[][] board, int row, int column)
@@ -94,7 +98,7 @@ public class PuzzleLoader {
 		{
 			return false;
 		} else {
-			return true;
+			return ((board[row][column] == 'i') ||(board[row][column] == ' '));
 		}
 	}
 }

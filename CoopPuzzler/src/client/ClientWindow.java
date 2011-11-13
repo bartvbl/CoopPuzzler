@@ -12,6 +12,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.*;
 
 public class ClientWindow {
 	private float windowWidth, windowHeight;
@@ -54,20 +55,24 @@ public class ClientWindow {
 		glViewport(0, 0, dim.width, dim.height);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, 640, 0, 480, 1, -1);
+		gluOrtho2D(0f, 640f, 0f, 480f);
 		glMatrixMode(GL_MODELVIEW);
 		glClearColor(94.0f/255.0f, 161.0f/255.0f, 255.0f/255.0f, 0.5f);
 		glClearDepth(1.0);
+		glEnable (GL_BLEND);
+		glDepthFunc(GL_NEVER);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
 	}
 	
 	public void mainLoop()
 	{
 		while (!Display.isCloseRequested() && running) {
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
 			Dimension newDim = canvasSize.getAndSet(null);
 			if(newDim != null) {
-				glOrtho(0, newDim.width, 0, newDim.height, 1, -1);
+				gluOrtho2D(0f, 640f, 0f, 480f);
+				glViewport(0, 0, newDim.width, newDim.height);
 				try {
 					DisplayMode mode = new DisplayMode(newDim.width, newDim.height);
 					Display.setDisplayMode(mode);
@@ -78,13 +83,13 @@ public class ClientWindow {
 					e.printStackTrace();
 				}
 			}
-			main.doFrame();
+			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-			glEnable(GL_DEPTH_TEST);
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
+			
+			
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
+			main.doFrame();
 			Display.update();
 			// no need to run at full speed
 			try {
