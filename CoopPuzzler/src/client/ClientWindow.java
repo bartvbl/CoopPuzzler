@@ -15,7 +15,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
 public class ClientWindow {
-	private float windowWidth, windowHeight;
+	public float windowWidth = 640;
+	public float windowHeight = 480;
 	private boolean running = true;
 	public JFrame jframe;
 	public Canvas canvas;
@@ -85,8 +86,6 @@ public class ClientWindow {
 			}
 			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-			
-			
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 			main.doFrame();
@@ -103,6 +102,8 @@ public class ClientWindow {
 	public void resize()
 	{
 		Dimension dim = this.canvas.getSize();
+		this.windowWidth = dim.width;
+		this.windowHeight = dim.height;
 		canvasSize.set(dim);
 		dim = null;
 	}

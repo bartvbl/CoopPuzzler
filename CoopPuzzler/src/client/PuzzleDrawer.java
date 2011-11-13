@@ -58,6 +58,10 @@ public class PuzzleDrawer {
 		
 		for(Point point : selectionList)
 		{
+//			this.drawVertex(0, 0);
+//			this.drawVertex(0, FIELD_SIZE);
+//			this.drawVertex(FIELD_SIZE, FIELD_SIZE);
+//			this.drawVertex(FIELD_SIZE, 0);
 			this.drawVertex(FIELD_SIZE * point.getY(), FIELD_SIZE * point.getX());
 			this.drawVertex(FIELD_SIZE * point.getY() + FIELD_SIZE, FIELD_SIZE * point.getX());
 			this.drawVertex(FIELD_SIZE * point.getY() + FIELD_SIZE, FIELD_SIZE * point.getX() + FIELD_SIZE);

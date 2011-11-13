@@ -22,17 +22,17 @@ public class ClientMain {
 	private BufferedWriter output;
 	public ClientMain()
 	{
-		try {
-			shakeHands(InetAddress.getLocalHost());
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			shakeHands(InetAddress.getLocalHost());
+//		} catch (UnknownHostException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		this.window = new ClientWindow(this);
 		this.puzzleTable = new PuzzleTable();
 		this.puzzleTable.initialize();
-		this.inputHandler = new InputHandler(this.puzzleTable.puzzleTable[0].length, this.puzzleTable.puzzleTable.length);
+		this.inputHandler = new InputHandler(this.window, this.puzzleTable.puzzleTable[0].length, this.puzzleTable.puzzleTable.length);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
 		this.window.mainLoop();
 	}

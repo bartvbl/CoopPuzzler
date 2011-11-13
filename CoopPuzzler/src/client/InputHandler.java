@@ -17,12 +17,16 @@ public class InputHandler {
 	private float y = 0.0f;
 	private int mapWidth, mapHeight;
 	private CoordConverter converter = new CoordConverter();
+	private ClientWindow window;
+	
+	private static final float MOVE_SPEED = 0.03f;
 	
 	public ArrayList<Point> selectionArray = new ArrayList<Point>();
 	public boolean isTyping = false;
 	
-	public InputHandler(int mapHeight, int mapWidth)
+	public InputHandler(ClientWindow window, int mapHeight, int mapWidth)
 	{
+		this.window = window;
 		this.mapHeight = mapHeight;
 		this.mapWidth = mapWidth;
 		try {
@@ -37,9 +41,9 @@ public class InputHandler {
 	{
 		this.handleMouse();
 		this.handleKeyboard();
-		
-		glScalef(zoomLevel, zoomLevel, 0.0f);
 		glTranslatef(x, y, 0.0f);
+		glScalef(zoomLevel, zoomLevel, 0.0f);
+		
 	}
 
 	public void handleSelection() {
@@ -50,45 +54,48 @@ public class InputHandler {
 			
 		} else {
 			float[] coords = converter.getMapCoords(Mouse.getX(), Mouse.getY());
-			int xCoord = (int)Math.floor(-100 + zoomLevel*PuzzleDrawer.FIELD_SIZE*Mouse.getY()*-1);//(int)Math.floor(coords[0]/100);
-			int yCoord = (int)Math.floor(-100 + zoomLevel*PuzzleDrawer.FIELD_SIZE*Mouse.getX());//(int)Math.floor(coords[0]/100);
-			this.selectionArray.add(new Point(xCoord,yCoord));
+			System.out.println("("+coords[0]+", "+coords[1]+")");
+			//float rawX = (int)Math.floor(PuzzleDrawer.FIELD_SIZE*((Mouse.getX()-this.x)/this.zoomLevel));
+			//int xCoord = (int)Math.floor(rawX / PuzzleDrawer.FIELD_SIZE);
+			//int yCoord = (int)Math.floor((this.window.windowHeight - Mouse.getY())/(PuzzleDrawer.FIELD_SIZE*220*this.zoomLevel));
+			//this.selectionArray.add(new Point(yCoord,xCoord));
 		}
 	}
 
 	private void handleKeyboard() {
 		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN))
 		{
-			this.y += 7.0;
+			this.y += MOVE_SPEED;
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
 		{
-			this.y -= 7.0;
+			this.y -= MOVE_SPEED;
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT))
 		{
-			this.x += 7.0;
+			this.x += MOVE_SPEED;
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
 		{
-			this.x -= 7.0;
+			this.x -= MOVE_SPEED;
 		}
-		if(x < -100)
+		if(x < -0.5f)
 		{
-			x = -100;
+			x = -0.5f;
 		}
-		if(x > PuzzleDrawer.FIELD_SIZE * mapWidth + -100 * zoomLevel)
+		if(x > 1.5f)
 		{
-			x = PuzzleDrawer.FIELD_SIZE * mapWidth + -100 * zoomLevel;
+			x = 1.5f;
 		}
-		if(y < -100)
+		if(y < -0.5f)
 		{
-			y = -100;
+			y = -0.5f;
 		}
-		if(y > PuzzleDrawer.FIELD_SIZE * mapHeight + -130)
+		if(y > 1.5f)
 		{
-			y = PuzzleDrawer.FIELD_SIZE * mapHeight + -130;
+			y = 1.5f;
 		}
+		//System.out.println("("+x+", "+y+")");
 	}
 
 	private void handleMouse() {

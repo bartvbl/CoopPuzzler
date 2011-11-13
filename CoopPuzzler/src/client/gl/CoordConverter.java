@@ -52,7 +52,7 @@ public class CoordConverter {
 		glGetInteger(GL_VIEWPORT, viewport);
 		
 		glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, winZ);
-		gluUnProject(x, y, winZ.get(0), modelView, projection, viewport, location);
+		gluUnProject(x, y, 1.0f, modelView, projection, viewport, location);
 		return new float[] {location.get(0), location.get(1)};
 	}
 	public void setBillboard()
