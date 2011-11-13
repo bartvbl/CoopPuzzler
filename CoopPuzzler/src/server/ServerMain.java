@@ -36,6 +36,7 @@ public class ServerMain implements Runnable{
 				clientSocket = this.serverSocket.accept();
 				ClientHandler handler = new ClientHandler(clientSocket);
 				this.threadpool.execute(handler);
+				this.window.writeMessage("Accepted client " + clientSocket.toString());
 			} catch (IOException e) {
 				System.out.println("Accept failed: 4444");
 				e.printStackTrace();

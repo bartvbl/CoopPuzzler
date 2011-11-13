@@ -29,12 +29,11 @@ public class ClientHandler implements Runnable {
 	public void run()
 	{
 		try {
-			clientSocket.getOutputStream().write(0);
 			output.write("INVITE");
 			output.newLine();
 			output.flush();
 			int waits = 0;
-			while(!input.ready() && waits < 200){
+			while(!input.ready() && waits < 2000){
 				waits++;
 				try {Thread.sleep(100);} catch (InterruptedException e) {}
 			}
