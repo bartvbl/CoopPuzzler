@@ -34,12 +34,15 @@ public class InputHandler {
 	private ArrayList<Point> selectionUndoList = new ArrayList<Point>();
 	private char previousChar = ' ';
 	
+	private final float initAspect;
+	
 	public InputHandler(ClientWindow window, int mapHeight, int mapWidth, PuzzleTable table)
 	{
 		this.puzzleTable = table;
 		this.window = window;
 		this.mapHeight = mapHeight;
 		this.mapWidth = mapWidth;
+		this.initAspect = this.window.windowWidth/this.window.windowHeight;
 		try {
 			Mouse.create();
 			Keyboard.create();
@@ -178,16 +181,6 @@ public class InputHandler {
 		}
 	}
 	
-	private float transformX(float x)
-	{
-		float aspect = this.window.windowWidth / this.window.windowHeight;
-		return ((x-0.1f)*this.zoomLevel)/aspect;
-	}
-	private float transformY(float y)
-	{
-		return (y-0.1f)*this.zoomLevel;
-	}
-	
 	private float[] getMapCoordinates(float mouseX, float mouseY)
 	{
 		float aspect = this.window.windowWidth / this.window.windowHeight;
@@ -195,10 +188,10 @@ public class InputHandler {
 		float yCoord = mouseY;
 		xCoord /= this.window.windowHeight/2;
 		xCoord -= 1;
-		System.out.println("("+xCoord+", "+yCoord+")");
+		//System.out.println("("+xCoord+", "+yCoord+")");
 		xCoord /= this.zoomLevel;
 		xCoord -= this.x;
-		xCoord -= 0.2*aspect;//0.4/this.zoomLevel;
+		xCoord -= 1f/((aspect/this.initAspect)) + -1.3;
 		
 		yCoord /= this.window.windowHeight/2;
 		yCoord -= 1;
