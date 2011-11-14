@@ -44,8 +44,13 @@ public class PuzzleDrawer {
 		this.drawSelection(table);
 		this.drawPuzzleGrid(table);
 		this.drawReferences(table);
+		this.drawLetters(table);
 	}
 	
+	private void drawLetters(PuzzleField[][] table) {
+		
+	}
+
 	private void drawSelection(PuzzleField[][] table) {
 		ArrayList<Point> selectionList = this.inputHandler.selectionArray;
 		glBegin(GL_QUADS);

@@ -9,4 +9,22 @@ public class PuzzleTable {
 	{
 		this.puzzleTable = PuzzleLoader.loadTableFromFile(DEFAULT_FILE_SOURCE);
 	}
+	public boolean fieldIsOccupied(int row, int column)
+	{
+		if(row < 0)
+		{
+			return false;
+		} else if(row >= this.puzzleTable.length)
+		{
+			return false;
+		} else if (column < 0)
+		{
+			return false;
+		} else if (column >= this.puzzleTable[0].length)
+		{
+			return false;
+		} else {
+			return this.puzzleTable[row][column].isFilled;
+		}
+	}
 }

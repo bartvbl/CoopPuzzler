@@ -36,7 +36,7 @@ public class ClientMain implements ProtocolConstants{
 		this.window = new ClientWindow(this);
 		this.puzzleTable = new PuzzleTable();
 		this.puzzleTable.initialize();
-		this.inputHandler = new InputHandler(this.window, this.puzzleTable.puzzleTable[0].length, this.puzzleTable.puzzleTable.length);
+		this.inputHandler = new InputHandler(this.window, this.puzzleTable.puzzleTable[0].length, this.puzzleTable.puzzleTable.length,this.puzzleTable);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
 		this.window.mainLoop();
 	}

@@ -6,6 +6,10 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
+import org.lwjgl.util.Timer;
+
+import common.PuzzleField;
+import common.PuzzleTable;
 
 import client.gl.CoordConverter;
 
@@ -18,14 +22,18 @@ public class InputHandler {
 	private int mapWidth, mapHeight;
 	private CoordConverter converter = new CoordConverter();
 	private ClientWindow window;
-	
+	private static final float X_FIELD_SIZE = 0.1427367308f;
+	private static final float Y_FIELD_SIZE = 0.2020211444f;
 	private static final float MOVE_SPEED = 0.3f;
-	
 	public ArrayList<Point> selectionArray = new ArrayList<Point>();
 	public boolean isTyping = false;
-	
-	public InputHandler(ClientWindow window, int mapHeight, int mapWidth)
+	private PuzzleTable puzzleTable;
+	private Timer selectionActionTimer = new Timer();
+	private float selectionActionStartTime;
+	private boolean isWaiting = false;
+	public InputHandler(ClientWindow window, int mapHeight, int mapWidth, PuzzleTable table)
 	{
+		this.puzzleTable = table;
 		this.window = window;
 		this.mapHeight = mapHeight;
 		this.mapWidth = mapWidth;
@@ -47,49 +55,110 @@ public class InputHandler {
 	}
 
 	public void handleSelection() {
-		this.selectionArray.clear();
-		
-		if(this.isTyping)
+		Timer.tick();
+		if(isWaiting)
 		{
-			
+			if((this.selectionActionTimer.getTime() - this.selectionActionStartTime) > 0.1)
+			{
+				this.isWaiting = false;
+			}
 		} else {
-			float rawX = ((Mouse.getX()-(this.x/this.zoomLevel))*this.zoomLevel);
-			float rawY = 0;//((this.window.windowHeight - Mouse.getY())*this.zoomLevel)-this.y;
-			float[] coords = this.getMapCoordinates(Mouse.getX(), Mouse.getY());
-			coords = this.converter.getScreenCoords(this.x, this.y);
-		//	coords[0] += this.window.windowWidth/4;
-		//	coords[1] += this.window.windowHeight/4;
-			this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
-			float xval = this.x;
-			float yval = this.y;
-			glLoadIdentity();
-			glBegin(GL_QUADS);
-			glColor3f(1.0f, 0.0f, 0.0f);
-			float aspect = this.window.windowWidth / this.window.windowHeight;
-			glVertex2f(((xval-0.1f)*this.zoomLevel)/aspect, (yval-0.1f)*this.zoomLevel);
-			glVertex2f(((xval+0.1f)*this.zoomLevel)/aspect, (yval-0.1f)*this.zoomLevel);
-			glVertex2f(((xval+0.1f)*this.zoomLevel)/aspect, (yval+0.1f)*this.zoomLevel);
-			glVertex2f(((xval-0.1f)*this.zoomLevel)/aspect, (yval+0.1f)*this.zoomLevel);
-			glEnd();
-			System.out.println("("+(((xval-0.1f)*this.zoomLevel)/aspect)+", "+((yval-0.1f)*this.zoomLevel)+")");
-			//System.out.println("("+this.x+", "+this.y+", "+Mouse.getX()+", "+Mouse.getY()+", "+this.zoomLevel+", "+coords[0]+", "+coords[1]+", "+this.x/this.zoomLevel+")");
+			if(this.isTyping)
+			{
+				if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+				{
+					this.isTyping = false;
+					this.isWaiting = true;
+					this.selectionActionStartTime = this.selectionActionTimer.getTime();
+				}
+				if(Mouse.isButtonDown(1))
+				{
+					this.isTyping = false;
+					this.isWaiting = true;
+					this.selectionActionStartTime = this.selectionActionTimer.getTime();
+				}
+				char typedKey = KeyboardToCharConverter.getKeyCharValue();
+				if(typedKey != ' ')
+				{
+					Point point = this.selectionArray.remove(0);
+					int column = point.getX();
+					int row = this.mapWidth - point.getY();
+					this.isWaiting = true;
+					this.selectionActionStartTime = this.selectionActionTimer.getTime();
+					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(typedKey);
+				}
+					
+			} else {
+				this.selectionArray.clear();
+				float[] coords = this.getMapCoordinates(Mouse.getX(), Mouse.getY());
+				if(!((coords[0] < 0) || (coords[1] < 0) || (coords[1] >= this.mapWidth) || (coords[0] >= this.mapHeight)))
+				{
+					this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
+					float remX = coords[0] % 1;
+					float remY = coords[1] % 1;
+					//lower quadrant
+					if((remX > remY) && (remX < (1 - remY)))
+					{
+						int tracker = this.mapWidth - (int)coords[1];
+						int counter = 1;
+						while(tracker < this.mapWidth)
+						{
+							if(this.puzzleTable.fieldIsOccupied(tracker, (int) coords[0]))
+							{
+								break;
+							}
+							this.selectionArray.add(new Point((int)coords[0],(int)coords[1]-counter));
+							tracker++;
+							counter++;
+						}
+					}
+					//right quadrant
+					if((remX > remY) && (remX > (1 - remY)))
+					{
+						int tracker = (int)coords[0] + 1;
+						int counter = 1;
+						while(tracker < this.mapHeight)
+						{
+							if(this.puzzleTable.fieldIsOccupied((int) this.mapWidth - (int)coords[1]-1,tracker))
+							{
+								break;
+							}
+							this.selectionArray.add(new Point((int)coords[0]+counter,(int)coords[1]));
+							tracker++;
+							counter++;
+						}
+					}
+					if(Mouse.isButtonDown(0))
+					{
+						this.isTyping = true;
+						this.selectionActionStartTime = this.selectionActionTimer.getTime();
+						this.isWaiting = true;
+					}
+				}
+				
+				//System.out.println("("+this.x+", "+this.y+", "+Mouse.getX()+", "+Mouse.getY()+", "+this.zoomLevel+", "+coords[0]+", "+coords[1]+", "+this.x/this.zoomLevel+")");
+			}
 		}
+	}
+	
+	private float transformX(float x)
+	{
+		float aspect = this.window.windowWidth / this.window.windowHeight;
+		return ((x-0.1f)*this.zoomLevel)/aspect;
+	}
+	private float transformY(float y)
+	{
+		return (y-0.1f)*this.zoomLevel;
 	}
 	
 	private float[] getMapCoordinates(float mouseX, float mouseY)
 	{
-		float windowWidth = 640;
-		float windowHeight = 480;
-		float xCoord = ((float)mouseX / this.window.windowWidth)*windowWidth;
-		float yCoord = ((float)(this.window.windowHeight - mouseY) / this.window.windowHeight)*windowHeight;
-		xCoord = xCoord - (windowWidth);
-		yCoord = yCoord - (windowHeight);
-		xCoord = xCoord * this.zoomLevel;
-		yCoord = yCoord * this.zoomLevel;
-		//System.out.println(xCoord + ", " +yCoord +", "+ this.x);
-		//xCoord -= (this.x/this.zoomLevel);
-		
-		return new float[]{xCoord, yCoord};
+		float xMouse = 2*(mouseX / this.window.windowWidth) - 1;
+		float yMouse = 2*(mouseY / this.window.windowHeight) - 1;
+		float xCoord = xMouse - this.transformX(this.x);
+		float yCoord = yMouse - this.transformY(this.y);
+	//	System.out.println("("+xCoord+", "+yCoord+")");
+		return new float[]{xCoord/InputHandler.X_FIELD_SIZE, yCoord/InputHandler.Y_FIELD_SIZE};
 	}
 
 	private void handleKeyboard() {
