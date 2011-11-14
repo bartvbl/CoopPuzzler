@@ -28,7 +28,10 @@ public class TextureLibrary {
 			generatedCharacter = (char)i;
 			this.addFontTextureToHashMaps(generatedCharacter);
 		}
-		this.addFontTextureToHashMaps(IJ);
+		Texture texture = this.defaultFontGenerator.createFontTexture("ij");
+		this.defaultTextureMaps.put(Character.valueOf(IJ), texture);
+		texture = this.unsureMarkFontGenerator.createFontTexture("ij");
+		this.unsureMarkedTextureMaps.put(Character.valueOf(IJ), texture);
 	}
 	
 	private void initializeFontGenerators()

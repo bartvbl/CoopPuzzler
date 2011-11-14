@@ -31,6 +31,9 @@ public class InputHandler {
 	private Timer selectionActionTimer = new Timer();
 	private float selectionActionStartTime;
 	private boolean isWaiting = false;
+	private ArrayList<Point> selectionUndoList = new ArrayList<Point>();
+	private char previousChar = ' ';
+	
 	public InputHandler(ClientWindow window, int mapHeight, int mapWidth, PuzzleTable table)
 	{
 		this.puzzleTable = table;
@@ -80,19 +83,41 @@ public class InputHandler {
 				char typedKey = KeyboardToCharConverter.getKeyCharValue();
 				if(typedKey != ' ')
 				{
-					Point point = this.selectionArray.remove(0);
+					Point point;
+					if((this.previousChar == 'i') && (typedKey == 'j'))
+					{
+						point = this.selectionUndoList.get(this.selectionUndoList.size()-1);
+						typedKey = TextureLibrary.IJ;
+					} else {
+						point = this.selectionArray.remove(0);
+						this.selectionUndoList.add(point);
+					}
 					int column = point.getX();
-					int row = this.mapWidth - point.getY();
+					int row = this.mapWidth - point.getY() -1;
 					this.isWaiting = true;
 					this.selectionActionStartTime = this.selectionActionTimer.getTime();
+					this.previousChar = typedKey;
 					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(typedKey);
+					if(this.selectionArray.size() == 0)
+					{
+						this.isTyping = false;
+						this.isWaiting = true;
+						this.selectionActionStartTime = this.selectionActionTimer.getTime();
+					}
 				}
 					
 			} else {
 				this.selectionArray.clear();
 				float[] coords = this.getMapCoordinates(Mouse.getX(), Mouse.getY());
+				
 				if(!((coords[0] < 0) || (coords[1] < 0) || (coords[1] >= this.mapWidth) || (coords[0] >= this.mapHeight)))
 				{
+					int column = (int)coords[0];
+					int row = this.mapWidth - (int)coords[1] -1;
+					if(this.puzzleTable.fieldIsOccupied(row, column))
+					{
+						return;
+					}
 					this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
 					float remX = coords[0] % 1;
 					float remY = coords[1] % 1;
@@ -133,6 +158,8 @@ public class InputHandler {
 						this.isTyping = true;
 						this.selectionActionStartTime = this.selectionActionTimer.getTime();
 						this.isWaiting = true;
+						this.previousChar = ' ';
+						this.selectionUndoList = new ArrayList<Point>();
 					}
 				}
 				

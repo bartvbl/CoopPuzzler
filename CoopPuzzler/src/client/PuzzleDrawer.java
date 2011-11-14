@@ -48,7 +48,32 @@ public class PuzzleDrawer {
 	}
 	
 	private void drawLetters(PuzzleField[][] table) {
-		
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+		final float OFFSET = 0.3f;
+		for(int i = 0; i < table.length; i++)
+		{
+			for(int j = 0; j < table[0].length; j++)
+			{
+				if(table[i][j].getCurrentValueOfField() != ' ')
+				{
+					Texture tex = this.textureLibrary.getDefaultTextureByCharacter(table[i][j].getCurrentValueOfField());
+					glBindTexture(GL_TEXTURE_2D, tex.texRef);
+					glBegin(GL_QUADS);
+					glTexCoord2f(1,1);
+					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE + OFFSET, (table.length - i-1) * FIELD_SIZE - OFFSET);
+					glTexCoord2f(0,1);
+					this.drawVertex(j * FIELD_SIZE + OFFSET, (table.length - i-1) * FIELD_SIZE - OFFSET);
+					glTexCoord2f(0,0);
+					this.drawVertex(j * FIELD_SIZE + OFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET);
+					glTexCoord2f(1,0);
+					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE + OFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET);
+					glEnd();
+					
+				}
+			}
+		}
+		glDisable(GL_TEXTURE_2D);
 	}
 
 	private void drawSelection(PuzzleField[][] table) {
