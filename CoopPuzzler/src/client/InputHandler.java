@@ -17,8 +17,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class InputHandler {
 	private float zoomLevel = 0.20f;
-	private float x = 0.5f;
-	private float y = 0.5f;
+	private float x = -6.5f;
+	private float y = -4.5f;
 	private int mapWidth, mapHeight;
 	private CoordConverter converter = new CoordConverter();
 	private ClientWindow window;
@@ -61,7 +61,7 @@ public class InputHandler {
 		Timer.tick();
 		if(isWaiting)
 		{
-			if((this.selectionActionTimer.getTime() - this.selectionActionStartTime) > 0.1)
+			if((this.selectionActionTimer.getTime() - this.selectionActionStartTime) > 0.2)
 			{
 				this.isWaiting = false;
 			}
