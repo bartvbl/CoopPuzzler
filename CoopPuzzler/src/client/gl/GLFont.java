@@ -15,7 +15,7 @@ public class GLFont
 	private float[] fgColour;
 	private float[] bgColour;
 	private Font font;
-	private static final float QUALITY = 3.0f;
+	private static final float QUALITY = 8.0f;
 	
 	public GLFont(Font font, float[] fgColour, float[] bgColour) 
 	{
@@ -70,7 +70,7 @@ public class GLFont
 		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
 		// get font measurements
-		g.drawString(msg, 0, fontSize + 4*QUALITY);
+		g.drawString(msg, 0, fontSize + QUALITY*QUALITY);
 		
 		Texture tex = new Texture();
 		tex.setImage(image);

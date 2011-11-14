@@ -51,6 +51,8 @@ public class PuzzleDrawer {
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 		final float OFFSET = -0.5f;
+		final float YOFFSET = -0.65f;
+		final float XOFFSET = 0.90f;
 		for(int i = 0; i < table.length; i++)
 		{
 			for(int j = 0; j < table[0].length; j++)
@@ -61,13 +63,13 @@ public class PuzzleDrawer {
 					glBindTexture(GL_TEXTURE_2D, tex.texRef);
 					glBegin(GL_QUADS);
 					glTexCoord2f(1,1);
-					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET, (table.length - i-1) * FIELD_SIZE + OFFSET);
+					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET + XOFFSET, (table.length - i-1) * FIELD_SIZE + OFFSET + YOFFSET);
 					glTexCoord2f(0,1);
-					this.drawVertex(j * FIELD_SIZE + OFFSET, (table.length - i-1) * FIELD_SIZE + OFFSET);
+					this.drawVertex(j * FIELD_SIZE + OFFSET + XOFFSET, (table.length - i-1) * FIELD_SIZE + OFFSET + YOFFSET);
 					glTexCoord2f(0,0);
-					this.drawVertex(j * FIELD_SIZE + OFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET);
+					this.drawVertex(j * FIELD_SIZE + OFFSET + XOFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET + YOFFSET);
 					glTexCoord2f(1,0);
-					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET);
+					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET + XOFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET + YOFFSET);
 					glEnd();
 					
 				}

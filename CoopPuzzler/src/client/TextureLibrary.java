@@ -36,8 +36,8 @@ public class TextureLibrary {
 	
 	private void initializeFontGenerators()
 	{
-		Font defaultFont = new Font("Arial", Font.PLAIN, 18);
-		Font unsureMarkFont = new Font("Arial", Font.ITALIC, 12);
+		Font defaultFont = new Font("Arial", Font.PLAIN, 10);
+		Font unsureMarkFont = new Font("Arial", Font.ITALIC, 10);
 		Font referenceFont = new Font("Arial", Font.PLAIN, 10);
 		this.defaultFontGenerator = new GLFont(defaultFont, new float[]{0.0f, 0.0f, 0.0f, 1.0f}, new float[]{1.0f, 1.0f, 1.0f, 0.0f});
 		this.unsureMarkFontGenerator = new GLFont(unsureMarkFont, new float[]{1.0f, 0.398f, 0.0f, 1.0f}, new float[]{1.0f, 1.0f, 1.0f, 0.0f});
