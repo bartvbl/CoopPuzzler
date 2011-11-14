@@ -190,13 +190,20 @@ public class InputHandler {
 	
 	private float[] getMapCoordinates(float mouseX, float mouseY)
 	{
-		float xMouse = 2*(mouseX / this.window.windowWidth) - 1;
-		float yMouse = 2*(mouseY / this.window.windowHeight) - 1;
-		float xCoord = xMouse - this.transformX(this.x);
-		float yCoord = yMouse - this.transformY(this.y);
-	//	System.out.println("("+xCoord+", "+yCoord+")");
-		xCoord = (xCoord*(this.window.windowWidth/640))/(InputHandler.X_FIELD_SIZE);
-		yCoord = (yCoord*(this.window.windowHeight/480))/InputHandler.Y_FIELD_SIZE;
+		float aspect = this.window.windowWidth / this.window.windowHeight;
+		float xCoord = mouseX;
+		float yCoord = mouseY;
+		xCoord /= this.window.windowHeight/2;
+		xCoord -= 1;
+		System.out.println("("+xCoord+", "+yCoord+")");
+		xCoord /= this.zoomLevel;
+		xCoord -= this.x;
+		xCoord -= 0.2*aspect;//0.4/this.zoomLevel;
+		
+		yCoord /= this.window.windowHeight/2;
+		yCoord -= 1;
+		yCoord /= this.zoomLevel;
+		yCoord -= this.y;
 		glColor3f(1.0f, 0.0f, 0.0f);
 		glBegin(GL_QUADS);
 		glVertex2f(xCoord - 0.1f, yCoord - 0.1f);
@@ -204,6 +211,7 @@ public class InputHandler {
 		glVertex2f(xCoord + 0.1f, yCoord + 0.1f);
 		glVertex2f(xCoord - 0.1f, yCoord + 0.1f);
 		glEnd();
+		
 		return new float[]{xCoord, yCoord};
 	}
 
