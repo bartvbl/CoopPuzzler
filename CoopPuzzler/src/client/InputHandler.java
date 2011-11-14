@@ -19,7 +19,7 @@ public class InputHandler {
 	private float zoomLevel = 0.20f;
 	private float x = -6.5f;
 	private float y = -4.5f;
-	private int mapWidth, mapHeight;
+	private int mapNumRows, mapNumColumns;
 	private CoordConverter converter = new CoordConverter();
 	private ClientWindow window;
 	private static final float X_FIELD_SIZE = 0.1427367308f;
@@ -40,8 +40,8 @@ public class InputHandler {
 	{
 		this.puzzleTable = table;
 		this.window = window;
-		this.mapHeight = mapHeight;
-		this.mapWidth = mapWidth;
+		this.mapNumColumns = mapHeight;
+		this.mapNumRows = mapWidth;
 		this.initAspect = this.window.windowWidth/this.window.windowHeight;
 		try {
 			Mouse.create();
@@ -90,7 +90,7 @@ public class InputHandler {
 						this.selectionUndoList.add(point);
 					}
 					int column = point.getX();
-					int row = this.mapWidth - point.getY() -1;
+					int row = this.mapNumRows - point.getY() -1;
 					this.isWaiting = true;
 					this.selectionActionStartTime = this.selectionActionTimer.getTime();
 					this.previousChar = typedKey;
@@ -107,7 +107,7 @@ public class InputHandler {
 					Point point = this.selectionUndoList.remove(this.selectionUndoList.size()-1);
 					this.selectionArray.add(0, point);
 					int column = point.getX();
-					int row = this.mapWidth - point.getY() -1;
+					int row = this.mapNumRows - point.getY() -1;
 					this.previousChar = this.puzzleTable.puzzleTable[row][column].getCurrentValueOfField();
 					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(' ');
 					this.isWaiting = true;
@@ -123,10 +123,10 @@ public class InputHandler {
 				this.selectionArray.clear();
 				float[] coords = this.getMapCoordinates(Mouse.getX(), Mouse.getY());
 				
-				if(!((coords[0] < 0) || (coords[1] < 0) || (coords[1] >= this.mapWidth) || (coords[0] >= this.mapHeight)))
+				if(!((coords[0] < 0) || (coords[1] < 0) || (coords[1] >= this.mapNumRows) || (coords[0] >= this.mapNumColumns)))
 				{
 					int column = (int)coords[0];
-					int row = this.mapWidth - (int)coords[1] -1;
+					int row = this.mapNumRows - (int)coords[1] -1;
 					if(this.puzzleTable.fieldIsOccupied(row, column))
 					{
 						return;
@@ -137,9 +137,9 @@ public class InputHandler {
 					//lower quadrant
 					if((remX > remY) && (remX < (1 - remY)))
 					{
-						int tracker = this.mapWidth - (int)coords[1];
+						int tracker = this.mapNumRows - (int)coords[1];
 						int counter = 1;
-						while(tracker < this.mapWidth)
+						while(tracker < this.mapNumRows)
 						{
 							if(this.puzzleTable.fieldIsOccupied(tracker, (int) coords[0]))
 							{
@@ -155,9 +155,9 @@ public class InputHandler {
 					{
 						int tracker = (int)coords[0] + 1;
 						int counter = 1;
-						while(tracker < this.mapHeight)
+						while(tracker < this.mapNumColumns)
 						{
-							if(this.puzzleTable.fieldIsOccupied((int) this.mapWidth - (int)coords[1]-1,tracker))
+							if(this.puzzleTable.fieldIsOccupied((int) this.mapNumRows - (int)coords[1]-1,tracker))
 							{
 								break;
 							}
@@ -190,7 +190,7 @@ public class InputHandler {
 		xCoord -= 1;
 		xCoord /= this.zoomLevel;
 		xCoord -= this.x;
-		xCoord -= -5.0f + ((aspect * 1.0f))/this.zoomLevel;
+		xCoord -= -5.0f + (aspect/this.zoomLevel);
 		
 		yCoord /= this.window.windowHeight/2;
 		yCoord -= 1;
@@ -217,22 +217,24 @@ public class InputHandler {
 		{
 			this.x -= MOVE_SPEED;
 		}
-//		if(x < -0.5f)
-//		{
-//			x = -0.5f;
-//		}
-//		if(x > 1.5f)
-//		{
-//			x = 1.5f;
-//		}
-//		if(y < -0.5f)
-//		{
-//			y = -0.5f;
-//		}
-//		if(y > 1.5f)
-//		{
-//			y = 1.5f;
-//		}
+		float aspect = this.window.windowWidth / this.window.windowHeight;
+		float bound = 1/this.zoomLevel;
+		if(x < -1*bound*aspect - this.mapNumColumns/2)
+		{
+			x = -1*bound*aspect - this.mapNumColumns/2;
+		}
+		if(x > bound*aspect - this.mapNumColumns/2)
+		{
+			x = bound*aspect - this.mapNumColumns/2;
+		}
+		if(y < -1*bound - this.mapNumRows/2)
+		{
+			y = -1*bound - this.mapNumRows/2;
+		}
+		if(y > bound - this.mapNumRows/2)
+		{
+			y = bound - this.mapNumRows/2;
+		}
 	}
 
 	private void handleMouse() {
