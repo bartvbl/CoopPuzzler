@@ -188,22 +188,14 @@ public class InputHandler {
 		float yCoord = mouseY;
 		xCoord /= this.window.windowHeight/2;
 		xCoord -= 1;
-		//System.out.println("("+xCoord+", "+yCoord+")");
 		xCoord /= this.zoomLevel;
 		xCoord -= this.x;
-		xCoord -= 1f/((aspect/this.initAspect)) + -1.3;
+		xCoord -= -5.0f + ((aspect * 1.0f))/this.zoomLevel;
 		
 		yCoord /= this.window.windowHeight/2;
 		yCoord -= 1;
 		yCoord /= this.zoomLevel;
 		yCoord -= this.y;
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glBegin(GL_QUADS);
-		glVertex2f(xCoord - 0.1f, yCoord - 0.1f);
-		glVertex2f(xCoord + 0.1f, yCoord - 0.1f);
-		glVertex2f(xCoord + 0.1f, yCoord + 0.1f);
-		glVertex2f(xCoord - 0.1f, yCoord + 0.1f);
-		glEnd();
 		
 		return new float[]{xCoord, yCoord};
 	}

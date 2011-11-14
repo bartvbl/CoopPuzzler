@@ -83,7 +83,7 @@ public class PuzzleDrawer {
 		glBegin(GL_QUADS);
 		if(this.inputHandler.isTyping)
 		{
-			glColor4f(1.0f, 0.797f, 0.0f, 0.8f);
+			glColor4f(1.0f, 0.797f, 0.0f, 1.0f);
 		} else {
 			glColor4f(1.0f, 0.797f, 0.0f, 0.7f);
 		}

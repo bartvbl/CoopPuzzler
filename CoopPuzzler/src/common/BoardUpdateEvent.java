@@ -19,6 +19,13 @@ public class BoardUpdateEvent {
 		
 		
 	}
+	public BoardUpdateEvent(int x, int y, char value, Color colour)
+	{
+		this.x = x;
+		this.y = y;
+		this.value = value;
+		this.color = colour;
+	}
 
 	public int getX() {
 		return x;
