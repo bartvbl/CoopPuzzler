@@ -15,7 +15,7 @@ public class GLFont
 	private float[] fgColour;
 	private float[] bgColour;
 	private Font font;
-	private static final float QUALITY = 8.0f;
+	private static final float QUALITY = 7.0f;
 	
 	public GLFont(Font font, float[] fgColour, float[] bgColour) 
 	{

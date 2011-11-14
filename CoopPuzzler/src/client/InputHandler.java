@@ -68,13 +68,7 @@ public class InputHandler {
 		} else {
 			if(this.isTyping)
 			{
-				if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-				{
-					this.isTyping = false;
-					this.isWaiting = true;
-					this.selectionActionStartTime = this.selectionActionTimer.getTime();
-				}
-				if(Mouse.isButtonDown(1))
+				if((Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) || (Mouse.isButtonDown(1)) || (Mouse.isButtonDown(0)))
 				{
 					this.isTyping = false;
 					this.isWaiting = true;
@@ -105,7 +99,23 @@ public class InputHandler {
 						this.selectionActionStartTime = this.selectionActionTimer.getTime();
 					}
 				}
-					
+				if(Keyboard.isKeyDown(Keyboard.KEY_BACK))
+				{
+					Point point = this.selectionUndoList.remove(this.selectionUndoList.size()-1);
+					this.selectionArray.add(0, point);
+					int column = point.getX();
+					int row = this.mapWidth - point.getY() -1;
+					this.previousChar = this.puzzleTable.puzzleTable[row][column].getCurrentValueOfField();
+					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(' ');
+					this.isWaiting = true;
+					this.selectionActionStartTime = this.selectionActionTimer.getTime();
+					if(this.selectionUndoList.size() == 0)
+					{
+						this.isTyping = false;
+						this.isWaiting = true;
+						this.selectionActionStartTime = this.selectionActionTimer.getTime();
+					}
+				}
 			} else {
 				this.selectionArray.clear();
 				float[] coords = this.getMapCoordinates(Mouse.getX(), Mouse.getY());
@@ -185,7 +195,16 @@ public class InputHandler {
 		float xCoord = xMouse - this.transformX(this.x);
 		float yCoord = yMouse - this.transformY(this.y);
 	//	System.out.println("("+xCoord+", "+yCoord+")");
-		return new float[]{xCoord/InputHandler.X_FIELD_SIZE, yCoord/InputHandler.Y_FIELD_SIZE};
+		xCoord = (xCoord*(this.window.windowWidth/640))/(InputHandler.X_FIELD_SIZE);
+		yCoord = (yCoord*(this.window.windowHeight/480))/InputHandler.Y_FIELD_SIZE;
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glBegin(GL_QUADS);
+		glVertex2f(xCoord - 0.1f, yCoord - 0.1f);
+		glVertex2f(xCoord + 0.1f, yCoord - 0.1f);
+		glVertex2f(xCoord + 0.1f, yCoord + 0.1f);
+		glVertex2f(xCoord - 0.1f, yCoord + 0.1f);
+		glEnd();
+		return new float[]{xCoord, yCoord};
 	}
 
 	private void handleKeyboard() {
