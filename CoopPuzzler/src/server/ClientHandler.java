@@ -9,22 +9,25 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import common.ProtocolConstants;
+import common.BoardUpdateEvent;
 
 public class ClientHandler implements Runnable,ProtocolConstants {
 	private Socket clientSocket;
 	private BufferedWriter output;
 	private BufferedReader input;
+	private ServerMain main;
 	/** 
 	 * When this task is waiting for a response from client,
 	 * it will check again this many times a second.
 	 */
 	private static final int FREQUENCY = 10;
-	
-	private ArrayList<String> messagesToProcess = new ArrayList<String>();
-	
-	public ClientHandler(Socket clientSocket)
+
+	private ArrayList<BoardUpdateEvent> outgoingMessageQueue = new ArrayList<BoardUpdateEvent>();
+
+	public ClientHandler(ServerMain main,Socket clientSocket)
 	{
 		this.clientSocket = clientSocket;
+		this.main = main;
 		try {
 			this.input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			this.output = new BufferedWriter(new PrintWriter(clientSocket.getOutputStream()));
@@ -59,51 +62,51 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			//TODO: Handle giving clients the board data.
 			String request = "";
 			while(!request.equals(SESSION_TEARDOWN)){
-				while(!input.ready()){
-					try {Thread.sleep(100);} catch (InterruptedException e) {}
-				}
 				request = input.readLine();
-				//TODO: Handle board update requests from clients.
-				processMessages();
+				if(request != null && request.startsWith(BOARD_UPDATE)){
+					main.broadcastMessage(new BoardUpdateEvent(request));
+				}
+				processEvents();
+				try {Thread.sleep(100);} catch (InterruptedException e) {}
 			}
-			
+
 			output.write(SESSION_TEARDOWN_ACK);
 			output.newLine();
 			output.flush();
 			clientSocket.close();
-			
-			
+
+
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	private void processMessages() throws IOException
+	private void processEvents() throws IOException
 	{
-		String message = this.getNextMessage();
-		while(message != null)
+		BoardUpdateEvent event = this.getNextMessage();
+		while(event != null)
 		{
-			output.write(message);
+			output.write(event.toString());
 			output.newLine();
-			message = this.getNextMessage();
+			event = this.getNextMessage();
 		}
 		output.flush();
 	}
-	private String getNextMessage()
+	private BoardUpdateEvent getNextMessage()
 	{
-		String message = null;
-		synchronized(this.messagesToProcess)
+		BoardUpdateEvent message = null;
+		synchronized(this.outgoingMessageQueue)
 		{
-			message = (this.messagesToProcess.isEmpty() ? null : this.messagesToProcess.remove(0));
+			message = (this.outgoingMessageQueue.isEmpty() ? null : this.outgoingMessageQueue.remove(0));
 		}
 		return message;
 	}
-	
-	public void broadcastMessageToClient(String message)
+
+	public void broadcastUpdateToClient(BoardUpdateEvent event)
 	{
-		synchronized(this.messagesToProcess)
+		synchronized(this.outgoingMessageQueue)
 		{
-			this.messagesToProcess.add(message);
+			this.outgoingMessageQueue.add(event);
 		}
 	}
 }

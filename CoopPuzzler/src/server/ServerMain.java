@@ -14,14 +14,18 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
+import common.BoardUpdateEvent;
+
 public class ServerMain implements Runnable{
 	private ServerSocket serverSocket = null;
 	private ServerWindow window;
 	private ExecutorService threadpool;
+	private ArrayList<ClientHandler> handlers;
 
 	public void initialize()
 	{
 		this.window = new ServerWindow();
+		this.handlers = new ArrayList<ClientHandler>();
 		this.threadpool = Executors.newCachedThreadPool();
 		try{this.serverSocket = new ServerSocket(4444);}
 		catch(IOException e){e.printStackTrace();}
@@ -34,7 +38,8 @@ public class ServerMain implements Runnable{
 		while(true){
 			try {
 				clientSocket = this.serverSocket.accept();
-				ClientHandler handler = new ClientHandler(clientSocket);
+				ClientHandler handler = new ClientHandler(this, clientSocket);
+				handlers.add(handler);
 				this.threadpool.execute(handler);
 				this.window.writeMessage("Accepted client " + clientSocket.toString());
 			} catch (IOException e) {
@@ -42,22 +47,13 @@ public class ServerMain implements Runnable{
 				e.printStackTrace();
 				System.exit(-1);
 			} 
-//			finally
-//			{
-//				this.window.writeMessage("closing connection..");
-//				try {
-//					clientSocket.close();
-//					serverSocket.close();
-//				} catch (IOException e) {
-//					JOptionPane.showMessageDialog(null, "The final catch went horribly wrong!");
-//					e.printStackTrace();
-//				}
-//			}
 		}
 	}
 
-	public synchronized void broadcastMessage(String message)
+	public synchronized void broadcastMessage(BoardUpdateEvent event)
 	{
-
+		for(ClientHandler handler : handlers){
+			handler.broadcastUpdateToClient(event);
+		}
 	}
 }
