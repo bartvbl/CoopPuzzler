@@ -4,6 +4,9 @@ package client;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 import common.PuzzleTable;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -20,6 +23,13 @@ public class ClientMain implements ProtocolConstants{
 	public ClientMain()
 	{
 		this.communicator = new ClientCommunicator(this);
+		try {
+			communicator.init(InetAddress.getLocalHost());
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		Thread comms = new Thread(communicator);
+		comms.start();
 		this.window = new ClientWindow(this);
 		this.puzzleTable = new PuzzleTable();
 		this.puzzleTable.initialize();
