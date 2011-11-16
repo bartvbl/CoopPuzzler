@@ -52,7 +52,7 @@ public class SelectionHandler {
 		} else {
 			if(this.isTyping)
 			{
-				if((Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) || (Mouse.isButtonDown(1)) || (Mouse.isButtonDown(0)))
+				if(this.cancelSelectionRequested())
 				{
 					this.isTyping = false;
 					this.waitForNextInput();
@@ -113,10 +113,10 @@ public class SelectionHandler {
 						return;
 					}
 					this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
-					float remX = coords[0] % 1;
-					float remY = coords[1] % 1;
+					float remainderX = coords[0] % 1;
+					float remainderY = coords[1] % 1;
 					//lower quadrant
-					if((remX > remY) && (remX < (1 - remY)))
+					if((remainderX > remainderY) && (remainderX < (1 - remainderY)))
 					{
 						int tracker = this.mapNumRows - (int)coords[1];
 						int counter = 1;
@@ -132,7 +132,7 @@ public class SelectionHandler {
 						}
 					}
 					//right quadrant
-					if((remX > remY) && (remX > (1 - remY)))
+					if((remainderX > remainderY) && (remainderX > (1 - remainderY)))
 					{
 						int tracker = (int)coords[0] + 1;
 						int counter = 1;
@@ -159,6 +159,10 @@ public class SelectionHandler {
 		}
 	}
 	
+	private boolean cancelSelectionRequested() {
+		return (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) || (Mouse.isButtonDown(1)) || (Mouse.isButtonDown(0));
+	}
+
 	private void waitForNextInput()
 	{
 		this.isWaiting = true;

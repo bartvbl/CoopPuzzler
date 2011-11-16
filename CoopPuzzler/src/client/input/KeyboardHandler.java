@@ -17,6 +17,8 @@ public class KeyboardHandler {
 	public KeyboardHandler(ClientMain main) {
 		this.main = main;
 		this.window = main.window;
+		this.mapNumRows = main.puzzleTable.puzzleTable.length;
+		this.mapNumColumns = main.puzzleTable.puzzleTable[0].length;
 	}
 
 	public void handleKeyboard(float zoomLevel, float x, float y)

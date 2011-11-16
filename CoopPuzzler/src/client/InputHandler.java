@@ -13,7 +13,7 @@ import client.input.SelectionHandler;
 import static org.lwjgl.opengl.GL11.*;
 
 public class InputHandler {
-	private float zoomLevel = 0.4f;
+	private float zoomLevel = 0.2f;
 	private float x = -6.5f;
 	private float y = -4.5f;
 	
@@ -36,12 +36,10 @@ public class InputHandler {
 	
 	public void update()
 	{
-		this.mouseHandler.handleMouse();
+		this.mouseHandler.handleMouse(this.zoomLevel);
 		this.keyboardHandler.handleKeyboard(this.zoomLevel, this.x, this.y);
-		
-		float zoomLevel = this.mouseHandler.getZoomLevel();
-		glScalef(zoomLevel, zoomLevel, 0.0f);
-		glTranslatef(x, y, 0.0f);
+		glScalef(this.zoomLevel, this.zoomLevel, 0.0f);
+		glTranslatef(this.x, this.y, 0.0f);
 	}
 	
 	public void handleSelection()
