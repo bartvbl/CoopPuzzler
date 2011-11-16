@@ -8,6 +8,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.Timer;
 
+import common.BoardUpdateEvent;
+import common.FontColour;
 import common.PuzzleField;
 import common.PuzzleTable;
 
@@ -35,11 +37,13 @@ public class InputHandler {
 	private char previousChar = ' ';
 	
 	private final float initAspect;
+	private final ClientMain main;
 	
-	public InputHandler(ClientWindow window, int mapHeight, int mapWidth, PuzzleTable table)
+	public InputHandler(ClientMain main, int mapHeight, int mapWidth)
 	{
-		this.puzzleTable = table;
-		this.window = window;
+		this.main = main;
+		this.puzzleTable = main.puzzleTable;
+		this.window = main.window;
 		this.mapNumColumns = mapHeight;
 		this.mapNumRows = mapWidth;
 		this.initAspect = this.window.windowWidth/this.window.windowHeight;
@@ -80,6 +84,11 @@ public class InputHandler {
 				char typedKey = KeyboardToCharConverter.getKeyCharValue();
 				if(typedKey != ' ')
 				{
+					
+					this.isWaiting = true;
+					this.selectionActionStartTime = this.selectionActionTimer.getTime();
+//					this.previousChar = typedKey;
+					
 					Point point;
 					if((this.previousChar == 'i') && (typedKey == 'j'))
 					{
@@ -87,14 +96,14 @@ public class InputHandler {
 						typedKey = TextureLibrary.IJ;
 					} else {
 						point = this.selectionArray.remove(0);
-						this.selectionUndoList.add(point);
+//						this.selectionUndoList.add(point);
 					}
 					int column = point.getX();
 					int row = this.mapNumRows - point.getY() -1;
-					this.isWaiting = true;
-					this.selectionActionStartTime = this.selectionActionTimer.getTime();
-					this.previousChar = typedKey;
-					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(typedKey);
+					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,new FontColour(FontColour.DARK_BLUE));
+					this.main.sendEventToServer(update);
+//					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(typedKey);
+					
 					if(this.selectionArray.size() == 0)
 					{
 						this.isTyping = false;

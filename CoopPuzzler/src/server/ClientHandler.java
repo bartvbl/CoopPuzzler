@@ -60,6 +60,9 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			output.newLine();
 			output.flush();
 			//TODO: Handle giving clients the board data.
+			output.write(BOARD_TRANSFER_END);
+			output.newLine();
+			output.flush();
 			String request = "";
 			while(!request.equals(SESSION_TEARDOWN)){
 				request = input.readLine();
