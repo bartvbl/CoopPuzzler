@@ -28,8 +28,8 @@ public class ClientMain implements ProtocolConstants{
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		Thread comms = new Thread(communicator);
-		comms.start();
+		Thread commsMonitor = new Thread(communicator);
+		commsMonitor.start();
 		this.window = new ClientWindow(this);
 		this.puzzleTable = new PuzzleTable();
 		this.puzzleTable.initialize();
