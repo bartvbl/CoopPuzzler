@@ -2,18 +2,30 @@ package client.input;
 
 import org.lwjgl.input.Mouse;
 
+import client.InputHandler;
+
 public class MouseHandler {
-	public static float updateZoomLevel(float zoomLevel)
+	private InputHandler inputHandler;
+	private float zoomLevel = 0.2f;
+	
+	public MouseHandler(InputHandler inputHandler) {
+		this.inputHandler = inputHandler;
+	}
+	
+	public float getZoomLevel()
 	{
-		zoomLevel += ((float)Mouse.getDWheel())/10000;
-		if(zoomLevel > 0.5f)
+		return this.zoomLevel;
+	}
+	
+	public void handleMouse() {
+		this.zoomLevel += ((float)Mouse.getDWheel())/10000;
+		if(this.zoomLevel > 0.5f)
 		{
-			zoomLevel = 0.5f;
+			this.zoomLevel = 0.5f;
 		}
-		if(zoomLevel < 0.05f)
+		if(this.zoomLevel < 0.05f)
 		{
-			zoomLevel = 0.05f;
+			this.zoomLevel = 0.05f;
 		}
-		return zoomLevel;
 	}
 }

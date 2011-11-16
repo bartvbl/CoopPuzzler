@@ -13,9 +13,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ClientMain implements ProtocolConstants{
 	public final ClientWindow window;
 	public final PuzzleTable puzzleTable;
-	private PuzzleDrawer puzzleDrawer;
-	private InputHandler inputHandler;
-	private ClientCommunicator communicator;
+	public final PuzzleDrawer puzzleDrawer;
+	public final InputHandler inputHandler;
+	public final ClientCommunicator communicator;
 	
 	private AtomicReference<ArrayList<BoardUpdateEvent>> outputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	private AtomicReference<ArrayList<BoardUpdateEvent>> inputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
@@ -35,7 +35,7 @@ public class ClientMain implements ProtocolConstants{
 		this.window = new ClientWindow(this);
 		this.puzzleTable = new PuzzleTable();
 		this.puzzleTable.initialize();
-		this.inputHandler = new InputHandler(this, this.puzzleTable.puzzleTable[0].length, this.puzzleTable.puzzleTable.length);
+		this.inputHandler = new InputHandler(this);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
 		this.window.mainLoop();
 	}

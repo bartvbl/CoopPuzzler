@@ -79,9 +79,9 @@ public class PuzzleDrawer {
 	}
 
 	private void drawSelection(PuzzleField[][] table) {
-		ArrayList<Point> selectionList = this.inputHandler.selectionArray;
+		ArrayList<Point> selectionList = this.inputHandler.getSelectionArray();
 		glBegin(GL_QUADS);
-		if(this.inputHandler.isTyping)
+		if(this.inputHandler.isTyping())
 		{
 			glColor4f(1.0f, 0.797f, 0.0f, 1.0f);
 		} else {
