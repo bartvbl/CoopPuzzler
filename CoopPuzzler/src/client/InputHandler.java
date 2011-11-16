@@ -190,7 +190,7 @@ public class InputHandler {
 		xCoord -= 1;
 		xCoord /= this.zoomLevel;
 		xCoord -= this.x;
-		xCoord -= -5.0f + (aspect/this.zoomLevel);
+		xCoord -= (aspect - 1.0f)/this.zoomLevel;
 		
 		yCoord /= this.window.windowHeight/2;
 		yCoord -= 1;
