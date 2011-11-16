@@ -21,13 +21,11 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 	private boolean connected = false;
 	/** When waiting for a response from the server, check back this many times a second */
 	private static final int FREQUENCY = 10;
-	private ArrayList<BoardUpdateEvent> incomingEvents;
 	private String board;
 
 	public ClientCommunicator(ClientMain main)
 	{
 		this.main = main;
-		incomingEvents = new ArrayList<BoardUpdateEvent>();
 	}
 
 	private ArrayList<BoardUpdateEvent> getBoardUpdateEventQueue()
@@ -116,8 +114,8 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			output.flush();
 		} catch (IOException e) {//The protocol calls for the server to close the TCP connection. This raises IOExceptions.
 			System.out.println(e.getMessage());
-			connected = false;
 		}
+		connected = false;
 
 	}
 
@@ -129,16 +127,18 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		while(connected){
 			try {
 				String message = input.readLine();
-				if(message != null && message.startsWith(BOARD_UPDATE)){
-					synchronized(incomingEvents){
-						incomingEvents.add(new BoardUpdateEvent(message));
+				ArrayList<BoardUpdateEvent> incoming = main.getEventQueueToClient();
+				while(message != null && message.startsWith(BOARD_UPDATE)){
+					synchronized(incoming){
+						incoming.add(new BoardUpdateEvent(message));
 					}
+					message = input.readLine();
+				}
 				ArrayList<BoardUpdateEvent> outgoing = getBoardUpdateEventQueue();
 				for(BoardUpdateEvent event : outgoing){
 					output.write(event.toString());
 				}
 				Thread.sleep(1000/FREQUENCY);
-				}
 
 			} catch (IOException e) {
 				e.printStackTrace();

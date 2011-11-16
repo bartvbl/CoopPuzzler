@@ -1,7 +1,7 @@
 package common;
 
 
-public class PuzzleTable {
+public class PuzzleTable implements BoardUpdateListener{
 	public PuzzleField[][] puzzleTable;
 	private static final String DEFAULT_FILE_SOURCE = "res/puzzle.txt";
 	
@@ -27,4 +27,15 @@ public class PuzzleTable {
 			return this.puzzleTable[row][column].isFilled;
 		}
 	}
+	public BoardUpdateEvent getFieldAsBoardUpdateMessage(int row, int column)
+	{
+		return new BoardUpdateEvent(row, column, this.puzzleTable[row][column].getCurrentValueOfField(), this.puzzleTable[row][column].getFieldTextColour());
+	}
+	
+	@Override
+	public void boardUpdated(BoardUpdateEvent event) {
+		puzzleTable[event.getX()][event.getY()].setNewCharacterValue(event.getCharacterValue());
+		puzzleTable[event.getX()][event.getY()].setFieldTextColour(event.getColour());
+	}
 }
+
