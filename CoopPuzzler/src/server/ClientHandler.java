@@ -68,7 +68,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 				request = input.readLine();
 				if(request != null && request.startsWith(BOARD_UPDATE)){
 					main.broadcastMessage(new BoardUpdateEvent(request));
-					System.out.println("bouncing message");
+					this.main.writeMessageInWindow("bouncing!");
 				}
 				processEvents();
 				try {Thread.sleep(100);} catch (InterruptedException e) {}

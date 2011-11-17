@@ -30,11 +30,16 @@ public class ServerMain implements Runnable{
 		try{this.serverSocket = new ServerSocket(4444);}
 		catch(IOException e){e.printStackTrace();}
 	}
+	
+	public void writeMessageInWindow(String message)
+	{
+		this.window.writeMessage(message);
+	}
 
 	public void run()
 	{
 		Socket clientSocket = null;
-		this.window.writeMessage("starting server..");
+		this.window.writeMessage("server started.");
 		while(true){
 			try {
 				clientSocket = this.serverSocket.accept();

@@ -50,7 +50,6 @@ public class ClientMain implements ProtocolConstants{
 	}
 
 	public ArrayList<BoardUpdateEvent> getEventQueueToServer() {
-		System.out.println("fetching event list for dispatch to server");
 		ArrayList<BoardUpdateEvent> list;
 		ArrayList<BoardUpdateEvent> newList = new ArrayList<BoardUpdateEvent>();
 		list = this.outputEventQueue.getAndSet(newList);
@@ -67,9 +66,16 @@ public class ClientMain implements ProtocolConstants{
 	public void sendEventToServer(BoardUpdateEvent event)
 	{
 		ArrayList<BoardUpdateEvent> outgoing = outputEventQueue.get();
-		System.out.println("adding event to outgoing event queue");
 		synchronized (outgoing) {
 			outgoing.add(event);
+		}
+	}
+	
+	public void sendEventToClient(BoardUpdateEvent event)
+	{
+		ArrayList<BoardUpdateEvent> incoming = this.inputEventQueue.get();
+		synchronized (incoming) {
+			incoming.add(event);
 		}
 	}
 	

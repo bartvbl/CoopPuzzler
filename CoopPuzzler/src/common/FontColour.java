@@ -24,6 +24,11 @@ public class FontColour {
 		return colours[colourIndex];
 	}
 	
+	public int getColourIndex()
+	{
+		return this.colourIndex;
+	}
+	
 	public String toString(){
 		return Integer.toString(this.colourIndex);
 	}

@@ -41,7 +41,7 @@ public class BoardUpdateEvent {
 	}
 	
 	public String toString(){
-		return ProtocolConstants.BOARD_UPDATE + " " + row + " " + column + " " + value + " " + colour.toString();
+		return ProtocolConstants.BOARD_UPDATE + " " + row + " " + column + " " + value + " " + colour.toString()+"\n";
 	}
 
 }

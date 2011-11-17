@@ -76,7 +76,7 @@ public class SelectionHandler {
 					}
 					int column = point.getX();
 					int row = this.mapNumRows - point.getY() -1;
-					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,new FontColour(FontColour.DARK_BLUE));
+					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,new FontColour(FontColour.DARK_RED));
 					this.main.sendEventToServer(update);
 //					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(typedKey);
 					

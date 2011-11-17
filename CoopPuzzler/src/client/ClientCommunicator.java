@@ -126,18 +126,21 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 	public void run(){
 		while(connected){
 			try {
-				String message = input.readLine();
-				ArrayList<BoardUpdateEvent> incoming = main.getEventQueueToClient();
+				String message = this.readNextMessage();
 				while(message != null && message.startsWith(BOARD_UPDATE)){
-					synchronized(incoming){
-						incoming.add(new BoardUpdateEvent(message));
-					}
-					message = input.readLine();
+					System.out.println("event received from server");
+					this.main.sendEventToClient(new BoardUpdateEvent(message));
+					message = this.readNextMessage();
 				}
 				ArrayList<BoardUpdateEvent> outgoing = getBoardUpdateEventQueue();
-				for(BoardUpdateEvent event : outgoing){
-					output.write(event.toString());
+				synchronized(outgoing)
+				{
+					for(BoardUpdateEvent event : outgoing){
+						System.out.println("writing to server");
+						output.write(event.toString());
+					}
 				}
+				output.flush();
 				Thread.sleep(1000/FREQUENCY);
 
 			} catch (IOException e) {
@@ -146,6 +149,17 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 				e.printStackTrace();
 			}
 		}
+	}
+	private String readNextMessage() throws IOException
+	{
+		String message;
+		if(input.ready())
+		{
+			message = input.readLine();
+		} else {
+			message = "";
+		}
+		return message;
 	}
 
 

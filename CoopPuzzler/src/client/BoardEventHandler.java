@@ -18,11 +18,15 @@ public class BoardEventHandler {
 	public void handleEvents()
 	{
 		ArrayList<BoardUpdateEvent> eventQueue = this.main.getEventQueueToClient();
-		for(BoardUpdateEvent event : eventQueue)
+		synchronized(eventQueue)
 		{
-			PuzzleField field = this.table[event.getRow()][event.getColumn()];
-			field.setNewCharacterValue(event.getCharacterValue());
-			field.setFieldTextColour(event.getColour());
+			for(BoardUpdateEvent event : eventQueue)
+			{
+				PuzzleField field = this.table[event.getRow()][event.getColumn()];
+				field.setNewCharacterValue(event.getCharacterValue());
+				field.setFieldTextColour(event.getColour());
+				System.out.println("event received!");
+			}
 		}
 	}
 }

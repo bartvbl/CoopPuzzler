@@ -13,7 +13,7 @@ import client.gl.Texture;
 public class TextureLibrary {
 	public static final char IJ = '+';
 	
-	private HashMap<FontColour, HashMap<Character, Texture>> textFontTextures;
+	private HashMap<Integer, HashMap<Character, Texture>> textFontTextures;
 	private HashMap<Integer, Texture> referenceTextures;
 	private GLFont referenceFontGenerator;
 	
@@ -30,7 +30,7 @@ public class TextureLibrary {
 	
 	public TextureLibrary()
 	{
-		this.textFontTextures = new HashMap<FontColour, HashMap<Character, Texture>>();
+		this.textFontTextures = new HashMap<Integer, HashMap<Character, Texture>>();
 		this.referenceTextures = new HashMap<Integer, Texture>();
 		this.initializeReferenceFontGenerator();
 	}
@@ -40,12 +40,12 @@ public class TextureLibrary {
 		Color colour = fontColour.getColour();
 		HashMap<Character, Texture> textureMap = new HashMap<Character, Texture>();
 		this.generateFontTextures(textureMap, colour);
-		this.textFontTextures.put(fontColour, textureMap);
+		this.textFontTextures.put(fontColour.getColourIndex(), textureMap);
 	}
 	
 	public Texture getTextTexture(FontColour colour, char character)
 	{
-		return this.textFontTextures.get(colour).get(character);
+		return this.textFontTextures.get(colour.getColourIndex()).get(character);
 	}
 	
 	public void addReferenceTexture(int questionReference) {
