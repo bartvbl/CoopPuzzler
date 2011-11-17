@@ -26,6 +26,7 @@ public class BoardEventHandler {
 				field.setNewCharacterValue(event.getCharacterValue());
 				field.setFieldTextColour(event.getColour());
 				System.out.println("event received!");
+				System.out.println(event.getColour().getColourIndex());
 			}
 		}
 	}
