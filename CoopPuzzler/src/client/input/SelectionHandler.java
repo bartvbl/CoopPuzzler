@@ -14,6 +14,7 @@ import client.TextureLibrary;
 
 import common.BoardUpdateEvent;
 import common.FontColour;
+import common.PuzzleField;
 import common.PuzzleTable;
 
 public class SelectionHandler {
@@ -41,6 +42,13 @@ public class SelectionHandler {
 		this.main = main;
 	}
 	
+	public void updateCharacter(BoardUpdateEvent event)
+	{
+		PuzzleField field = this.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
+		field.setNewCharacterValue(event.getCharacterValue());
+		field.setFieldTextColour(event.getColour());
+	}
+	
 	public void handleSelection(float zoomLevel, float x, float y) {
 		Timer.tick();
 		if(isWaiting)
@@ -63,30 +71,33 @@ public class SelectionHandler {
 					
 					this.isWaiting = true;
 					this.selectionActionStartTime = this.selectionActionTimer.getTime();
-//					this.previousChar = typedKey;
 					
 					Point point;
 					if((this.previousChar == 'i') && (typedKey == 'j'))
 					{
-						point = this.selectionUndoList.get(this.selectionUndoList.size()-1);
+						point = this.selectionArray.remove(0);;
 						typedKey = TextureLibrary.IJ;
 					} else {
-						point = this.selectionArray.remove(0);
-//						this.selectionUndoList.add(point);
+						if(typedKey!='i')
+						{
+							point = this.selectionArray.remove(0);
+						} else {
+							point = this.selectionArray.get(0);
+						}
 					}
 					int column = point.getX();
 					int row = this.mapNumRows - point.getY() -1;
-					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,new FontColour(FontColour.DARK_RED));
+					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,new FontColour(FontColour.DARK_BLUE));
 					this.main.sendEventToServer(update);
-//					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(typedKey);
-					
-					if(this.selectionArray.size() == 0)
+					this.selectionUndoList.add(point);
+					this.previousChar = typedKey;
+					if((this.selectionArray.size() == 0) && (typedKey!='i'))
 					{
 						this.isTyping = false;
 						this.waitForNextInput();
 					}
 				}
-				if(Keyboard.isKeyDown(Keyboard.KEY_BACK))
+				if(Keyboard.isKeyDown(Keyboard.KEY_BACK) && (this.selectionUndoList.size() > 0))
 				{
 					Point point = this.selectionUndoList.remove(this.selectionUndoList.size()-1);
 					this.selectionArray.add(0, point);
@@ -94,10 +105,6 @@ public class SelectionHandler {
 					int row = this.mapNumRows - point.getY() -1;
 					this.previousChar = this.puzzleTable.puzzleTable[row][column].getCurrentValueOfField();
 					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(' ');
-					if(this.selectionUndoList.size() == 0)
-					{
-						this.isTyping = false;
-					}
 					this.waitForNextInput();
 				}
 			} else {

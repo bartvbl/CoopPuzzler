@@ -6,6 +6,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
 
+import common.BoardUpdateEvent;
+
 import client.input.KeyboardHandler;
 import client.input.MouseHandler;
 import client.input.SelectionHandler;
@@ -70,5 +72,10 @@ public class InputHandler {
 	public boolean isTyping()
 	{
 		return this.selectionHandler.isTyping();
+	}
+	
+	public void setField(BoardUpdateEvent event)
+	{
+		this.selectionHandler.updateCharacter(event);
 	}
 }

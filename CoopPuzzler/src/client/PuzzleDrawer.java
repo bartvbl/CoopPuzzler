@@ -58,7 +58,7 @@ public class PuzzleDrawer {
 	
 	private void drawLetters(PuzzleField[][] table) {
 		glEnable(GL_TEXTURE_2D);
-		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+		
 		final float OFFSET = -0.5f;
 		final float YOFFSET = -0.65f;
 		final float XOFFSET = 0.90f;
@@ -70,6 +70,11 @@ public class PuzzleDrawer {
 				{
 					Texture tex = this.textureLibrary.getTextTexture(table[i][j].getFieldTextColour(), table[i][j].getCurrentValueOfField());
 					glBindTexture(GL_TEXTURE_2D, tex.texRef);
+					Color colour = table[i][j].getFieldTextColour().getColour();
+					float red = ((float)colour.getRed())/255;
+					float green = ((float)colour.getGreen())/255;
+					float blue = ((float)colour.getBlue())/255;
+					glColor4f(red, green, blue, 1.0f);
 					glBegin(GL_QUADS);
 					glTexCoord2f(1,1);
 					this.drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET + XOFFSET, (table.length - i-1) * FIELD_SIZE + OFFSET + YOFFSET);
@@ -110,7 +115,6 @@ public class PuzzleDrawer {
 	private void drawReferences(PuzzleField[][] table)
 	{
 		glEnable(GL_TEXTURE_2D);
-		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 		final float OFFSET = 0.03f;
 		for(int i = 0; i < table.length; i++)
 		{
