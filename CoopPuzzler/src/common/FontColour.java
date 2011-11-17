@@ -27,9 +27,6 @@ public class FontColour {
 	public String toString(){
 		return Integer.toString(this.colourIndex);
 	}
-	
-	
-
 }
 
 

@@ -2,9 +2,11 @@ package client;
 
 import java.util.ArrayList;
 
+import org.lwjgl.util.Color;
 import org.lwjgl.util.Point;
 
 import client.gl.Texture;
+import common.FontColour;
 import common.PuzzleField;
 import common.PuzzleTable;
 import static org.lwjgl.opengl.GL11.*;
@@ -20,8 +22,15 @@ public class PuzzleDrawer {
 		this.puzzleTable = puzzleTable;
 		this.inputHandler = inputHandler;
 		this.parseFieldReferenceTextures();
+		this.initializeTextureLibrary();
 	}
 	
+	private void initializeTextureLibrary() {
+		this.textureLibrary.addFontColour(new FontColour(FontColour.BLACK));
+		this.textureLibrary.addFontColour(new FontColour(FontColour.DARK_BLUE));
+		this.textureLibrary.addFontColour(new FontColour(FontColour.DARK_RED));
+	}
+
 	private void parseFieldReferenceTextures() {
 		PuzzleField[][] table = puzzleTable.puzzleTable;
 		for(int i = 0; i < table.length; i++)
@@ -59,7 +68,7 @@ public class PuzzleDrawer {
 			{
 				if(table[i][j].getCurrentValueOfField() != ' ')
 				{
-					Texture tex = this.textureLibrary.getDefaultTextureByCharacter(table[i][j].getCurrentValueOfField());
+					Texture tex = this.textureLibrary.getTextTexture(table[i][j].getFieldTextColour(), table[i][j].getCurrentValueOfField());
 					glBindTexture(GL_TEXTURE_2D, tex.texRef);
 					glBegin(GL_QUADS);
 					glTexCoord2f(1,1);

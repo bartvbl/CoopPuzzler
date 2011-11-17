@@ -34,8 +34,8 @@ public class PuzzleTable implements BoardUpdateListener{
 	
 	@Override
 	public void boardUpdated(BoardUpdateEvent event) {
-		puzzleTable[event.getX()][event.getY()].setNewCharacterValue(event.getCharacterValue());
-		puzzleTable[event.getX()][event.getY()].setFieldTextColour(event.getColour());
+		puzzleTable[event.getRow()][event.getColumn()].setNewCharacterValue(event.getCharacterValue());
+		puzzleTable[event.getRow()][event.getColumn()].setFieldTextColour(event.getColour());
 	}
 }
 

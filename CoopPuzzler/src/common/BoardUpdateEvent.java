@@ -1,9 +1,7 @@
 package common;
 
-import org.lwjgl.util.Color;
-
 public class BoardUpdateEvent {
-	private int x,y;
+	private int row,column;
 	private char value;
 	private FontColour colour;
 	
@@ -11,29 +9,27 @@ public class BoardUpdateEvent {
 		if(description==null){return;}
 		String[] split = description.split(" ");
 		try{
-			x = Integer.parseInt(split[1]);
-			y = Integer.parseInt(split[2]);
+			row = Integer.parseInt(split[1]);
+			column = Integer.parseInt(split[2]);
 			value = split[3].charAt(0);
 			colour = new FontColour(Integer.parseInt(split[4]));
 		}catch(Exception e){e.printStackTrace();}
-		
-		
 	}
 	
-	public BoardUpdateEvent(int x, int y, char value, FontColour colour)
+	public BoardUpdateEvent(int row, int column, char value, FontColour colour)
 	{
-		this.x = x;
-		this.y = y;
+		this.row = row;
+		this.column = column;
 		this.value = value;
 		this.colour = colour;
 	}
 
-	public int getX() {
-		return x;
+	public int getRow() {
+		return row;
 	}
 
-	public int getY() {
-		return y;
+	public int getColumn() {
+		return column;
 	}
 
 	public char getCharacterValue() {
@@ -45,7 +41,7 @@ public class BoardUpdateEvent {
 	}
 	
 	public String toString(){
-		return ProtocolConstants.BOARD_UPDATE + " " + x + " " + y + " " + value + " " + colour.toString();
+		return ProtocolConstants.BOARD_UPDATE + " " + row + " " + column + " " + value + " " + colour.toString();
 	}
 
 }

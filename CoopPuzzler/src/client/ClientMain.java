@@ -16,6 +16,7 @@ public class ClientMain implements ProtocolConstants{
 	public final PuzzleDrawer puzzleDrawer;
 	public final InputHandler inputHandler;
 	public final ClientCommunicator communicator;
+	public final BoardEventHandler boardEventHandler;
 	
 	private AtomicReference<ArrayList<BoardUpdateEvent>> outputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	private AtomicReference<ArrayList<BoardUpdateEvent>> inputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
@@ -37,16 +38,19 @@ public class ClientMain implements ProtocolConstants{
 		this.puzzleTable.initialize();
 		this.inputHandler = new InputHandler(this);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
+		this.boardEventHandler = new BoardEventHandler(this, this.puzzleTable.puzzleTable);
 		this.window.mainLoop();
 	}
 
 	public void doFrame() {
+		this.boardEventHandler.handleEvents();
 		this.inputHandler.update();
 		this.puzzleDrawer.draw();
 		this.inputHandler.handleSelection();
 	}
 
 	public ArrayList<BoardUpdateEvent> getEventQueueToServer() {
+		System.out.println("fetching event list for dispatch to server");
 		ArrayList<BoardUpdateEvent> list;
 		ArrayList<BoardUpdateEvent> newList = new ArrayList<BoardUpdateEvent>();
 		list = this.outputEventQueue.getAndSet(newList);
@@ -63,6 +67,7 @@ public class ClientMain implements ProtocolConstants{
 	public void sendEventToServer(BoardUpdateEvent event)
 	{
 		ArrayList<BoardUpdateEvent> outgoing = outputEventQueue.get();
+		System.out.println("adding event to outgoing event queue");
 		synchronized (outgoing) {
 			outgoing.add(event);
 		}
