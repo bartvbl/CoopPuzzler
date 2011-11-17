@@ -35,7 +35,7 @@ public interface ProtocolConstants {
 	public final static String BOARD_TRANSFER_ACK = "ACK BOARD";
 	
 	/**
-	 * A full board update consists of BOARD_UPDATE, two integers for board position, one char for the tile value and three floats for RGB colour of the tile, all space-separated.
+	 * A full board update consists of BOARD_UPDATE, two integers for board position, one char for the tile value and one integer for the FontColour, all space-separated.
 	 * Server responds to board updates by testing their validity and transmitting valid ones to all clients. Clients respond to them by updating their local model.
 	 */
 	public final static String BOARD_UPDATE = "UPDATE";
