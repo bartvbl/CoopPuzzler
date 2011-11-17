@@ -16,6 +16,7 @@ public class FontColour {
 	public FontColour(int fontcolourIndex){
 		if(fontcolourIndex < 0 || fontcolourIndex >= colours.length){
 			this.colourIndex = 0;
+			return;
 		}
 		colourIndex = fontcolourIndex;
 	}
