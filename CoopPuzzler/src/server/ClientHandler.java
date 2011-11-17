@@ -65,13 +65,12 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			output.flush();
 			String request = "";
 			while(!request.equals(SESSION_TEARDOWN)){
-				request = input.readLine();
+				processEvents();
 				if(request != null && request.startsWith(BOARD_UPDATE)){
 					main.broadcastMessage(new BoardUpdateEvent(request));
-					this.main.writeMessageInWindow("bouncing!");
 				}
-				processEvents();
 				try {Thread.sleep(100);} catch (InterruptedException e) {}
+				request = (input.ready() ? input.readLine() : "");
 			}
 
 			output.write(SESSION_TEARDOWN_ACK);
