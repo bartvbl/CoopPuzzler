@@ -25,9 +25,6 @@ public class TextureLibrary {
 	private static final int REFERENCE_FONT_STYLE = Font.PLAIN;
 	private static final int REFERENCE_FONT_SIZE = 10;
 	
-	private static final float[] DEFAULT_BACKGROUND_COLOUR = new float[]{1.0f, 1.0f, 1.0f, 0.0f};
-	private static final float[] REFERENCE_FONT_COLOUR = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
-	
 	public TextureLibrary()
 	{
 		this.textFontTextures = new HashMap<Integer, HashMap<Character, Texture>>();
@@ -37,9 +34,8 @@ public class TextureLibrary {
 	
 	public void addFontColour(FontColour fontColour)
 	{
-		Color colour = fontColour.getColour();
 		HashMap<Character, Texture> textureMap = new HashMap<Character, Texture>();
-		this.generateFontTextures(textureMap, colour);
+		this.generateFontTextures(textureMap);
 		this.textFontTextures.put(fontColour.getColourIndex(), textureMap);
 	}
 	
@@ -58,10 +54,10 @@ public class TextureLibrary {
 		return this.referenceTextures.get(questionReference);
 	}
 	
-	private void generateFontTextures(HashMap<Character, Texture> textureMap, Color colour)
+	private void generateFontTextures(HashMap<Character, Texture> textureMap)
 	{
 		Font textFont = new Font(TEXT_FONT_FACE, TEXT_FONT_STYLE, TEXT_FONT_SIZE);
-		GLFont fontGenerator = this.createFontGenerator(textFont, colour);
+		GLFont fontGenerator = this.createFontGenerator(textFont);
 		char generatedCharacter;
 		Texture texture;
 		for(int i = 97; i < 123; i++)
@@ -70,21 +66,20 @@ public class TextureLibrary {
 			texture = fontGenerator.createFontTexture(Character.toString(generatedCharacter));
 			textureMap.put(generatedCharacter, texture);
 		}
+		texture = fontGenerator.createFontTexture("ij");
+		textureMap.put(IJ, texture);
 	}
 	
-	private GLFont createFontGenerator(Font font, Color colour)
+	private GLFont createFontGenerator(Font font)
 	{
-		float red = ((float)colour.getRed())/255f;
-		float green = ((float)colour.getGreen())/255f;
-		float blue = ((float)colour.getBlue())/255f;
-		GLFont fontGenerator = new GLFont(font, new float[]{red, green, blue, 1.0f}, DEFAULT_BACKGROUND_COLOUR);
+		GLFont fontGenerator = new GLFont(font);
 		return fontGenerator;
 	}
 	
 	private void initializeReferenceFontGenerator()
 	{
 		Font referenceFont = new Font(REFERENCE_FONT_FACE, REFERENCE_FONT_STYLE, REFERENCE_FONT_SIZE);
-		this.referenceFontGenerator = new GLFont(referenceFont, REFERENCE_FONT_COLOUR, DEFAULT_BACKGROUND_COLOUR);
+		this.referenceFontGenerator = new GLFont(referenceFont);
 	}
 
 }

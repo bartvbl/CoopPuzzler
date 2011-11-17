@@ -3,15 +3,12 @@ package client;
 import java.util.ArrayList;
 
 import common.BoardUpdateEvent;
-import common.PuzzleField;
 
 public class BoardEventHandler {
-	private PuzzleField[][] table;
 	private ClientMain main;
 	
-	public BoardEventHandler(ClientMain main, PuzzleField[][] board)
+	public BoardEventHandler(ClientMain main)
 	{
-		this.table = board;
 		this.main = main;
 	}
 	
@@ -22,10 +19,7 @@ public class BoardEventHandler {
 		{
 			for(BoardUpdateEvent event : eventQueue)
 			{
-				PuzzleField field = this.table[event.getRow()][event.getColumn()];
-				field.setNewCharacterValue(event.getCharacterValue());
-				field.setFieldTextColour(event.getColour());
-				System.out.println("event received!");
+				this.main.inputHandler.setField(event);
 			}
 		}
 	}

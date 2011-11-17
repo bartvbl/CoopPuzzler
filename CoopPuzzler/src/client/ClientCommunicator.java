@@ -128,7 +128,6 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			try {
 				String message = this.readNextMessage();
 				while(message != null && message.startsWith(BOARD_UPDATE)){
-					System.out.println("event received from server");
 					this.main.sendEventToClient(new BoardUpdateEvent(message));
 					message = this.readNextMessage();
 				}
@@ -136,7 +135,6 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 				synchronized(outgoing)
 				{
 					for(BoardUpdateEvent event : outgoing){
-						System.out.println("writing to server");
 						output.write(event.toString());
 					}
 				}
