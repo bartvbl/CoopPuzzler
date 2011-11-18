@@ -58,19 +58,19 @@ public class PuzzleLoader {
 				fieldChar = board[row][column];
 				if(fieldChar == '*')
 				{
-					puzzle[row][column] = new PuzzleField(true, -1);
+					puzzle[row][column] = new PuzzleField(true, false, -1);
 				} else if (fieldChar == ' ')
 				{
 					if(fieldHasReference(board, row, column))
 					{
-						puzzle[row][column] = new PuzzleField(false, referenceID);
+						puzzle[row][column] = new PuzzleField(false, false, referenceID);
 						referenceID++;
 					} else {
-						puzzle[row][column] = new PuzzleField(false, -1);
+						puzzle[row][column] = new PuzzleField(false, false, -1);
 					}
 				} else if (fieldChar == 'i') //i for ignore
 				{
-					puzzle[row][column] = new PuzzleField(false, -1);
+					puzzle[row][column] = new PuzzleField(false, true, -1);
 				}
 			}
 		}

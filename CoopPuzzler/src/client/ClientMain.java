@@ -12,6 +12,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.JOptionPane;
+
 public class ClientMain implements ProtocolConstants{
 	public final ClientWindow window;
 	public final PuzzleTable puzzleTable;
