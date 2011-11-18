@@ -30,6 +30,7 @@ public class ClientMain implements ProtocolConstants{
 	
 	public ClientMain()
 	{
+		this.puzzleTable = new PuzzleTable();
 		this.outputEventQueue.set(new ArrayList<BoardUpdateEvent>());
 		this.inputEventQueue.set(new ArrayList<BoardUpdateEvent>());
 		this.communicator = new ClientCommunicator(this);
@@ -41,8 +42,8 @@ public class ClientMain implements ProtocolConstants{
 		Thread commsMonitor = new Thread(communicator);
 		commsMonitor.start();
 		this.window = new ClientWindow(this);
-		this.puzzleTable = new PuzzleTable();
-		this.puzzleTable.initialize();
+		
+		//this.puzzleTable.loadMapFromLocalFile();
 		this.inputHandler = new InputHandler(this);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
 		this.boardEventHandler = new BoardEventHandler(this);

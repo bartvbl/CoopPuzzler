@@ -23,7 +23,7 @@ public class ServerMain implements Runnable{
 	
 	public void initialize()
 	{
-		this.puzzleTable.initialize();
+		this.puzzleTable.loadMapFromLocalFile();
 		this.window = new ServerWindow();
 		this.handlers = new ArrayList<ClientHandler>();
 		this.threadpool = Executors.newCachedThreadPool();

@@ -83,6 +83,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 		output.newLine();
 		PuzzleField[][] table = this.main.puzzleTable.puzzleTable;
 		output.write(BOARD_SIZE + " " + table.length + " " + table[0].length);
+		output.newLine();
 		output.flush();
 		for(int row = 0; row < table.length; row++)
 		{

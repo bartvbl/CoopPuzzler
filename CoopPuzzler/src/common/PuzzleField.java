@@ -20,7 +20,9 @@ public class PuzzleField {
 	public PuzzleField(String messageString)
 	{
 		this.initialize();
-		String[] messageParts = messageString.split(" ");
+		int contentOfMessageStartIndex = messageString.indexOf('(');
+		String messageContent = messageString.substring(contentOfMessageStartIndex + 1, messageString.length() - 1);
+		String[] messageParts = messageContent.split("/");
 		this.isFilled = Boolean.parseBoolean(messageParts[0]);
 		this.questionReference = Integer.parseInt(messageParts[1]);
 		this.fieldTextColour.set(new FontColour(Integer.parseInt(messageParts[2])));
@@ -28,9 +30,9 @@ public class PuzzleField {
 	}
 	
 	private void initialize(){
-		this.setNewCharacterValue(' ');
 		this.fieldTextColour = new AtomicReference<FontColour>();
 		this.currentValueOfField = new AtomicInteger();
+		this.setNewCharacterValue(' ');
 	}
 
 	public FontColour getFieldTextColour() {
@@ -53,9 +55,9 @@ public class PuzzleField {
 	
 	public String toString()
 	{
-		return Boolean.toString(this.isFilled) + " " + 
-		Integer.toString(this.questionReference) + " " + 
-		fieldTextColour.toString() + " " + 
-		Character.toString((char)this.currentValueOfField.get());
+		return "(" + Boolean.toString(this.isFilled) + "/" + 
+		Integer.toString(this.questionReference) + "/" + 
+		fieldTextColour.toString() + "/" + 
+		Character.toString((char)this.currentValueOfField.get()) + ")";
 	}
 }

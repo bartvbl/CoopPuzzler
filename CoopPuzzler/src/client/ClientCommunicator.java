@@ -10,6 +10,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 
@@ -79,7 +81,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			socket.close();
 			return;
 		}
-		/* While the server doesn't have a board, don't expect one to be sent.
+		//While the server doesn't have a board, don't expect one to be sent.
 		if(!input.ready() || !input.readLine().equals(BOARD_TRANSFER_START)){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
 			output.newLine();
@@ -87,13 +89,23 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			socket.close();
 			return;
 		}
-		String board = "";
 		String message = input.readLine();
-		while(!message.equals(BOARD_TRANSFER_END)){
-			board += message;
+		if(message.startsWith(BOARD_SIZE))
+		{
+			String[] parts = message.split(" ");
+			this.main.puzzleTable.createNewMap(Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
 			message = input.readLine();
-		}*/
-		connected = true;
+			while(!message.equals(BOARD_TRANSFER_END))
+			{
+				parts = message.split(" ");
+				this.main.puzzleTable.createFieldAt(message, Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+				message = input.readLine();
+			}
+			connected = true;
+		} else {
+			JOptionPane.showMessageDialog(null, "failed to connect to server!");
+		}
+		
 	}
 
 	/** Whether the Communicator has an active connection. */
