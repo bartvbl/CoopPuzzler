@@ -22,6 +22,6 @@ public class MouseHandler {
 		{
 			zoomLevel = 0.05f;
 		}
-		this.inputHandler.setZoomLevel(zoomLevel);
+		this.inputHandler.zoomLevel = zoomLevel;
 	}
 }

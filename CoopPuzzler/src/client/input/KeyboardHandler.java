@@ -29,8 +29,8 @@ public class KeyboardHandler {
 		float bound = 1/zoomLevel;
 		x = this.checkBoundsX(x, bound, aspect);
 		y = this.checkBoundsY(y, bound);
-		this.main.inputHandler.setX(x);
-		this.main.inputHandler.setY(y);
+		this.main.inputHandler.x = x;
+		this.main.inputHandler.y = y;
 	}
 	private float handleKeyboardInputY(float y)
 	{

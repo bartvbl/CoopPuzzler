@@ -1,6 +1,8 @@
 package client;
 
 
+import static org.lwjgl.opengl.GL11.*;
+import client.gui.ColourPickerUI;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 import common.PuzzleTable;
@@ -17,6 +19,7 @@ public class ClientMain implements ProtocolConstants{
 	public final InputHandler inputHandler;
 	public final ClientCommunicator communicator;
 	public final BoardEventHandler boardEventHandler;
+	public final ColourPickerUI colourPickerUI;
 	
 	private AtomicReference<ArrayList<BoardUpdateEvent>> outputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	private AtomicReference<ArrayList<BoardUpdateEvent>> inputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
@@ -39,14 +42,23 @@ public class ClientMain implements ProtocolConstants{
 		this.inputHandler = new InputHandler(this);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
 		this.boardEventHandler = new BoardEventHandler(this);
+		this.colourPickerUI = new ColourPickerUI();
 		this.window.mainLoop();
 	}
 
 	public void doFrame() {
 		this.boardEventHandler.handleEvents();
 		this.inputHandler.update();
+		glScalef(inputHandler.zoomLevel, inputHandler.zoomLevel, 0.0f);
+		glTranslatef(inputHandler.x, inputHandler.y, 0.0f);
 		this.puzzleDrawer.draw();
-		this.inputHandler.handleSelection();
+		glLoadIdentity();
+		glOrtho(0.0f, this.window.windowWidth, 0.0f, this.window.windowHeight, -1.0f, 1.0f);
+		boolean hasHandledMouse = this.colourPickerUI.draw();
+		if(!hasHandledMouse)
+		{
+			this.inputHandler.handleSelection();
+		}
 	}
 
 	public ArrayList<BoardUpdateEvent> getEventQueueToServer() {
