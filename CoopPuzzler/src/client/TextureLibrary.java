@@ -13,7 +13,7 @@ import client.gl.Texture;
 public class TextureLibrary {
 	public static final char IJ = '+';
 	
-	private HashMap<Integer, HashMap<Character, Texture>> textFontTextures;
+	private HashMap<Character, Texture> textFontTextures;
 	private HashMap<Integer, Texture> referenceTextures;
 	private GLFont referenceFontGenerator;
 	
@@ -27,21 +27,15 @@ public class TextureLibrary {
 	
 	public TextureLibrary()
 	{
-		this.textFontTextures = new HashMap<Integer, HashMap<Character, Texture>>();
+		this.textFontTextures = new HashMap<Character, Texture>();
 		this.referenceTextures = new HashMap<Integer, Texture>();
 		this.initializeReferenceFontGenerator();
+		this.generateTextFontTextures();
 	}
 	
-	public void addFontColour(FontColour fontColour)
+	public Texture getTextTexture(char character)
 	{
-		HashMap<Character, Texture> textureMap = new HashMap<Character, Texture>();
-		this.generateFontTextures(textureMap);
-		this.textFontTextures.put(fontColour.getColourIndex(), textureMap);
-	}
-	
-	public Texture getTextTexture(FontColour colour, char character)
-	{
-		return this.textFontTextures.get(colour.getColourIndex()).get(character);
+		return this.textFontTextures.get(character);
 	}
 	
 	public void addReferenceTexture(int questionReference) {
@@ -54,7 +48,7 @@ public class TextureLibrary {
 		return this.referenceTextures.get(questionReference);
 	}
 	
-	private void generateFontTextures(HashMap<Character, Texture> textureMap)
+	private void generateTextFontTextures()
 	{
 		Font textFont = new Font(TEXT_FONT_FACE, TEXT_FONT_STYLE, TEXT_FONT_SIZE);
 		GLFont fontGenerator = this.createFontGenerator(textFont);
@@ -64,10 +58,10 @@ public class TextureLibrary {
 		{
 			generatedCharacter = (char)i;
 			texture = fontGenerator.createFontTexture(Character.toString(generatedCharacter));
-			textureMap.put(generatedCharacter, texture);
+			this.textFontTextures.put(generatedCharacter, texture);
 		}
 		texture = fontGenerator.createFontTexture("ij");
-		textureMap.put(IJ, texture);
+		this.textFontTextures.put(IJ, texture);
 	}
 	
 	private GLFont createFontGenerator(Font font)

@@ -11,6 +11,7 @@ import client.ClientMain;
 import client.ClientWindow;
 import client.KeyboardToCharConverter;
 import client.TextureLibrary;
+import client.utils.CoordConverter;
 
 import common.BoardUpdateEvent;
 import common.FontColour;
@@ -75,11 +76,15 @@ public class SelectionHandler {
 					Point point;
 					if((this.previousChar == 'i') && (typedKey == 'j'))
 					{
-						point = this.selectionArray.remove(0);;
+						point = this.selectionArray.remove(0);
 						typedKey = TextureLibrary.IJ;
 					} else {
 						if(typedKey!='i')
 						{
+							if(this.previousChar == 'i')
+							{
+								this.selectionArray.remove(0);
+							}
 							point = this.selectionArray.remove(0);
 						} else {
 							point = this.selectionArray.get(0);
@@ -87,7 +92,7 @@ public class SelectionHandler {
 					}
 					int column = point.getX();
 					int row = this.mapNumRows - point.getY() -1;
-					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,new FontColour(FontColour.DARK_BLUE));
+					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,this.main.colourPickerUI.getSelectedColour());
 					this.main.sendEventToServer(update);
 					this.selectionUndoList.add(point);
 					this.previousChar = typedKey;
@@ -176,23 +181,12 @@ public class SelectionHandler {
 		this.selectionActionStartTime = this.selectionActionTimer.getTime();
 	}
 	
-	private float[] getMapCoordinates(float x, float y, float zoomLevel)
+	public float[] getMapCoordinates(float x, float y, float zoomLevel)
 	{
-		float aspect = this.window.windowWidth / this.window.windowHeight;
-		float xCoord = Mouse.getX();
-		float yCoord = Mouse.getY();
-		xCoord /= this.window.windowHeight/2;
-		xCoord -= 1;
-		xCoord /= zoomLevel;
-		xCoord -= x;
-		xCoord -= (aspect - 1.0f)/zoomLevel;
-		
-		yCoord /= this.window.windowHeight/2;
-		yCoord -= 1;
-		yCoord /= zoomLevel;
-		yCoord -= y;
-		
-		return new float[]{xCoord, yCoord};
+		float[] coords = CoordConverter.getMapCoordinates(x, y, zoomLevel, this.window.windowWidth, this.window.windowHeight);
+		coords[0] -= x;
+		coords[1] -= y;
+		return coords;
 	}
 
 	public ArrayList<Point> getSelectionArray() {

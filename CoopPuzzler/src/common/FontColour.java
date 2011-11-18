@@ -7,10 +7,12 @@ public class FontColour {
 	public final static int BLACK = 0;
 	public final static int DARK_BLUE = 1;
 	public final static int DARK_RED = 2;
+	public final static int DARK_GREEN = 3;
 	public final static Color[] colours = new Color[]{
 		new Color(0,0,0),
 		new Color(0,0,170),
-		new Color(170,0,0)
+		new Color(170,0,0),
+		new Color(0,170,0)
 	};
 
 	public FontColour(int fontcolourIndex){
