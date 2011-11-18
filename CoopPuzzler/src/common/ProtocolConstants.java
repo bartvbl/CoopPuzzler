@@ -46,4 +46,7 @@ public interface ProtocolConstants {
 	public final static String SESSION_TEARDOWN = "BYE";
 	/** The signal to acknowledge a teardown request */
 	public final static String SESSION_TEARDOWN_ACK = "BYE";
+	
+	public static final String BOARD_FIELD = "BOARD FIELD";
+	public static final String BOARD_SIZE = "BOARD SIZE";
 }

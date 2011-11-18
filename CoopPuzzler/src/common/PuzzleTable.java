@@ -10,11 +10,6 @@ public class PuzzleTable implements BoardUpdateListener{
 		this.puzzleTable = PuzzleLoader.loadTableFromFile(DEFAULT_FILE_SOURCE);
 	}
 	
-	public String getRowString(int row)
-	{
-		return "";
-	}
-	
 	public boolean fieldIsOccupied(int row, int column)
 	{
 		if(row < 0)

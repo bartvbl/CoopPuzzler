@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import common.ProtocolConstants;
 import common.BoardUpdateEvent;
+import common.PuzzleField;
 
 public class ClientHandler implements Runnable,ProtocolConstants {
 	private Socket clientSocket;
@@ -56,13 +57,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			}
 			output.write(HANDSHAKE_ACK);
 			output.newLine();
-			output.write(BOARD_TRANSFER_START);
-			output.newLine();
-			output.flush();
-			//TODO: Handle giving clients the board data.
-			output.write(BOARD_TRANSFER_END);
-			output.newLine();
-			output.flush();
+			this.sendBoard();
 			String request = "";
 			while(!request.equals(SESSION_TEARDOWN)){
 				processEvents();
@@ -77,13 +72,32 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			output.newLine();
 			output.flush();
 			clientSocket.close();
-
-
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private void sendBoard() throws IOException
+	{
+		output.write(BOARD_TRANSFER_START);
+		output.newLine();
+		PuzzleField[][] table = this.main.puzzleTable.puzzleTable;
+		output.write(BOARD_SIZE + " " + table.length + " " + table[0].length);
+		output.flush();
+		for(int row = 0; row < table.length; row++)
+		{
+			for(int column = 0; column < table[0].length; column++)
+			{
+				output.write(BOARD_FIELD + " " + row + " " + column + " " + table[row][column].toString());
+				output.newLine();
+			}
+			output.flush(); //periodic flush
+		}
+		output.write(BOARD_TRANSFER_END);
+		output.newLine();
+		output.flush();
+	}
+	
 	private void processEvents() throws IOException
 	{
 		BoardUpdateEvent event = this.getNextMessage();

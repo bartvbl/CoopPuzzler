@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JOptionPane;
 
+import org.lwjgl.input.Mouse;
+
 public class ClientMain implements ProtocolConstants{
 	public final ClientWindow window;
 	public final PuzzleTable puzzleTable;
@@ -57,7 +59,7 @@ public class ClientMain implements ProtocolConstants{
 		glLoadIdentity();
 		glOrtho(0.0f, this.window.windowWidth, 0.0f, this.window.windowHeight, -1.0f, 1.0f);
 		boolean hasHandledMouse = this.colourPickerUI.draw();
-		if(!hasHandledMouse)
+		if(!(hasHandledMouse && Mouse.isButtonDown(0)))
 		{
 			this.inputHandler.handleSelection();
 		}

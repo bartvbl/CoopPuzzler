@@ -7,15 +7,30 @@ public class PuzzleField {
 	public final boolean isFilled;
 	public final int questionReference;
 	private AtomicReference<FontColour> fieldTextColour;
-	private AtomicInteger currentValueOfField = new AtomicInteger();
+	private AtomicInteger currentValueOfField;
 
 	public PuzzleField(boolean isFilled, boolean ignoreQuestionreference, int questionReference)
 	{
+		this.initialize();
 		this.isFilled = isFilled;
 		this.questionReference = questionReference;
+		this.fieldTextColour.set(new FontColour(FontColour.BLACK));
+	}
+	
+	public PuzzleField(String messageString)
+	{
+		this.initialize();
+		String[] messageParts = messageString.split(" ");
+		this.isFilled = Boolean.parseBoolean(messageParts[0]);
+		this.questionReference = Integer.parseInt(messageParts[1]);
+		this.fieldTextColour.set(new FontColour(Integer.parseInt(messageParts[2])));
+		this.currentValueOfField.set(messageParts[3].charAt(0));
+	}
+	
+	private void initialize(){
 		this.setNewCharacterValue(' ');
 		this.fieldTextColour = new AtomicReference<FontColour>();
-		this.fieldTextColour.set(new FontColour(FontColour.BLACK));
+		this.currentValueOfField = new AtomicInteger();
 	}
 
 	public FontColour getFieldTextColour() {
@@ -35,6 +50,12 @@ public class PuzzleField {
 	{
 		return (char)this.currentValueOfField.get();
 	}
-
-
+	
+	public String toString()
+	{
+		return Boolean.toString(this.isFilled) + " " + 
+		Integer.toString(this.questionReference) + " " + 
+		fieldTextColour.toString() + " " + 
+		Character.toString((char)this.currentValueOfField.get());
+	}
 }
