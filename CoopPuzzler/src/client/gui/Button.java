@@ -17,10 +17,10 @@ public class Button {
 		this.height = height;
 	}
 	
-	public boolean isHovering()
+	public boolean isHovering(float scaleLevel)
 	{
-		int mouseX = Mouse.getX();
-		int mouseY = Mouse.getY();
+		int mouseX = (int)(((float)Mouse.getX())/scaleLevel);
+		int mouseY = (int)(((float)Mouse.getY())/scaleLevel);
 		Rectangle rect = new Rectangle(this.x, this.y, this.width, this.height);
 		if(rect.contains(mouseX, mouseY))
 		{
@@ -30,9 +30,9 @@ public class Button {
 		}
 	}
 	
-	public boolean draw()
+	public boolean draw(float scaleLevel)
 	{
-		boolean isHovering = this.isHovering();
+		boolean isHovering = this.isHovering(scaleLevel);
 		if(isHovering && Mouse.isButtonDown(0))
 		{
 			this.drawMouseDown();

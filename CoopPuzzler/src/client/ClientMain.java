@@ -42,7 +42,7 @@ public class ClientMain implements ProtocolConstants{
 		this.inputHandler = new InputHandler(this);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
 		this.boardEventHandler = new BoardEventHandler(this);
-		this.colourPickerUI = new ColourPickerUI();
+		this.colourPickerUI = new ColourPickerUI(this);
 		this.window.mainLoop();
 	}
 

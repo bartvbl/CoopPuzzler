@@ -11,7 +11,7 @@ public class ColourPickerButton extends Button{
 	private final ColourPickerUI uiMain;
 	private final int fontColourID;
 	
-	private static final float LINE_WIDTH_SELECTED = 5.0f;
+	private static final float LINE_WIDTH_SELECTED = 4.0f;
 	private static final float LINE_WIDTH_DESELECTED = 1.0f;
 	
 	private boolean isSelected = false;
@@ -53,8 +53,8 @@ public class ColourPickerButton extends Button{
 	private float[] getRGB(float offsetRed, float offsetGreen, float offsetBlue)
 	{
 		float red = ((float)this.colour.getRed()) / 255f; 
-		float blue = ((float)this.colour.getGreen()) / 255f; 
-		float green = ((float)this.colour.getBlue()) / 255f; 
+		float green = ((float)this.colour.getGreen()) / 255f; 
+		float blue = ((float)this.colour.getBlue()) / 255f; 
 		float[] colours = new float[3];
 		colours[0] = this.clamp(red + offsetRed);
 		colours[1] = this.clamp(green + offsetGreen);
@@ -84,8 +84,7 @@ public class ColourPickerButton extends Button{
 		glVertex2f(x+width, y+height);
 		glVertex2f(x, y+height);
 		glEnd();
-		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
-		
+		glColor4f(0.1f, 0.1f, 0.1f, 1.0f);
 		if(this.isSelected)
 		{
 			glLineWidth(LINE_WIDTH_SELECTED);

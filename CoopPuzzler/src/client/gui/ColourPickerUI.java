@@ -1,13 +1,18 @@
 package client.gui;
 
 import java.util.ArrayList;
+import static org.lwjgl.opengl.GL11.*;
+
+import client.ClientMain;
 
 import common.FontColour;
 
 public class ColourPickerUI {
 	private ArrayList<ColourPickerButton> colourPickerButtons;
 	private FontColour currentSelectedColour;
-	public ColourPickerUI()
+	private ClientMain main;
+	
+	public ColourPickerUI(ClientMain main)
 	{
 		this.colourPickerButtons = new ArrayList<ColourPickerButton>();
 		for(int i = 0; i < FontColour.colours.length; i++)
@@ -16,13 +21,19 @@ public class ColourPickerUI {
 		}
 		this.colourPickerButtons.get(0).setSelected(true);
 		this.currentSelectedColour = new FontColour(0);
+		this.main = main;
 	}
+	
 	public boolean draw()
 	{
+		float scaleLevel = this.main.window.windowHeight / 480f;
+		glScalef(scaleLevel, scaleLevel, 0.0f);
 		boolean hasHandledMouse = false;
+		boolean lastDrawHandledMouse = false;
 		for(ColourPickerButton button : colourPickerButtons)
 		{
-			if(button.draw() == true)
+			lastDrawHandledMouse = button.draw(scaleLevel);
+			if(lastDrawHandledMouse == true)
 			{
 				hasHandledMouse = true;
 			}
