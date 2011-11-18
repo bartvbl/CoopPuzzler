@@ -75,11 +75,15 @@ public class SelectionHandler {
 					Point point;
 					if((this.previousChar == 'i') && (typedKey == 'j'))
 					{
-						point = this.selectionArray.remove(0);;
+						point = this.selectionArray.remove(0);
 						typedKey = TextureLibrary.IJ;
 					} else {
 						if(typedKey!='i')
 						{
+							if(this.previousChar == 'i')
+							{
+								this.selectionArray.remove(0);
+							}
 							point = this.selectionArray.remove(0);
 						} else {
 							point = this.selectionArray.get(0);
