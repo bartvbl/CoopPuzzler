@@ -60,7 +60,6 @@ public class ServerMain implements Runnable{
 	{
 		PuzzleField targetField = this.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
 		targetField.setFieldTextColour(event.getColour());
-		System.out.println(event.getCharacterValue());
 		targetField.setNewCharacterValue(event.getCharacterValue());
 		for(ClientHandler handler : handlers){
 			handler.broadcastUpdateToClient(event);
