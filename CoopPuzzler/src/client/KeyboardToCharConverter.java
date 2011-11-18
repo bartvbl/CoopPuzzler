@@ -3,6 +3,8 @@ package client;
 import org.lwjgl.input.Keyboard;
 
 public class KeyboardToCharConverter {
+	public static char NO_MATCH = '%';
+
 	public static char getKeyCharValue()
 	{
 		if(Keyboard.isKeyDown(Keyboard.KEY_A))
@@ -83,8 +85,11 @@ public class KeyboardToCharConverter {
 		} else if(Keyboard.isKeyDown(Keyboard.KEY_Z))
 		{
 			return 'z';
-		} else {
+		} else if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+		{
 			return ' ';
+		} else {
+			return NO_MATCH;
 		}
 	}
 }

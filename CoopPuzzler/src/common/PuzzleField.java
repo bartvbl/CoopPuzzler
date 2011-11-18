@@ -22,6 +22,7 @@ public class PuzzleField {
 		this.initialize();
 		int contentOfMessageStartIndex = messageString.indexOf('(');
 		String messageContent = messageString.substring(contentOfMessageStartIndex + 1, messageString.length() - 1);
+		
 		String[] messageParts = messageContent.split("/");
 		this.isFilled = Boolean.parseBoolean(messageParts[0]);
 		this.questionReference = Integer.parseInt(messageParts[1]);

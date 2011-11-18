@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import common.BoardUpdateEvent;
+import common.PuzzleField;
 import common.PuzzleTable;
 
 public class ServerMain implements Runnable{
@@ -57,6 +58,10 @@ public class ServerMain implements Runnable{
 
 	public synchronized void broadcastMessage(BoardUpdateEvent event)
 	{
+		PuzzleField targetField = this.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
+		targetField.setFieldTextColour(event.getColour());
+		System.out.println(event.getCharacterValue());
+		targetField.setNewCharacterValue(event.getCharacterValue());
 		for(ClientHandler handler : handlers){
 			handler.broadcastUpdateToClient(event);
 		}

@@ -5,9 +5,11 @@ public class BoardUpdateEvent {
 	private char value;
 	private FontColour colour;
 	
+	private static String SEPARATOR = "/";
+	
 	public BoardUpdateEvent(String description){
 		if(description==null){return;}
-		String[] split = description.split(" ");
+		String[] split = description.split(SEPARATOR);
 		try{
 			row = Integer.parseInt(split[1]);
 			column = Integer.parseInt(split[2]);
@@ -41,7 +43,7 @@ public class BoardUpdateEvent {
 	}
 	
 	public String toString(){
-		return ProtocolConstants.BOARD_UPDATE + " " + row + " " + column + " " + value + " " + colour.toString()+"\n";
+		return ProtocolConstants.BOARD_UPDATE + SEPARATOR + row + SEPARATOR + column + SEPARATOR + value + SEPARATOR + colour.toString()+"\n";
 	}
 
 }

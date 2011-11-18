@@ -67,7 +67,7 @@ public class SelectionHandler {
 					this.waitForNextInput();
 				}
 				char typedKey = KeyboardToCharConverter.getKeyCharValue();
-				if(typedKey != ' ')
+				if(typedKey != KeyboardToCharConverter.NO_MATCH)
 				{
 					
 					this.isWaiting = true;
