@@ -3,6 +3,7 @@ package common;
 
 public class PuzzleTable implements BoardUpdateListener{
 	public PuzzleField[][] puzzleTable;
+	private String[] boardRows;
 	private static final String DEFAULT_FILE_SOURCE = "res/puzzle.txt";
 	
 	public void initialize()

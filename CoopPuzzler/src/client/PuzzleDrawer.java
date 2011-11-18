@@ -22,15 +22,8 @@ public class PuzzleDrawer {
 		this.puzzleTable = puzzleTable;
 		this.inputHandler = inputHandler;
 		this.parseFieldReferenceTextures();
-		this.initializeTextureLibrary();
 	}
 	
-	private void initializeTextureLibrary() {
-		this.textureLibrary.addFontColour(new FontColour(FontColour.BLACK));
-		this.textureLibrary.addFontColour(new FontColour(FontColour.DARK_BLUE));
-		this.textureLibrary.addFontColour(new FontColour(FontColour.DARK_RED));
-	}
-
 	private void parseFieldReferenceTextures() {
 		PuzzleField[][] table = puzzleTable.puzzleTable;
 		for(int i = 0; i < table.length; i++)
@@ -68,7 +61,7 @@ public class PuzzleDrawer {
 			{
 				if(table[i][j].getCurrentValueOfField() != ' ')
 				{
-					Texture tex = this.textureLibrary.getTextTexture(table[i][j].getFieldTextColour(), table[i][j].getCurrentValueOfField());
+					Texture tex = this.textureLibrary.getTextTexture(table[i][j].getCurrentValueOfField());
 					glBindTexture(GL_TEXTURE_2D, tex.texRef);
 					Color colour = table[i][j].getFieldTextColour().getColour();
 					float red = ((float)colour.getRed())/255;
