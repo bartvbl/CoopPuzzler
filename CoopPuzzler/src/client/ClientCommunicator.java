@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import client.gui.FeedbackProvider;
+
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 
@@ -39,9 +41,11 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		try {
 			shakeHands(server);
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			FeedbackProvider.showFailedToFindServerMessage();
+			System.exit(0);
 		} catch (IOException e) {
-			e.printStackTrace();
+			FeedbackProvider.showConnectingToServerFailedMessage();
+			System.exit(0);
 		}
 	}
 

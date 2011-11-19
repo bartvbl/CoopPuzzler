@@ -11,4 +11,8 @@ public class FeedbackProvider {
 	public static void showFailedToFindServerMessage() {
 		showErrorMessage("Could not find server");
 	}
+
+	public static void showConnectingToServerFailedMessage() {
+		showErrorMessage("Failed to connect to server");
+	}
 }
