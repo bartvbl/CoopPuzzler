@@ -4,8 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import client.ClientMain;
+import client.GameStarter;
 
 @SuppressWarnings("serial")
 public class MainMenuPanel extends JPanel implements ActionListener{
@@ -28,12 +30,12 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		{
 			System.out.println("a");
 			this.main.window.disableMainMenu();
-			this.main.runGame(true, MainMenuView.serverAddressTextBox.getText());
+			SwingUtilities.invokeLater(new GameStarter(this.main, true, MainMenuView.serverAddressTextBox.getText()));
 		} else if(event.getSource() == MainMenuView.playButton)
 		{
 			System.out.println("b");
 			this.main.window.disableMainMenu();
-			this.main.runGame(false, "");
+			SwingUtilities.invokeLater(new GameStarter(this.main, false, ""));
 		}
 	}
 }

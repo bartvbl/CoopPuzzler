@@ -48,6 +48,7 @@ public class ClientMain implements ProtocolConstants{
 	
 	public void runGame(boolean isOnline, String hostName)
 	{
+		//this.window.createOpenGLContext();
 		this.gameIsOnline = isOnline;
 		if(isOnline)
 		{
@@ -61,7 +62,6 @@ public class ClientMain implements ProtocolConstants{
 		} else {
 			this.puzzleTable.loadMapFromLocalFile();
 		}
-		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
 		this.window.mainLoop();

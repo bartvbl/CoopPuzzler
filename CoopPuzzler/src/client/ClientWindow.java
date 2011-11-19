@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
@@ -53,7 +54,7 @@ public class ClientWindow {
 				resize();
 			}
 		};
-		canvas.addComponentListener(adapter);
+		jframe.addComponentListener(adapter);
 		canvas.setIgnoreRepaint(true);
 	}
 	
@@ -74,8 +75,8 @@ public class ClientWindow {
 		this.jframe.setSize(640, 480);
 		this.createCanvas();
 		this.resize();
-		this.jframe.add(canvas);
 		
+		this.jframe.add(canvas);
 	}
 	
 	public void createOpenGLContext()
@@ -100,10 +101,13 @@ public class ClientWindow {
 		glEnable (GL_BLEND);
 		glDepthFunc(GL_NEVER);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		this.main.runGame(false, "");
 	}
 	
 	public void mainLoop()
 	{
+		System.out.println("starting main loop " + this.canvas.getWidth() + ", " + this.canvas.getHeight());
+		this.canvasSize.set(new Dimension(this.canvas.getWidth(), this.canvas.getHeight()));
 		while (!Display.isCloseRequested() && running) {
 			Dimension newDim = canvasSize.getAndSet(null);
 			if(newDim != null) {
@@ -133,11 +137,13 @@ public class ClientWindow {
 			Display.update();
 			Display.sync(50);
 		}
+		System.out.println("shutting down..");
 	}
 	
 	public void resize()
 	{
 		System.out.println("resizing");
+		System.out.println(this.canvas.getWidth() + ", " + this.canvas.getHeight());
 		Dimension dim = this.canvas.getSize();
 		this.windowWidth = dim.width;
 		this.windowHeight = dim.height;
