@@ -97,7 +97,12 @@ public class SelectionHandler {
 					int column = point.getX();
 					int row = this.mapNumRows - point.getY() -1;
 					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,this.main.colourPickerUI.getSelectedColour());
-					this.main.sendEventToServer(update);
+					if(this.main.gameIsOnline == true)
+					{
+						this.main.sendEventToServer(update);
+					} else {
+						this.main.sendEventToClient(update);
+					}
 					this.selectionUndoList.add(point);
 					this.previousChar = typedKey;
 					if((this.selectionArray.size() == 0) && (typedKey!='i'))

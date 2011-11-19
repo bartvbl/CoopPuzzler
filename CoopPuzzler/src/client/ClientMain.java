@@ -26,6 +26,8 @@ public class ClientMain implements ProtocolConstants{
 	public final BoardEventHandler boardEventHandler;
 	public final ColourPickerUI colourPickerUI;
 	
+	public boolean gameIsOnline = false;
+	
 	private AtomicReference<ArrayList<BoardUpdateEvent>> outputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	private AtomicReference<ArrayList<BoardUpdateEvent>> inputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	
@@ -46,6 +48,7 @@ public class ClientMain implements ProtocolConstants{
 	
 	public void runGame(boolean isOnline, String hostName)
 	{
+		this.gameIsOnline = isOnline;
 		this.window.disableMainMenu();
 		if(isOnline)
 		{

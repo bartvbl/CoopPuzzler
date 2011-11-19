@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -9,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -40,12 +42,11 @@ public class ClientWindow {
 				resize();
 			}
 		};
-		
 		canvas.addComponentListener(adapter);
 		canvas.setIgnoreRepaint(true);
 		frame.setSize(640, 480);
+		frame.setLocation(100, 100);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
 	}
 	
 	public void enableMainMenu()
@@ -53,19 +54,19 @@ public class ClientWindow {
 		this.mainMenuPanel = new MainMenuPanel(this.main);
 		this.jframe.setSize(500, 170);
 		this.jframe.getContentPane().add(mainMenuPanel);
-		this.jframe.validate();
+		this.jframe.setVisible(true);
 	}
 	
 	public void disableMainMenu()
 	{
 		this.jframe.setSize(640, 480);
-		this.jframe.invalidate();
-		this.jframe.removeAll();
-		this.jframe.getContentPane().add(canvas);
+		System.out.println("" + this.jframe.getContentPane().toString());
+		this.jframe.getContentPane().remove(this.mainMenuPanel);
+		this.jframe.getContentPane().add(this.canvas, BorderLayout.CENTER);
 		this.mainMenuPanel = null; //mark for garbage collection
-		
 		this.jframe.validate();
 		this.jframe.setVisible(true);
+		this.jframe.repaint();
 	}
 	
 	public void createOpenGLContext()
@@ -127,6 +128,7 @@ public class ClientWindow {
 	
 	public void resize()
 	{
+		System.out.println("resizing");
 		Dimension dim = this.canvas.getSize();
 		this.windowWidth = dim.width;
 		this.windowHeight = dim.height;
