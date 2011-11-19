@@ -61,11 +61,11 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			String request = "";
 			while(!request.equals(SESSION_TEARDOWN)){
 				processEvents();
+				request = (input.ready() ? input.readLine() : "");
 				if(request != null && request.startsWith(BOARD_UPDATE)){
 					main.broadcastMessage(new BoardUpdateEvent(request));
 				}
 				try {Thread.sleep(100);} catch (InterruptedException e) {}
-				request = (input.ready() ? input.readLine() : "");
 			}
 
 			output.write(SESSION_TEARDOWN_ACK);
