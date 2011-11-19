@@ -60,20 +60,20 @@ public class ClientWindow {
 	public void enableMainMenu()
 	{
 		this.jframe.setSize(500, 170);
+		this.jframe.setResizable(false);
 		this.jframe.setVisible(true);
 		this.jframe.add(mainMenuPanel);
 	}
 	
 	public void disableMainMenu()
 	{
-		
 		this.jframe.remove(this.mainMenuPanel);
 		this.jframe.setSize(640, 480);
+		this.jframe.setResizable(true);
 		this.createCanvas();
 		this.resize();
 		this.jframe.add(canvas);
 		this.jframe.getRootPane().revalidate();
-
 	}
 	
 	public void createOpenGLContext()
