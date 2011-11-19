@@ -1,5 +1,4 @@
 Todo list:
 - fixing all the server exceptions when a client disconnects. I think we'll also need some graceful disconnect handlers when the app wants to shut down.
-- fix not whole map visible when zooming in (using the arrow keys.. it has to do with the zoom level. Once you zoom in more, the screen should stick to the outside of the map, rather than trying to get the middle of the map on screen)
 
 - celebrate after the exams that it turned out so well :D
