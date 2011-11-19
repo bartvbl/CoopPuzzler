@@ -2,6 +2,7 @@ package client;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.concurrent.atomic.AtomicReference;
@@ -33,6 +34,7 @@ public class ClientWindow {
 		this.mainMenuPanel = new MainMenuPanel(this.main);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocation(100, 100);
+		this.jframe.setIconImage(Toolkit.getDefaultToolkit().getImage("res/icon_32.png"));
 	}
 	
 	private void createCanvas()
@@ -88,6 +90,7 @@ public class ClientWindow {
 		glEnable (GL_BLEND);
 		glDepthFunc(GL_NEVER);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
 	}
 	
 	public void mainLoop()
