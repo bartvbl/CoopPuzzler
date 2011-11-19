@@ -21,7 +21,7 @@ public class ServerMain implements Runnable{
 	{
 		this.puzzleTable = new PuzzleTable();
 	}
-	
+	 
 	public void initialize()
 	{
 		this.puzzleTable.loadMapFromLocalFile();

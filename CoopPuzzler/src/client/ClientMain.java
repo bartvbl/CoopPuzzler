@@ -3,6 +3,7 @@ package client;
 
 import static org.lwjgl.opengl.GL11.*;
 import client.gui.ColourPickerUI;
+import client.gui.MainMenuView;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 import common.PuzzleTable;
@@ -43,13 +44,13 @@ public class ClientMain implements ProtocolConstants{
 		this.window.enableMainMenu();
 	}
 	
-	public void runGame(boolean isOnline)
+	public void runGame(boolean isOnline, String hostName)
 	{
 		this.window.disableMainMenu();
 		if(isOnline)
 		{
 			try {
-				communicator.init(InetAddress.getLocalHost());
+				communicator.init(InetAddress.getByName(hostName));
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
@@ -58,6 +59,7 @@ public class ClientMain implements ProtocolConstants{
 		} else {
 			this.puzzleTable.loadMapFromLocalFile();
 		}
+		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
 		this.window.mainLoop();

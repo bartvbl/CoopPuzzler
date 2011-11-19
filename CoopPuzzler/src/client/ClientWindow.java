@@ -1,5 +1,6 @@
 package client;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
@@ -50,21 +51,25 @@ public class ClientWindow {
 	public void enableMainMenu()
 	{
 		this.mainMenuPanel = new MainMenuPanel(this.main);
-		this.jframe.setContentPane(mainMenuPanel);
+		this.jframe.setSize(500, 170);
+		this.jframe.getContentPane().add(mainMenuPanel);
 		this.jframe.validate();
 	}
 	
 	public void disableMainMenu()
 	{
-		this.jframe.setContentPane(new JPanel());
+		this.jframe.setSize(640, 480);
+		this.jframe.invalidate();
+		this.jframe.removeAll();
+		this.jframe.getContentPane().add(canvas);
 		this.mainMenuPanel = null; //mark for garbage collection
+		
 		this.jframe.validate();
+		this.jframe.setVisible(true);
 	}
 	
-	public void createOpenGLConext()
+	public void createOpenGLContext()
 	{
-		this.jframe.getContentPane().add(canvas);
-		this.jframe.validate();
 		Dimension dim = this.canvas.getSize();
 		Display.setLocation(100, 100);
 		Display.setTitle("Puzzler");
