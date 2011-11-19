@@ -31,23 +31,35 @@ public class ClientMain implements ProtocolConstants{
 	public ClientMain()
 	{
 		this.puzzleTable = new PuzzleTable();
-		this.outputEventQueue.set(new ArrayList<BoardUpdateEvent>());
-		this.inputEventQueue.set(new ArrayList<BoardUpdateEvent>());
-		this.communicator = new ClientCommunicator(this);
-		try {
-			communicator.init(InetAddress.getLocalHost());
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		Thread commsMonitor = new Thread(communicator);
-		commsMonitor.start();
 		this.window = new ClientWindow(this);
-		
-		//this.puzzleTable.loadMapFromLocalFile();
+		this.communicator = new ClientCommunicator(this);
 		this.inputHandler = new InputHandler(this);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
 		this.boardEventHandler = new BoardEventHandler(this);
 		this.colourPickerUI = new ColourPickerUI(this);
+		this.outputEventQueue.set(new ArrayList<BoardUpdateEvent>());
+		this.inputEventQueue.set(new ArrayList<BoardUpdateEvent>());
+		
+		this.window.enableMainMenu();
+	}
+	
+	public void runGame(boolean isOnline)
+	{
+		this.window.disableMainMenu();
+		if(isOnline)
+		{
+			try {
+				communicator.init(InetAddress.getLocalHost());
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+			Thread commsMonitor = new Thread(communicator);
+			commsMonitor.start();
+		} else {
+			this.puzzleTable.loadMapFromLocalFile();
+		}
+		this.inputHandler.init();
+		this.puzzleDrawer.init();
 		this.window.mainLoop();
 	}
 

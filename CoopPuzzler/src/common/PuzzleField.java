@@ -56,9 +56,11 @@ public class PuzzleField {
 	
 	public String toString()
 	{
+		System.out.println("");
 		return "(" + Boolean.toString(this.isFilled) + "/" + 
 		Integer.toString(this.questionReference) + "/" + 
 		fieldTextColour.toString() + "/" + 
 		Character.toString((char)this.currentValueOfField.get()) + ")";
+		
 	}
 }

@@ -28,12 +28,6 @@ public class InputHandler {
 		this.mouseHandler = new MouseHandler(this);
 		this.keyboardHandler = new KeyboardHandler(main);
 		this.selectionHandler = new SelectionHandler(main);
-		try {
-			Mouse.create();
-			Keyboard.create();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void update()
@@ -60,5 +54,16 @@ public class InputHandler {
 	public void setField(BoardUpdateEvent event)
 	{
 		this.selectionHandler.updateCharacter(event);
+	}
+
+	public void init() {
+		try {
+			Mouse.create();
+			Keyboard.create();
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
+		this.keyboardHandler.init();
+		this.selectionHandler.init();
 	}
 }

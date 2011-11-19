@@ -12,7 +12,7 @@ import common.PuzzleTable;
 import static org.lwjgl.opengl.GL11.*;
 
 public class PuzzleDrawer {
-	private TextureLibrary textureLibrary = new TextureLibrary();
+	private TextureLibrary textureLibrary;
 	private PuzzleTable puzzleTable;
 	public static final int FIELD_SIZE = 1;
 	private InputHandler inputHandler;
@@ -21,6 +21,11 @@ public class PuzzleDrawer {
 	{
 		this.puzzleTable = puzzleTable;
 		this.inputHandler = inputHandler;
+	}
+	
+	public void init()
+	{
+		this.textureLibrary = new TextureLibrary();
 		this.parseFieldReferenceTextures();
 	}
 	
