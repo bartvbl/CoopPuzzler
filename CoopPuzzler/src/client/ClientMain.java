@@ -2,6 +2,7 @@ package client;
 
 import static org.lwjgl.opengl.GL11.*;
 import client.gui.ColourPickerUI;
+import client.gui.FeedbackProvider;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 import common.PuzzleTable;
@@ -50,7 +51,8 @@ public class ClientMain implements ProtocolConstants{
 			try {
 				communicator.init(InetAddress.getByName(hostName));
 			} catch (UnknownHostException e) {
-				e.printStackTrace();
+				FeedbackProvider.showFailedToFindServerMessage();
+				System.exit(0);
 			}
 			Thread commsMonitor = new Thread(communicator);
 			commsMonitor.start();

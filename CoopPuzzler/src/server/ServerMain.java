@@ -30,6 +30,7 @@ public class ServerMain implements Runnable{
 		this.threadpool = Executors.newCachedThreadPool();
 		try{this.serverSocket = new ServerSocket(4444);}
 		catch(IOException e){e.printStackTrace();}
+		this.writeMessageInWindow("listening on port 4444");
 	}
 	
 	public void writeMessageInWindow(String message)
