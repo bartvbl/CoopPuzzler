@@ -23,7 +23,6 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 	private boolean connected = false;
 	/** When waiting for a response from the server, check back this many times a second */
 	private static final int FREQUENCY = 10;
-	private String board;
 
 	public ClientCommunicator(ClientMain main)
 	{
@@ -48,7 +47,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 
 	/**Client side of the handshake. Only protocol test for now */
 	private void shakeHands(InetAddress server) throws IOException{
-		Socket socket = new Socket(server,4444);
+		socket = new Socket(server,4444);
 		if(!socket.isConnected()){
 			throw new IOException("Server not found.");
 		}
@@ -81,7 +80,6 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			socket.close();
 			return;
 		}
-		//While the server doesn't have a board, don't expect one to be sent.
 		if(!input.ready() || !input.readLine().equals(BOARD_TRANSFER_START)){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
 			output.newLine();
@@ -101,6 +99,9 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 				this.main.puzzleTable.createFieldAt(message, Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
 				message = input.readLine();
 			}
+			output.write(BOARD_TRANSFER_ACK);
+			output.newLine();
+			output.flush();
 			connected = true;
 		} else {
 			JOptionPane.showMessageDialog(null, "failed to connect to server!");
@@ -113,9 +114,6 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		return connected;
 	}
 	
-	public String getBoard(){
-		return board;
-	}
 
 	/** Close the session */
 	public void close(){
