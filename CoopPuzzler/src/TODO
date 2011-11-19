@@ -1,5 +1,4 @@
 Todo list:
-- write a UI acting as a main menu. It should contain an option for online or offline play, and writing the server accordingly.
 - fixing all the server exceptions when a client disconnects. I think we'll also need some graceful disconnect handlers when the app wants to shut down.
 
 - celebrate after the exams that it turned out so well :D

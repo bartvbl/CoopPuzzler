@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
@@ -9,6 +10,7 @@ import java.awt.event.ComponentEvent;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 
@@ -29,14 +31,33 @@ public class ClientWindow {
 	private AtomicReference<Dimension> canvasSize = new AtomicReference<Dimension>();
 	private ClientMain main;
 	private MainMenuPanel mainMenuPanel;
+	private static final String MAIN_MENU_CARD = "mainMenu";
+	private static final String CANVAS_CARD = "canvasCard";
 	
 	public ClientWindow(ClientMain main)
 	{
 		this.main = main;
-		Canvas canvas = new Canvas();
+		
+		  
 		JFrame frame = new JFrame("Puzzler");
-		this.canvas = canvas;
+		
 		this.jframe = frame;
+		
+		
+		this.mainMenuPanel = new MainMenuPanel(this.main);
+		
+		
+		frame.setLocation(100, 100);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.getContentPane().setLayout(new CardLayout());
+//		frame.getContentPane().add(canvas, CANVAS_CARD);
+		
+	}
+	
+	private void createCanvas()
+	{
+		Canvas canvas = new Canvas();
+		this.canvas = canvas;
 		ComponentAdapter adapter = new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				resize();
@@ -44,29 +65,32 @@ public class ClientWindow {
 		};
 		canvas.addComponentListener(adapter);
 		canvas.setIgnoreRepaint(true);
-		frame.setSize(640, 480);
-		frame.setLocation(100, 100);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public void enableMainMenu()
 	{
-		this.mainMenuPanel = new MainMenuPanel(this.main);
 		this.jframe.setSize(500, 170);
-		this.jframe.getContentPane().add(mainMenuPanel);
 		this.jframe.setVisible(true);
+		this.jframe.add(mainMenuPanel);
+		this.jframe.getContentPane().add(mainMenuPanel);
 	}
 	
 	public void disableMainMenu()
 	{
 		this.jframe.setSize(640, 480);
-		System.out.println("" + this.jframe.getContentPane().toString());
-		this.jframe.getContentPane().remove(this.mainMenuPanel);
-		this.jframe.getContentPane().add(this.canvas, BorderLayout.CENTER);
-		this.mainMenuPanel = null; //mark for garbage collection
+//		CardLayout layout = (CardLayout)this.jframe.getContentPane().getLayout();
+//		layout.show(this.jframe.getContentPane(), CANVAS_CARD);
+		
+//		this.jframe.setLocation(100, 100);
+		this.jframe.remove(this.mainMenuPanel);
+		this.jframe.setContentPane(new JPanel(new BorderLayout()));
+		this.createCanvas();
+		this.jframe.add(this.canvas);
+
+//		this.mainMenuPanel = null; //mark for garbage collection
+//		this.jframe.doLayout();
 		this.jframe.validate();
 		this.jframe.setVisible(true);
-		this.jframe.repaint();
 	}
 	
 	public void createOpenGLContext()
@@ -128,7 +152,6 @@ public class ClientWindow {
 	
 	public void resize()
 	{
-		System.out.println("resizing");
 		Dimension dim = this.canvas.getSize();
 		this.windowWidth = dim.width;
 		this.windowHeight = dim.height;

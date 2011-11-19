@@ -40,8 +40,6 @@ public class MainMenuView extends javax.swing.JPanel {
 		connectToServerButton = new javax.swing.JButton();
 		mainSeparator = new javax.swing.JSeparator();
 
-		setName("Form"); // NOI18N
-
 		Font mainMenuFont = new Font("Tahoma", Font.BOLD, 18);
 		Font headerFont = new Font("Tahoma", Font.BOLD, 11);
 		mainMenuLabel.setFont(mainMenuFont); // NOI18N
