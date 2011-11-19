@@ -1,23 +1,12 @@
 package client;
 
-import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JRootPane;
-import javax.swing.SwingUtilities;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -62,24 +51,19 @@ public class ClientWindow {
 	public void enableMainMenu()
 	{
 		this.jframe.setSize(500, 170);
-		
+		this.jframe.setResizable(false);
 		this.jframe.setVisible(true);
 		this.jframe.add(mainMenuPanel);
-//		this.disableMainMenu();
-//		this.main.runGame(false, "");
 	}
 	
 	public void disableMainMenu()
 	{
-		
 		this.jframe.remove(this.mainMenuPanel);
 		this.jframe.setSize(640, 480);
+		this.jframe.setResizable(true);
 		this.createCanvas();
 		this.resize();
-		
 		this.jframe.add(canvas);
-		this.jframe.getRootPane().revalidate();
-
 	}
 	
 	public void createOpenGLContext()
@@ -104,11 +88,12 @@ public class ClientWindow {
 		glEnable (GL_BLEND);
 		glDepthFunc(GL_NEVER);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		this.main.runGame(false, "");
 	}
 	
-	public void doFrame()
+	public void mainLoop()
 	{
+		while(!Display.isCloseRequested())
+		{
 	//	System.out.println("starting main loop " + this.canvas.getWidth() + ", " + this.canvas.getHeight());
 	//	this.canvasSize.set(new Dimension(this.canvas.getWidth(), this.canvas.getHeight()));
 	//	while (!Display.isCloseRequested() && running) {
@@ -131,16 +116,27 @@ public class ClientWindow {
 			glLoadIdentity();
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
-			
-			float aspectRatio = this.windowWidth/this.windowHeight;
-			glViewport(0, 0, (int)this.windowWidth, (int)this.windowHeight);
+			float windowWidth, windowHeight;
+			if((this.windowWidth == 0) || (this.windowHeight == 0))
+			{
+				windowWidth = 100f;
+				windowHeight = 100f;
+			} else {
+				windowWidth = this.windowWidth;
+				windowHeight = this.windowHeight;
+			}
+			float aspectRatio = windowWidth/windowHeight;
+			glViewport(0, 0, (int)windowWidth, (int)windowHeight);
 			gluOrtho2D(-1 * aspectRatio, 1*aspectRatio, -1, 1);
 			
 			main.doFrame();
+			
+			glOrtho(0.0f, windowWidth, 0.0f, windowHeight, -1.0f, 1.0f);
+			
+			main.handleUI();
 			Display.update();
 			Display.sync(50);
-	//	}
-	//	System.out.println("shutting down..");
+		}
 	}
 	
 	public void resize()

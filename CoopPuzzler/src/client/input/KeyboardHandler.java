@@ -7,6 +7,7 @@ import client.ClientWindow;
 
 public class KeyboardHandler {
 	private static final float MOVE_SPEED = 0.3f;
+	private static final int MOVE_BOUNDARY_BORDER_INSET = 2;
 	
 	private final ClientMain main;
 	private ClientWindow window;
@@ -64,26 +65,26 @@ public class KeyboardHandler {
 	
 	private float checkBoundsX(float x, float bound, float aspect)
 	{
-		if(x < -1*bound*aspect - this.mapNumColumns/2)
+		if(x < -1*bound*aspect - this.mapNumColumns + MOVE_BOUNDARY_BORDER_INSET)
 		{
-			x = -1*bound*aspect - this.mapNumColumns/2;
+			x = -1*bound*aspect - this.mapNumColumns + MOVE_BOUNDARY_BORDER_INSET;
 		}
-		if(x > bound*aspect - this.mapNumColumns/2)
+		if(x > bound*aspect - MOVE_BOUNDARY_BORDER_INSET)
 		{
-			x = bound*aspect - this.mapNumColumns/2;
+			x = bound*aspect - MOVE_BOUNDARY_BORDER_INSET;
 		}
 		return x;
 	}
 	
 	private float checkBoundsY(float y, float bound)
 	{
-		if(y < -1*bound - this.mapNumRows/2)
+		if(y < -1*bound - this.mapNumRows + MOVE_BOUNDARY_BORDER_INSET)
 		{
-			y = -1*bound - this.mapNumRows/2;
+			y = -1*bound - this.mapNumRows + MOVE_BOUNDARY_BORDER_INSET;
 		}
-		if(y > bound - this.mapNumRows/2)
+		if(y > bound - MOVE_BOUNDARY_BORDER_INSET)
 		{
-			y = bound - this.mapNumRows/2;
+			y = bound - MOVE_BOUNDARY_BORDER_INSET;
 		}
 		return y;
 	}

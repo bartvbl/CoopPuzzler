@@ -1,9 +1,8 @@
 package client;
 
-
 import static org.lwjgl.opengl.GL11.*;
 import client.gui.ColourPickerUI;
-import client.gui.MainMenuView;
+import client.gui.FeedbackProvider;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 import common.PuzzleTable;
@@ -12,8 +11,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
-
-import javax.swing.JOptionPane;
 
 import org.lwjgl.input.Mouse;
 
@@ -55,16 +52,24 @@ public class ClientMain implements ProtocolConstants{
 			try {
 				communicator.init(InetAddress.getByName(hostName));
 			} catch (UnknownHostException e) {
-				e.printStackTrace();
+				FeedbackProvider.showFailedToFindServerMessage();
+				System.exit(0);
 			}
 			Thread commsMonitor = new Thread(communicator);
 			commsMonitor.start();
 		} else {
 			this.puzzleTable.loadMapFromLocalFile();
 		}
+		Thread mainThread = new Thread(new MainLoopThread(this));
+		mainThread.start();
+	}
+	
+	public void doMainLoop()
+	{
+		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
-		//this.window.mainLoop();
+		this.window.mainLoop();
 	}
 
 	public void doFrame() {
@@ -74,7 +79,10 @@ public class ClientMain implements ProtocolConstants{
 		glTranslatef(inputHandler.x, inputHandler.y, 0.0f);
 		this.puzzleDrawer.draw();
 		glLoadIdentity();
-		glOrtho(0.0f, this.window.windowWidth, 0.0f, this.window.windowHeight, -1.0f, 1.0f);
+	}
+	
+	public void handleUI()
+	{
 		boolean hasHandledMouse = this.colourPickerUI.draw();
 		if(!(hasHandledMouse && Mouse.isButtonDown(0)))
 		{
