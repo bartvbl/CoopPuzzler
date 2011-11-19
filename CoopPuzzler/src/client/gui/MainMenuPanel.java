@@ -30,12 +30,10 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		{
 			System.out.println("a");
 			this.main.window.disableMainMenu();
-			SwingUtilities.invokeLater(new GameStarter(this.main, true, MainMenuView.serverAddressTextBox.getText()));
 		} else if(event.getSource() == MainMenuView.playButton)
 		{
 			System.out.println("b");
 			this.main.window.disableMainMenu();
-			SwingUtilities.invokeLater(new GameStarter(this.main, false, ""));
 		}
 	}
 }

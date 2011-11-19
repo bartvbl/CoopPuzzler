@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -77,6 +78,8 @@ public class ClientWindow {
 		this.resize();
 		
 		this.jframe.add(canvas);
+		this.jframe.getRootPane().revalidate();
+
 	}
 	
 	public void createOpenGLContext()
@@ -104,11 +107,11 @@ public class ClientWindow {
 		this.main.runGame(false, "");
 	}
 	
-	public void mainLoop()
+	public void doFrame()
 	{
-		System.out.println("starting main loop " + this.canvas.getWidth() + ", " + this.canvas.getHeight());
-		this.canvasSize.set(new Dimension(this.canvas.getWidth(), this.canvas.getHeight()));
-		while (!Display.isCloseRequested() && running) {
+	//	System.out.println("starting main loop " + this.canvas.getWidth() + ", " + this.canvas.getHeight());
+	//	this.canvasSize.set(new Dimension(this.canvas.getWidth(), this.canvas.getHeight()));
+	//	while (!Display.isCloseRequested() && running) {
 			Dimension newDim = canvasSize.getAndSet(null);
 			if(newDim != null) {
 				
@@ -136,8 +139,8 @@ public class ClientWindow {
 			main.doFrame();
 			Display.update();
 			Display.sync(50);
-		}
-		System.out.println("shutting down..");
+	//	}
+	//	System.out.println("shutting down..");
 	}
 	
 	public void resize()

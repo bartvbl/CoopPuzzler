@@ -1,5 +1,7 @@
 package client;
 
+import org.lwjgl.opengl.Display;
+
 public class GameStarter implements Runnable{
 
 	private ClientMain main;
@@ -17,6 +19,7 @@ public class GameStarter implements Runnable{
 	public void run() {
 		main.window.createOpenGLContext();
 		main.runGame(isOnline, hostName);
+		new Thread(new MainLoopThread(main)).run();
 	}
 
 }

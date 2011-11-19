@@ -64,7 +64,7 @@ public class ClientMain implements ProtocolConstants{
 		}
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
-		this.window.mainLoop();
+		//this.window.mainLoop();
 	}
 
 	public void doFrame() {
