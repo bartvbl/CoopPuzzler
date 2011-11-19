@@ -1,29 +1,30 @@
 package server;
 
-import java.awt.ScrollPane;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTextPane;
-
 import common.BoardUpdateEvent;
+import common.PuzzleField;
+import common.PuzzleTable;
 
 public class ServerMain implements Runnable{
 	private ServerSocket serverSocket = null;
 	private ServerWindow window;
 	private ExecutorService threadpool;
 	private ArrayList<ClientHandler> handlers;
+	public final PuzzleTable puzzleTable;
 
+	public ServerMain()
+	{
+		this.puzzleTable = new PuzzleTable();
+	}
+	 
 	public void initialize()
 	{
+		this.puzzleTable.loadMapFromLocalFile();
 		this.window = new ServerWindow();
 		this.handlers = new ArrayList<ClientHandler>();
 		this.threadpool = Executors.newCachedThreadPool();
@@ -57,6 +58,9 @@ public class ServerMain implements Runnable{
 
 	public synchronized void broadcastMessage(BoardUpdateEvent event)
 	{
+		PuzzleField targetField = this.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
+		targetField.setFieldTextColour(event.getColour());
+		targetField.setNewCharacterValue(event.getCharacterValue());
 		for(ClientHandler handler : handlers){
 			handler.broadcastUpdateToClient(event);
 		}

@@ -1,5 +1,6 @@
 package client;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
@@ -7,10 +8,13 @@ import java.awt.event.ComponentEvent;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
+import client.gui.MainMenuPanel;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
@@ -22,6 +26,7 @@ public class ClientWindow {
 	public Canvas canvas;
 	private AtomicReference<Dimension> canvasSize = new AtomicReference<Dimension>();
 	private ClientMain main;
+	private MainMenuPanel mainMenuPanel;
 	
 	public ClientWindow(ClientMain main)
 	{
@@ -40,10 +45,32 @@ public class ClientWindow {
 		canvas.setIgnoreRepaint(true);
 		frame.setSize(640, 480);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(canvas);
 		frame.setVisible(true);
-		Dimension dim = this.canvas.getSize();
+	}
+	
+	public void enableMainMenu()
+	{
+		this.mainMenuPanel = new MainMenuPanel(this.main);
+		this.jframe.setSize(500, 170);
+		this.jframe.getContentPane().add(mainMenuPanel);
+		this.jframe.validate();
+	}
+	
+	public void disableMainMenu()
+	{
+		this.jframe.setSize(640, 480);
+		this.jframe.invalidate();
+		this.jframe.removeAll();
+		this.jframe.getContentPane().add(canvas);
+		this.mainMenuPanel = null; //mark for garbage collection
 		
+		this.jframe.validate();
+		this.jframe.setVisible(true);
+	}
+	
+	public void createOpenGLContext()
+	{
+		Dimension dim = this.canvas.getSize();
 		Display.setLocation(100, 100);
 		Display.setTitle("Puzzler");
 		try {

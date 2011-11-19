@@ -3,6 +3,7 @@ package client;
 
 import static org.lwjgl.opengl.GL11.*;
 import client.gui.ColourPickerUI;
+import client.gui.MainMenuView;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 import common.PuzzleTable;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JOptionPane;
+
+import org.lwjgl.input.Mouse;
 
 public class ClientMain implements ProtocolConstants{
 	public final ClientWindow window;
@@ -28,23 +31,37 @@ public class ClientMain implements ProtocolConstants{
 	
 	public ClientMain()
 	{
-		this.outputEventQueue.set(new ArrayList<BoardUpdateEvent>());
-		this.inputEventQueue.set(new ArrayList<BoardUpdateEvent>());
-		this.communicator = new ClientCommunicator(this);
-		try {
-			communicator.init(InetAddress.getLocalHost());
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		Thread commsMonitor = new Thread(communicator);
-		commsMonitor.start();
-		this.window = new ClientWindow(this);
 		this.puzzleTable = new PuzzleTable();
-		this.puzzleTable.initialize();
+		this.window = new ClientWindow(this);
+		this.communicator = new ClientCommunicator(this);
 		this.inputHandler = new InputHandler(this);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
 		this.boardEventHandler = new BoardEventHandler(this);
 		this.colourPickerUI = new ColourPickerUI(this);
+		this.outputEventQueue.set(new ArrayList<BoardUpdateEvent>());
+		this.inputEventQueue.set(new ArrayList<BoardUpdateEvent>());
+		
+		this.window.enableMainMenu();
+	}
+	
+	public void runGame(boolean isOnline, String hostName)
+	{
+		this.window.disableMainMenu();
+		if(isOnline)
+		{
+			try {
+				communicator.init(InetAddress.getByName(hostName));
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+			Thread commsMonitor = new Thread(communicator);
+			commsMonitor.start();
+		} else {
+			this.puzzleTable.loadMapFromLocalFile();
+		}
+		this.window.createOpenGLContext();
+		this.inputHandler.init();
+		this.puzzleDrawer.init();
 		this.window.mainLoop();
 	}
 
@@ -57,7 +74,7 @@ public class ClientMain implements ProtocolConstants{
 		glLoadIdentity();
 		glOrtho(0.0f, this.window.windowWidth, 0.0f, this.window.windowHeight, -1.0f, 1.0f);
 		boolean hasHandledMouse = this.colourPickerUI.draw();
-		if(!hasHandledMouse)
+		if(!(hasHandledMouse && Mouse.isButtonDown(0)))
 		{
 			this.inputHandler.handleSelection();
 		}

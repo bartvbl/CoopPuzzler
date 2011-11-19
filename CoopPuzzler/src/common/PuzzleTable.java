@@ -5,14 +5,19 @@ public class PuzzleTable implements BoardUpdateListener{
 	public PuzzleField[][] puzzleTable;
 	private static final String DEFAULT_FILE_SOURCE = "res/puzzle.txt";
 	
-	public void initialize()
+	public void loadMapFromLocalFile()
 	{
 		this.puzzleTable = PuzzleLoader.loadTableFromFile(DEFAULT_FILE_SOURCE);
 	}
 	
-	public String getRowString(int row)
+	public void createNewMap(int rows, int columns)
 	{
-		return "";
+		this.puzzleTable = new PuzzleField[rows][columns];
+	}
+	
+	public void createFieldAt(String message, int row, int column)
+	{
+		this.puzzleTable[row][column] = new PuzzleField(message);
 	}
 	
 	public boolean fieldIsOccupied(int row, int column)

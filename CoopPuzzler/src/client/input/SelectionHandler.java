@@ -37,10 +37,14 @@ public class SelectionHandler {
 	public SelectionHandler(ClientMain main)
 	{
 		this.puzzleTable = main.puzzleTable;
-		this.mapNumColumns = main.puzzleTable.puzzleTable[0].length;
-		this.mapNumRows = main.puzzleTable.puzzleTable.length;
 		this.window = main.window;
 		this.main = main;
+	}
+	
+	public void init()
+	{
+		this.mapNumColumns = main.puzzleTable.puzzleTable[0].length;
+		this.mapNumRows = main.puzzleTable.puzzleTable.length;
 	}
 	
 	public void updateCharacter(BoardUpdateEvent event)
@@ -67,7 +71,7 @@ public class SelectionHandler {
 					this.waitForNextInput();
 				}
 				char typedKey = KeyboardToCharConverter.getKeyCharValue();
-				if(typedKey != ' ')
+				if(typedKey != KeyboardToCharConverter.NO_MATCH)
 				{
 					
 					this.isWaiting = true;
