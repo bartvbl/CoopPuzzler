@@ -49,7 +49,6 @@ public class ClientMain implements ProtocolConstants{
 	public void runGame(boolean isOnline, String hostName)
 	{
 		this.gameIsOnline = isOnline;
-		this.window.disableMainMenu();
 		if(isOnline)
 		{
 			try {
