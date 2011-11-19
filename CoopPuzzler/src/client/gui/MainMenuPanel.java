@@ -26,12 +26,10 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource() == MainMenuView.connectToServerButton)
 		{
-			System.out.println("a");
 			this.main.window.disableMainMenu();
 			this.main.runGame(true, MainMenuView.serverAddressTextBox.getText());
 		} else if(event.getSource() == MainMenuView.playButton)
 		{
-			System.out.println("b");
 			this.main.window.disableMainMenu();
 			this.main.runGame(false, "");
 		}

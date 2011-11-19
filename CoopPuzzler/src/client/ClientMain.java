@@ -1,9 +1,7 @@
 package client;
 
-
 import static org.lwjgl.opengl.GL11.*;
 import client.gui.ColourPickerUI;
-import client.gui.MainMenuView;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 import common.PuzzleTable;
@@ -12,8 +10,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
-
-import javax.swing.JOptionPane;
 
 import org.lwjgl.input.Mouse;
 

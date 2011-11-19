@@ -60,11 +60,8 @@ public class ClientWindow {
 	public void enableMainMenu()
 	{
 		this.jframe.setSize(500, 170);
-		
 		this.jframe.setVisible(true);
 		this.jframe.add(mainMenuPanel);
-//		this.disableMainMenu();
-//		this.main.runGame(false, "");
 	}
 	
 	public void disableMainMenu()
@@ -107,7 +104,6 @@ public class ClientWindow {
 	{
 		while(!Display.isCloseRequested())
 		{
-			System.out.println("frame");
 			Dimension newDim = canvasSize.getAndSet(null);
 			if(newDim != null) {
 				
@@ -152,7 +148,6 @@ public class ClientWindow {
 	
 	public void resize()
 	{
-		System.out.println("resizing");
 		Dimension dim = this.canvas.getSize();
 		this.windowWidth = dim.width;
 		this.windowHeight = dim.height;
