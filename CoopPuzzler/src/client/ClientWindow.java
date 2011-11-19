@@ -141,8 +141,6 @@ public class ClientWindow {
 	
 	public void resize()
 	{
-		System.out.println("resizing");
-		System.out.println(this.canvas.getWidth() + ", " + this.canvas.getHeight());
 		Dimension dim = this.canvas.getSize();
 		this.windowWidth = dim.width;
 		this.windowHeight = dim.height;
