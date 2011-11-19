@@ -61,6 +61,12 @@ public class ClientMain implements ProtocolConstants{
 		} else {
 			this.puzzleTable.loadMapFromLocalFile();
 		}
+		Thread mainThread = new MainLoopThread(this);
+		mainThread.start();
+	}
+	
+	public void doMainLoop()
+	{
 		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
@@ -74,7 +80,10 @@ public class ClientMain implements ProtocolConstants{
 		glTranslatef(inputHandler.x, inputHandler.y, 0.0f);
 		this.puzzleDrawer.draw();
 		glLoadIdentity();
-		glOrtho(0.0f, this.window.windowWidth, 0.0f, this.window.windowHeight, -1.0f, 1.0f);
+	}
+	
+	public void handleUI()
+	{
 		boolean hasHandledMouse = this.colourPickerUI.draw();
 		if(!(hasHandledMouse && Mouse.isButtonDown(0)))
 		{

@@ -75,7 +75,8 @@ public class ClientWindow {
 		this.createCanvas();
 		this.resize();
 		this.jframe.add(canvas);
-		
+		this.jframe.getRootPane().revalidate();
+
 	}
 	
 	public void createOpenGLContext()
@@ -104,7 +105,9 @@ public class ClientWindow {
 	
 	public void mainLoop()
 	{
-		while (!Display.isCloseRequested() && running) {
+		while(!Display.isCloseRequested())
+		{
+			System.out.println("frame");
 			Dimension newDim = canvasSize.getAndSet(null);
 			if(newDim != null) {
 				
@@ -124,12 +127,24 @@ public class ClientWindow {
 			glLoadIdentity();
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
-			
-			float aspectRatio = this.windowWidth/this.windowHeight;
-			glViewport(0, 0, (int)this.windowWidth, (int)this.windowHeight);
+			float windowWidth, windowHeight;
+			if((this.windowWidth == 0) || (this.windowHeight == 0))
+			{
+				windowWidth = 100f;
+				windowHeight = 100f;
+			} else {
+				windowWidth = this.windowWidth;
+				windowHeight = this.windowHeight;
+			}
+			float aspectRatio = windowWidth/windowHeight;
+			glViewport(0, 0, (int)windowWidth, (int)windowHeight);
 			gluOrtho2D(-1 * aspectRatio, 1*aspectRatio, -1, 1);
 			
 			main.doFrame();
+			
+			glOrtho(0.0f, windowWidth, 0.0f, windowHeight, -1.0f, 1.0f);
+			
+			main.handleUI();
 			Display.update();
 			Display.sync(50);
 		}
