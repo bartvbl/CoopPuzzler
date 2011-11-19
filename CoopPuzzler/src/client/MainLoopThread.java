@@ -1,6 +1,6 @@
 package client;
 
-public class MainLoopThread extends Thread {
+public class MainLoopThread implements Runnable{
 	private ClientMain main;
 
 	public MainLoopThread(ClientMain main)
@@ -8,7 +8,8 @@ public class MainLoopThread extends Thread {
 		this.main = main;
 	}
 
+	@Override
 	public void run() {
-		this.main.doMainLoop();
+		main.doMainLoop();
 	}
 }

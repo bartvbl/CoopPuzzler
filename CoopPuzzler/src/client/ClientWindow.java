@@ -1,21 +1,12 @@
 package client;
 
-import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JRootPane;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -53,7 +44,7 @@ public class ClientWindow {
 				resize();
 			}
 		};
-		canvas.addComponentListener(adapter);
+		jframe.addComponentListener(adapter);
 		canvas.setIgnoreRepaint(true);
 	}
 	
@@ -73,7 +64,6 @@ public class ClientWindow {
 		this.createCanvas();
 		this.resize();
 		this.jframe.add(canvas);
-		this.jframe.getRootPane().revalidate();
 	}
 	
 	public void createOpenGLContext()
@@ -104,6 +94,9 @@ public class ClientWindow {
 	{
 		while(!Display.isCloseRequested())
 		{
+	//	System.out.println("starting main loop " + this.canvas.getWidth() + ", " + this.canvas.getHeight());
+	//	this.canvasSize.set(new Dimension(this.canvas.getWidth(), this.canvas.getHeight()));
+	//	while (!Display.isCloseRequested() && running) {
 			Dimension newDim = canvasSize.getAndSet(null);
 			if(newDim != null) {
 				
@@ -148,6 +141,8 @@ public class ClientWindow {
 	
 	public void resize()
 	{
+		System.out.println("resizing");
+		System.out.println(this.canvas.getWidth() + ", " + this.canvas.getHeight());
 		Dimension dim = this.canvas.getSize();
 		this.windowWidth = dim.width;
 		this.windowHeight = dim.height;

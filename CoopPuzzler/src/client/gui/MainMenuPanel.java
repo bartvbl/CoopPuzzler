@@ -6,8 +6,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import client.ClientMain;
+import client.GameStarter;
 
 @SuppressWarnings("serial")
 public class MainMenuPanel extends JPanel implements ActionListener{
