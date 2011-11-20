@@ -12,9 +12,11 @@ public class ServerWindow {
 	private JFrame jframe;
 	private JTextPane outputPane;
 	private JScrollPane scroller;
+	private final ServerMain main;
 	
-	public ServerWindow()
+	public ServerWindow(ServerMain main)
 	{
+		this.main = main;
 		this.jframe = new JFrame("Server");
 		
 		JScrollPane scroller = new JScrollPane();
@@ -33,8 +35,13 @@ public class ServerWindow {
 		this.jframe.addWindowListener(new WindowListener() {public void windowOpened(WindowEvent e) {}public void windowIconified(WindowEvent e) {}public void windowDeactivated(WindowEvent e) {}public void windowClosed(WindowEvent e) {}public void windowActivated(WindowEvent e) {}public void windowDeiconified(WindowEvent e) {}
 			public void windowClosing(WindowEvent e) {
 				System.out.println("g'day!");
+				startShutdown();
 			}
 		});
+	}
+	
+	protected void startShutdown(){
+		main.shutdown();
 	}
 	
 	public void writeMessage(String message)

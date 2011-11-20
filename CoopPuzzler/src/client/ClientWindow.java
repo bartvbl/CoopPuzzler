@@ -140,6 +140,7 @@ public class ClientWindow {
 			Display.update();
 			Display.sync(50);
 		}
+		System.out.println("Main loop over!");
 	}
 	
 	public void resize()

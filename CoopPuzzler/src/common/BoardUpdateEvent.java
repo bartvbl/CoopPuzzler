@@ -43,7 +43,7 @@ public class BoardUpdateEvent {
 	}
 	
 	public String toString(){
-		return ProtocolConstants.BOARD_UPDATE + SEPARATOR + row + SEPARATOR + column + SEPARATOR + value + SEPARATOR + colour.toString()+"\n";
+		return ProtocolConstants.BOARD_UPDATE + SEPARATOR + row + SEPARATOR + column + SEPARATOR + value + SEPARATOR + colour.toString();
 	}
 
 }

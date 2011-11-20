@@ -64,14 +64,12 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		}
 		if(!input.ready() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_SYN) || waits >= ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
-			output.newLine();
-			output.flush();
+			flush();
 			socket.close();
 			return;
 		}
 		output.write(ProtocolConstants.HANDSHAKE_SYNACK);
-		output.newLine();
-		output.flush();
+		flush();
 		waits = 0;
 		while(!input.ready() && waits < ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
 			waits++;
@@ -79,15 +77,13 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		}
 		if(!input.ready() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_ACK) || waits >= ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
-			output.newLine();
-			output.flush();
+			flush();
 			socket.close();
 			return;
 		}
 		if(!input.ready() || !input.readLine().equals(BOARD_TRANSFER_START)){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
-			output.newLine();
-			output.flush();
+			flush();
 			socket.close();
 			return;
 		}
@@ -104,20 +100,19 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 				message = input.readLine();
 			}
 			output.write(BOARD_TRANSFER_ACK);
-			output.newLine();
-			output.flush();
+			flush();
 			connected = true;
 		} else {
 			JOptionPane.showMessageDialog(null, "failed to connect to server!");
 		}
-		
+
 	}
 
 	/** Whether the Communicator has an active connection. */
 	public boolean isConnected(){
 		return connected;
 	}
-	
+
 
 	/** Close the session */
 	public void close(){
@@ -145,11 +140,19 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 					this.main.sendEventToClient(new BoardUpdateEvent(message));
 					message = this.readNextMessage();
 				}
+				if(message.equals(SESSION_TEARDOWN)){
+					output.write(SESSION_TEARDOWN_ACK);
+					flush();
+					socket.close();
+					main.serverRequestsShutDown();
+					return;
+				}
 				ArrayList<BoardUpdateEvent> outgoing = getBoardUpdateEventQueue();
 				synchronized(outgoing)
 				{
 					for(BoardUpdateEvent event : outgoing){
 						output.write(event.toString());
+						output.newLine();
 					}
 				}
 				output.flush();
@@ -162,6 +165,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			}
 		}
 	}
+
 	private String readNextMessage() throws IOException
 	{
 		String message;
@@ -174,5 +178,8 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		return message;
 	}
 
-
+	private void flush() throws IOException{
+		output.newLine();
+		output.flush();
+	}
 }

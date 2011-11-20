@@ -123,5 +123,9 @@ public class ClientMain implements ProtocolConstants{
 		}
 	}
 	
+	public void serverRequestsShutDown(){
+		FeedbackProvider.showServerShutdownMessage();
+		this.gameIsOnline = false;
+	}
 	
 }

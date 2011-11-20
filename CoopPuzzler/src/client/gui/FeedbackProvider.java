@@ -15,4 +15,8 @@ public class FeedbackProvider {
 	public static void showConnectingToServerFailedMessage() {
 		showErrorMessage("Failed to connect to server");
 	}
+
+	public static void showServerShutdownMessage() {
+		showErrorMessage("Server has shut down.");
+	}
 }

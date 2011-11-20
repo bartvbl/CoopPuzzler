@@ -17,6 +17,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 	private BufferedWriter output;
 	private BufferedReader input;
 	private ServerMain main;
+	private boolean shutdownRequested = false;
 	/** 
 	 * When this task is waiting for a response from client,
 	 * it will check again this many times a second.
@@ -41,17 +42,11 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 	{
 		try {
 			output.write(HANDSHAKE_SYN);
-			output.newLine();
-			output.flush();
-			int waits = 0;
-			while(!input.ready() && waits < HANDSHAKE_TIMEOUT/FREQUENCY){
-				waits++;
-				try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
-			}
-			if(!input.ready() || !input.readLine().equals(HANDSHAKE_SYNACK) || waits >= HANDSHAKE_TIMEOUT/FREQUENCY){
+			flush();
+			waitForInput();
+			if(!input.readLine().equals(HANDSHAKE_SYNACK)){
 				output.write(HANDSHAKE_CANCEL);
-				output.newLine();
-				output.flush();
+				flush();
 				clientSocket.close();
 				return;
 			}
@@ -59,7 +54,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			output.newLine();
 			this.sendBoard();
 			String request = "";
-			while(!request.equals(SESSION_TEARDOWN)){
+			while(!request.equals(SESSION_TEARDOWN)&&!shutdownRequested){
 				processEvents();
 				request = (input.ready() ? input.readLine() : "");
 				if(request != null && request.startsWith(BOARD_UPDATE)){
@@ -67,25 +62,31 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 				}
 				try {Thread.sleep(100);} catch (InterruptedException e) {}
 			}
-
-			output.write(SESSION_TEARDOWN_ACK);
-			output.newLine();
-			output.flush();
-			clientSocket.close();
+			if(shutdownRequested){
+				output.write(SESSION_TEARDOWN);
+				flush();
+				if(!waitForInput() || input.readLine().equals(SESSION_TEARDOWN_ACK)){
+					clientSocket.close();
+				}
+				
+			}else{
+				output.write(SESSION_TEARDOWN_ACK);
+				flush();
+				clientSocket.close();
+			}
 			main.removeHandler(this);//Unsubscribe this handler from updates and mark it for garbage collection.
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void sendBoard() throws IOException
 	{
 		output.write(BOARD_TRANSFER_START);
 		output.newLine();
 		PuzzleField[][] table = this.main.puzzleTable.puzzleTable;
 		output.write(BOARD_SIZE + " " + table.length + " " + table[0].length);
-		output.newLine();
-		output.flush();
+		flush();
 		for(int row = 0; row < table.length; row++)
 		{
 			for(int column = 0; column < table[0].length; column++)
@@ -93,13 +94,12 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 				output.write(BOARD_FIELD + " " + row + " " + column + " " + table[row][column].toString());
 				output.newLine();
 			}
-			output.flush(); //periodic flush
+//			output.flush(); //periodic flush
 		}
 		output.write(BOARD_TRANSFER_END);
-		output.newLine();
-		output.flush();
+		flush();
 	}
-	
+
 	private void processEvents() throws IOException
 	{
 		BoardUpdateEvent event = this.getNextMessage();
@@ -128,4 +128,23 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			this.outgoingMessageQueue.add(event);
 		}
 	}
+
+	public void initateShutdown(){
+		shutdownRequested = true;
+	}
+	
+	public boolean waitForInput() throws IOException{
+		int waits = 0;
+		while(!input.ready() && waits < HANDSHAKE_TIMEOUT/(1000/FREQUENCY)){
+			waits++;
+			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
+		}
+		return input.ready();
+	}
+	
+	private void flush() throws IOException{
+		output.newLine();
+		output.flush();
+	}
 }
+

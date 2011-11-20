@@ -26,7 +26,7 @@ public class ServerMain implements Runnable{
 	public void initialize()
 	{
 		this.puzzleTable.loadMapFromLocalFile();
-		this.window = new ServerWindow();
+		this.window = new ServerWindow(this);
 		this.handlers = new ArrayList<ClientHandler>();
 		this.threadpool = Executors.newCachedThreadPool();
 		try{this.serverSocket = new ServerSocket(ProtocolConstants.PORT);}
@@ -51,9 +51,9 @@ public class ServerMain implements Runnable{
 				this.threadpool.execute(handler);
 				this.window.writeMessage("Accepted client " + clientSocket.toString());
 			} catch (IOException e) {
-				System.out.println("Accept failed: 4444");
+				System.err.println("Accept failed: " + ProtocolConstants.PORT );
 				e.printStackTrace();
-				System.exit(-1);
+				if(e.getMessage().equals("Socket is closed")){return;}
 			} 
 		}
 	}
@@ -70,5 +70,21 @@ public class ServerMain implements Runnable{
 	
 	public synchronized void removeHandler(ClientHandler handler){
 		handlers.remove(handler);
+	}
+
+	public void shutdown() {
+		threadpool.shutdown();
+		for(ClientHandler handler : handlers){
+			handler.initateShutdown();
+		}
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		while(handlers.size() > 0){
+			try{Thread.sleep(100);}catch(InterruptedException e){}
+		}
+		System.exit(0);
 	}
 }
