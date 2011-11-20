@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import common.BoardUpdateEvent;
+import common.ProtocolConstants;
 import common.PuzzleField;
 import common.PuzzleTable;
 
@@ -28,9 +29,9 @@ public class ServerMain implements Runnable{
 		this.window = new ServerWindow();
 		this.handlers = new ArrayList<ClientHandler>();
 		this.threadpool = Executors.newCachedThreadPool();
-		try{this.serverSocket = new ServerSocket(4444);}
+		try{this.serverSocket = new ServerSocket(ProtocolConstants.PORT);}
 		catch(IOException e){e.printStackTrace();}
-		this.writeMessageInWindow("listening on port 4444");
+		this.writeMessageInWindow("listening on port " + ProtocolConstants.PORT);
 	}
 	
 	public void writeMessageInWindow(String message)

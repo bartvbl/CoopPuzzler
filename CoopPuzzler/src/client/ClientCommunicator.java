@@ -51,7 +51,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 
 	/**Client side of the handshake. Only protocol test for now */
 	private void shakeHands(InetAddress server) throws IOException{
-		socket = new Socket(server,4444);
+		socket = new Socket(server,PORT);
 		if(!socket.isConnected()){
 			throw new IOException("Server not found.");
 		}

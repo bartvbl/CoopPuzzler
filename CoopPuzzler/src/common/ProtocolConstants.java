@@ -8,6 +8,7 @@ package common;
  *
  */
 public interface ProtocolConstants {
+	public static final int PORT = 4444;
 	
 	/** 
 	 * The timeout a handshake participant must grant the other to respond, in milliseconds.
