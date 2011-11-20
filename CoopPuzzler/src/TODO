@@ -1,4 +1,3 @@
 Todo list:
-- fixing all the server exceptions when a client disconnects. I think we'll also need some graceful disconnect handlers when the app wants to shut down.
 
 - celebrate after the exams that it turned out so well :D
