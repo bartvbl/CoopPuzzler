@@ -72,6 +72,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			output.newLine();
 			output.flush();
 			clientSocket.close();
+			main.removeHandler(this);//Unsubscribe this handler from updates and mark it for garbage collection.
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

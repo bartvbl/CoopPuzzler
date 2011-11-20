@@ -66,4 +66,8 @@ public class ServerMain implements Runnable{
 			handler.broadcastUpdateToClient(event);
 		}
 	}
+	
+	public synchronized void removeHandler(ClientHandler handler){
+		handlers.remove(handler);
+	}
 }
