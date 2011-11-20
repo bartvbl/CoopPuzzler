@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 
 public class ClientMain implements ProtocolConstants{
 	public final ClientWindow window;
@@ -70,6 +71,8 @@ public class ClientMain implements ProtocolConstants{
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
 		this.window.mainLoop();
+		this.communicator.close();
+		Display.destroy();
 	}
 
 	public void doFrame() {
