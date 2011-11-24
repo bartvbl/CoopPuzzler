@@ -56,6 +56,8 @@ public class ClientWindow {
 		this.jframe.setResizable(false);
 		this.jframe.setVisible(true);
 		this.jframe.add(mainMenuPanel);
+		this.jframe.validate();
+		this.jframe.repaint();
 	}
 	
 	public void disableMainMenu()
