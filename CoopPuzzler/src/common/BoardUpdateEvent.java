@@ -1,15 +1,14 @@
 package common;
 
-public class BoardUpdateEvent {
+public class BoardUpdateEvent implements ProtocolConstants{
 	private int row,column;
 	private char value;
 	private FontColour colour;
 	
-	private static String SEPARATOR = "/";
 	
 	public BoardUpdateEvent(String description){
 		if(description==null){return;}
-		String[] split = description.split(SEPARATOR);
+		String[] split = description.split(BOARD_UPDATE_SEPARATOR);
 		try{
 			row = Integer.parseInt(split[1]);
 			column = Integer.parseInt(split[2]);
@@ -43,7 +42,7 @@ public class BoardUpdateEvent {
 	}
 	
 	public String toString(){
-		return ProtocolConstants.BOARD_UPDATE + SEPARATOR + row + SEPARATOR + column + SEPARATOR + value + SEPARATOR + colour.toString();
+		return BOARD_UPDATE + BOARD_UPDATE_SEPARATOR + row + BOARD_UPDATE_SEPARATOR + column + BOARD_UPDATE_SEPARATOR + value + BOARD_UPDATE_SEPARATOR + colour.toString();
 	}
 
 }

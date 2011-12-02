@@ -36,10 +36,12 @@ public interface ProtocolConstants {
 	public final static String BOARD_TRANSFER_ACK = "ACK BOARD";
 	
 	/**
-	 * A full board update consists of BOARD_UPDATE, two integers for board position, one char for the tile value and one integer for the FontColour, all space-separated.
-	 * Server responds to board updates by testing their validity and transmitting valid ones to all clients. Clients respond to them by updating their local model.
+	 * A full board update consists of BOARD_UPDATE, two integers for board position, one char for the tile value and one integer for the FontColour,
+	 * all separated by BOARD_UPDATE_SEPARATOR. Server responds to board updates by testing their validity and transmitting valid ones to all clients.
+	 *  Clients respond to them by updating their local model.
 	 */
 	public final static String BOARD_UPDATE = "UPDATE";
+	public final static String BOARD_UPDATE_SEPARATOR = "/";
 	/** Negative acknowledgement of board update. Positive acknowledgement is to repeat the update back. */
 	public final static String BOARD_UPDATE_REJECT = "REJECT UPDATE";
 	

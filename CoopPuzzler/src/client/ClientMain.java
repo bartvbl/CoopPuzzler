@@ -94,17 +94,13 @@ public class ClientMain implements ProtocolConstants{
 	}
 
 	public ArrayList<BoardUpdateEvent> getEventQueueToServer() {
-		ArrayList<BoardUpdateEvent> list;
 		ArrayList<BoardUpdateEvent> newList = new ArrayList<BoardUpdateEvent>();
-		list = this.outputEventQueue.getAndSet(newList);
-		return list;
+		return this.outputEventQueue.getAndSet(newList);
 	}
 	
 	public ArrayList<BoardUpdateEvent> getEventQueueToClient() {
-		ArrayList<BoardUpdateEvent> list;
 		ArrayList<BoardUpdateEvent> newList = new ArrayList<BoardUpdateEvent>();
-		list = this.inputEventQueue.getAndSet(newList);
-		return list;
+		return this.inputEventQueue.getAndSet(newList);
 	}
 	
 	public void sendEventToServer(BoardUpdateEvent event)

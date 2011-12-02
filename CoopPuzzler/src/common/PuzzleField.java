@@ -23,7 +23,7 @@ public class PuzzleField {
 		int contentOfMessageStartIndex = messageString.indexOf('(');
 		String messageContent = messageString.substring(contentOfMessageStartIndex + 1, messageString.length() - 1);
 		
-		String[] messageParts = messageContent.split("/");
+		String[] messageParts = messageContent.split(ProtocolConstants.BOARD_UPDATE_SEPARATOR);
 		this.isFilled = Boolean.parseBoolean(messageParts[0]);
 		this.questionReference = Integer.parseInt(messageParts[1]);
 		this.fieldTextColour.set(new FontColour(Integer.parseInt(messageParts[2])));
