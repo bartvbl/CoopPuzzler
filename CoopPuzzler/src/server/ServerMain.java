@@ -49,7 +49,7 @@ public class ServerMain implements Runnable{
 				ClientHandler handler = new ClientHandler(this, clientSocket);
 				handlers.add(handler);
 				this.threadpool.execute(handler);
-				this.window.writeMessage("Accepted client from " + clientSocket.getRemoteSocketAddress().toString());
+				this.window.writeMessage("Accepted client from " + handler.toString());
 			} catch (IOException e) {
 				System.err.println("Accept failed: " + ProtocolConstants.PORT );
 				e.printStackTrace();
@@ -81,7 +81,7 @@ public class ServerMain implements Runnable{
 
 	public synchronized void removeHandler(ClientHandler handler){
 		handlers.remove(handler);
-		this.window.writeMessage("Closing session from" + handler.toString());
+		this.window.writeMessage("Closing session from " + handler.toString());
 	}
 
 	public void shutdown() {
