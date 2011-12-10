@@ -22,7 +22,7 @@ public class ServerMain implements Runnable{
 	{
 		this.puzzleTable = new PuzzleTable();
 	}
-	 
+
 	public void initialize()
 	{
 		this.puzzleTable.loadMapFromLocalFile();
@@ -33,7 +33,7 @@ public class ServerMain implements Runnable{
 		catch(IOException e){e.printStackTrace();}
 		this.writeMessageInWindow("listening on port " + ProtocolConstants.PORT);
 	}
-	
+
 	public void writeMessageInWindow(String message)
 	{
 		this.window.writeMessage(message);
@@ -49,7 +49,7 @@ public class ServerMain implements Runnable{
 				ClientHandler handler = new ClientHandler(this, clientSocket);
 				handlers.add(handler);
 				this.threadpool.execute(handler);
-				this.window.writeMessage("Accepted client " + clientSocket.toString());
+				this.window.writeMessage("Accepted client from " + clientSocket.getRemoteSocketAddress().toString());
 			} catch (IOException e) {
 				System.err.println("Accept failed: " + ProtocolConstants.PORT );
 				e.printStackTrace();
@@ -58,18 +58,30 @@ public class ServerMain implements Runnable{
 		}
 	}
 
-	public synchronized void broadcastMessage(BoardUpdateEvent event)
+	/** 
+	 * Process a BoardUpdateEvent proposed by a client. 
+	 * Verifies that it references a real board field which is not filled, and updates state if valid. 
+	 * Returns whether or not the proposed update was accepted.
+	 */
+	public synchronized boolean processMessage(BoardUpdateEvent event)
 	{
+		if(event.getRow()< 0 || event.getRow() > this.puzzleTable.puzzleTable.length
+				|| event.getColumn() < 0 || event.getColumn() > this.puzzleTable.puzzleTable[event.getRow()].length){
+			return false;
+		}
 		PuzzleField targetField = this.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
+		if(targetField.isFilled){return false;}
 		targetField.setFieldTextColour(event.getColour());
 		targetField.setNewCharacterValue(event.getCharacterValue());
 		for(ClientHandler handler : handlers){
 			handler.broadcastUpdateToClient(event);
 		}
+		return true;
 	}
-	
+
 	public synchronized void removeHandler(ClientHandler handler){
 		handlers.remove(handler);
+		this.window.writeMessage("Closing session from" + handler.toString());
 	}
 
 	public void shutdown() {

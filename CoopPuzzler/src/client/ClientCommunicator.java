@@ -57,12 +57,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		}
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = new BufferedWriter(new PrintWriter(socket.getOutputStream()));
-		int waits = 0;
-		while(!input.ready() && waits < ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
-			waits++;
-			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
-		}
-		if(!input.ready() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_SYN) || waits >= ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
+		if(!waitForInput() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_SYN)){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
 			flush();
 			socket.close();
@@ -70,18 +65,13 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		}
 		output.write(ProtocolConstants.HANDSHAKE_SYNACK);
 		flush();
-		waits = 0;
-		while(!input.ready() && waits < ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
-			waits++;
-			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
-		}
-		if(!input.ready() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_ACK) || waits >= ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
+		if(!waitForInput() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_ACK)){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
 			flush();
 			socket.close();
 			return;
 		}
-		if(!input.ready() || !input.readLine().equals(BOARD_TRANSFER_START)){
+		if(!waitForInput() || !input.readLine().equals(BOARD_TRANSFER_START)){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
 			flush();
 			socket.close();
@@ -121,8 +111,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			output.write(SESSION_TEARDOWN);
 			output.newLine();
 			output.flush();
-		} catch (IOException e) {//The protocol calls for the server to close the TCP connection. This raises IOExceptions.
-			System.out.println(e.getMessage());
+		} catch (IOException e) {
 		}
 		connected = false;
 
@@ -178,6 +167,15 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		return message;
 	}
 
+	private boolean waitForInput() throws IOException{
+		int waits = 0;
+		while(!input.ready() && waits < HANDSHAKE_TIMEOUT/(1000/FREQUENCY)){
+			waits++;
+			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
+		}
+		return input.ready();
+	}
+	
 	private void flush() throws IOException{
 		output.newLine();
 		output.flush();
