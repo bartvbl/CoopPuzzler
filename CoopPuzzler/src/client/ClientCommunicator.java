@@ -79,13 +79,13 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			waits++;
 			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {System.out.println(e.getMessage());e.printStackTrace();}
 		}
-		if(!input.ready() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_ACK) || waits >= ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
+		if(!waitForInput() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_ACK)){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
 			flush();
 			socket.close();
 			return;
 		}
-		if(!input.ready() || !input.readLine().equals(BOARD_TRANSFER_START)){
+		if(!waitForInput() || !input.readLine().equals(BOARD_TRANSFER_START)){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
 			flush();
 			socket.close();
@@ -185,6 +185,15 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		return message;
 	}
 
+	private boolean waitForInput() throws IOException{
+		int waits = 0;
+		while(!input.ready() && waits < HANDSHAKE_TIMEOUT/(1000/FREQUENCY)){
+			waits++;
+			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
+		}
+		return input.ready();
+	}
+	
 	private void flush() throws IOException{
 		output.newLine();
 		output.flush();

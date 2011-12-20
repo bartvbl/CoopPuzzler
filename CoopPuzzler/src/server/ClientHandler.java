@@ -58,7 +58,10 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 				processEvents();
 				request = (input.ready() ? input.readLine() : "");
 				if(request != null && request.startsWith(BOARD_UPDATE)){
-					main.broadcastMessage(new BoardUpdateEvent(request));
+					if(!main.processMessage(new BoardUpdateEvent(request))){
+						output.write(BOARD_UPDATE_REJECT);
+						flush();
+					}
 				}
 				try {Thread.sleep(100);} catch (InterruptedException e) {this.main.writeMessageInWindow(e.getMessage());}
 			}
@@ -68,7 +71,6 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 				if(!waitForInput() || input.readLine().equals(SESSION_TEARDOWN_ACK)){
 					clientSocket.close();
 				}
-				
 			}else{
 				output.write(SESSION_TEARDOWN_ACK);
 				flush();
@@ -133,7 +135,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 		shutdownRequested = true;
 	}
 	
-	public boolean waitForInput() throws IOException{
+	private boolean waitForInput() throws IOException{
 		int waits = 0;
 		while(!input.ready() && waits < HANDSHAKE_TIMEOUT/(1000/FREQUENCY)){
 			waits++;
@@ -145,6 +147,10 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 	private void flush() throws IOException{
 		output.newLine();
 		output.flush();
+	}
+	
+	public String toString(){
+		return clientSocket.getRemoteSocketAddress().toString();
 	}
 }
 
