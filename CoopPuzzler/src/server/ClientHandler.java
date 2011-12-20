@@ -34,7 +34,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			this.input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			this.output = new BufferedWriter(new PrintWriter(clientSocket.getOutputStream()));
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.main.writeMessageInWindow(e.getMessage());
 		}
 	}
 
@@ -60,7 +60,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 				if(request != null && request.startsWith(BOARD_UPDATE)){
 					main.broadcastMessage(new BoardUpdateEvent(request));
 				}
-				try {Thread.sleep(100);} catch (InterruptedException e) {}
+				try {Thread.sleep(100);} catch (InterruptedException e) {this.main.writeMessageInWindow(e.getMessage());}
 			}
 			if(shutdownRequested){
 				output.write(SESSION_TEARDOWN);
@@ -76,7 +76,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			}
 			main.removeHandler(this);//Unsubscribe this handler from updates and mark it for garbage collection.
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.main.writeMessageInWindow(e.getMessage());
 		}
 	}
 
@@ -137,7 +137,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 		int waits = 0;
 		while(!input.ready() && waits < HANDSHAKE_TIMEOUT/(1000/FREQUENCY)){
 			waits++;
-			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
+			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {this.main.writeMessageInWindow(e.getMessage());}
 		}
 		return input.ready();
 	}

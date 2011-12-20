@@ -42,9 +42,13 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			shakeHands(server);
 		} catch (UnknownHostException e) {
 			FeedbackProvider.showFailedToFindServerMessage();
+			e.printStackTrace();
+			System.out.println(e.getMessage());
 			System.exit(0);
 		} catch (IOException e) {
 			FeedbackProvider.showConnectingToServerFailedMessage();
+			e.printStackTrace();
+			System.out.println(e.getMessage());
 			System.exit(0);
 		}
 	}
@@ -60,7 +64,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		int waits = 0;
 		while(!input.ready() && waits < ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
 			waits++;
-			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
+			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {System.out.println(e.getMessage());e.printStackTrace();}
 		}
 		if(!input.ready() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_SYN) || waits >= ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
@@ -73,7 +77,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		waits = 0;
 		while(!input.ready() && waits < ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
 			waits++;
-			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {}
+			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {System.out.println(e.getMessage());e.printStackTrace();}
 		}
 		if(!input.ready() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_ACK) || waits >= ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
 			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
@@ -123,6 +127,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			output.flush();
 		} catch (IOException e) {//The protocol calls for the server to close the TCP connection. This raises IOExceptions.
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		connected = false;
 
@@ -159,8 +164,10 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 				Thread.sleep(1000/FREQUENCY);
 
 			} catch (IOException e) {
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 			} catch (InterruptedException e) {
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 		}
