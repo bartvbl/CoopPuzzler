@@ -52,6 +52,7 @@ public class SelectionHandler {
 		PuzzleField field = this.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
 		field.setNewCharacterValue(event.getCharacterValue());
 		field.setFieldTextColour(event.getColour());
+		this.main.puzzleDrawer.updateFeatureDisplayList();
 	}
 	
 	public void handleSelection(float zoomLevel, float x, float y) {

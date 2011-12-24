@@ -15,6 +15,7 @@ public class ClientRunner {
 		catch(Exception e)
 		{
 			JOptionPane.showMessageDialog(null, "launch failed: " + e.getMessage());
+			e.printStackTrace();
 		}
 		
 	}

@@ -92,7 +92,6 @@ public class ClientWindow {
 		glEnable (GL_BLEND);
 		glDepthFunc(GL_NEVER);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
 	}
 	
 	public void mainLoop()

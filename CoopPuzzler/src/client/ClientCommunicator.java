@@ -38,6 +38,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 
 	public void init(InetAddress server)
 	{
+		System.out.println("initializing..");
 		try {
 			shakeHands(server);
 		} catch (UnknownHostException e) {
