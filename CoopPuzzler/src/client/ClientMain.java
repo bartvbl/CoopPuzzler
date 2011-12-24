@@ -3,6 +3,7 @@ package client;
 import static org.lwjgl.opengl.GL11.*;
 import client.gui.ColourPickerUI;
 import client.gui.FeedbackProvider;
+import common.AutoSaver;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 import common.PuzzleTable;
@@ -70,6 +71,7 @@ public class ClientMain implements ProtocolConstants{
 		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
+		new AutoSaver(this.puzzleTable.puzzleTable);
 		this.window.mainLoop();
 		this.communicator.close();
 		Display.destroy();

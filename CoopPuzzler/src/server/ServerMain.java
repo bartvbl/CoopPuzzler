@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import common.AutoSaver;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
 import common.PuzzleField;
@@ -32,6 +34,7 @@ public class ServerMain implements Runnable{
 		try{this.serverSocket = new ServerSocket(ProtocolConstants.PORT);}
 		catch(IOException e){e.printStackTrace();}
 		this.writeMessageInWindow("listening on port " + ProtocolConstants.PORT);
+		new AutoSaver(this.puzzleTable.puzzleTable);
 	}
 
 	public void writeMessageInWindow(String message)

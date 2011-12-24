@@ -20,7 +20,7 @@ public class NumberDrawer {
 	{
 		final float OFFSETX = 0.04f;
 		final float OFFSETY = -0.03f;
-		final float SEPARATION = 0.23f;
+		final float SEPARATION = 0.21f;
 		final float CHARWIDTH = 0.2f;
 		final float MAPCHARWIDTH = 0.23f;
 		final float CHARHEIGHT = 0.3f;
@@ -41,21 +41,21 @@ public class NumberDrawer {
 			{
 				glTexCoord2f(currentValue*CHARWIDTH			,1);
 				drawVertex(baseX							, baseY);
-				glTexCoord2f((currentValue + 1)*CHARWIDTH	,1);
+				glTexCoord2f((currentValue + 1)*CHARWIDTH - 0.005f	,1);
 				drawVertex(baseX + MAPCHARWIDTH				, baseY);
-				glTexCoord2f((currentValue + 1)*CHARWIDTH	,1 - CHARHEIGHT);
+				glTexCoord2f((currentValue + 1)*CHARWIDTH - 0.005f	,1 - CHARHEIGHT);
 				drawVertex(baseX + MAPCHARWIDTH				, baseY - MAPCHARHEIGHT);
 				glTexCoord2f(currentValue*CHARWIDTH			,1 - CHARHEIGHT);
 				drawVertex(baseX							, baseY - MAPCHARHEIGHT);
 			} else {
 				glTexCoord2f(currentValue*CHARWIDTH	+ LOX		,1 - CHARHEIGHT + LOY);
-				drawVertex(baseX								, baseY);
+				drawVertex(baseX - 0.01f								, baseY);
 				glTexCoord2f((currentValue + 1)*CHARWIDTH + LOX	,1 - CHARHEIGHT + LOY);
-				drawVertex(baseX + MAPCHARWIDTH					, baseY);
+				drawVertex(baseX + MAPCHARWIDTH	 - 0.01f		, baseY);
 				glTexCoord2f((currentValue + 1)*CHARWIDTH + LOX	,1 - 1.98f*CHARHEIGHT + LOY);
-				drawVertex(baseX + MAPCHARWIDTH					, baseY - MAPCHARHEIGHT);
+				drawVertex(baseX + MAPCHARWIDTH	 - 0.01f		, baseY - MAPCHARHEIGHT);
 				glTexCoord2f(currentValue*CHARWIDTH	+ LOX		,1 - 1.98f*CHARHEIGHT + LOY);
-				drawVertex(baseX								, baseY - MAPCHARHEIGHT);
+				drawVertex(baseX - 0.01f	 					, baseY - MAPCHARHEIGHT);
 			}
 			
 		}
