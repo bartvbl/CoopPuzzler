@@ -1,5 +1,7 @@
 package client;
 
+import static common.ProtocolConstants.*;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -10,12 +12,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import client.gui.FeedbackProvider;
 
 import common.BoardUpdateEvent;
-import static common.ProtocolConstants.*;
 
 public class ClientCommunicator implements Runnable{
 	private Socket socket;
@@ -63,11 +62,13 @@ public class ClientCommunicator implements Runnable{
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = new BufferedWriter(new PrintWriter(socket.getOutputStream()));
 
-		shakeHands(server);
+		shakeHands();
 		retrieveBoard();
+		
+		connected = true;
 	}
 
-	private void shakeHands(InetAddress server) throws IOException {
+	private void shakeHands() throws IOException {
 		if(!waitForInput() || !input.readLine().equals(HANDSHAKE_SYN)){
 			output.write(HANDSHAKE_CANCEL);
 			flush();
@@ -89,7 +90,7 @@ public class ClientCommunicator implements Runnable{
 			return;
 		}
 	}
-	
+
 	private void retrieveBoard() throws IOException {
 		String message = input.readLine();
 		if(message.startsWith(BOARD_SIZE))
@@ -105,7 +106,6 @@ public class ClientCommunicator implements Runnable{
 			}
 			output.write(BOARD_TRANSFER_ACK);
 			flush();
-			connected = true;
 		}
 	}
 
@@ -173,14 +173,7 @@ public class ClientCommunicator implements Runnable{
 
 	private String readNextMessage() throws IOException
 	{
-		String message;
-		if(input.ready())
-		{
-			message = input.readLine();
-		} else {
-			message = "";
-		}
-		return message;
+		return (input.ready() ? input.readLine() : "");
 	}
 
 	private boolean waitForInput() throws IOException{
