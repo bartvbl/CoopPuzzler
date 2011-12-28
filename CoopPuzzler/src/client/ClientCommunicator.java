@@ -15,9 +15,9 @@ import javax.swing.JOptionPane;
 import client.gui.FeedbackProvider;
 
 import common.BoardUpdateEvent;
-import common.ProtocolConstants;
+import static common.ProtocolConstants.*;
 
-public class ClientCommunicator implements ProtocolConstants,Runnable{
+public class ClientCommunicator implements Runnable{
 	private Socket socket;
 	private BufferedReader input;
 	private BufferedWriter output;
@@ -40,7 +40,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 	{
 		System.out.println("initializing..");
 		try {
-			shakeHands(server);
+			openSession(server);
 		} catch (UnknownHostException e) {
 			FeedbackProvider.showFailedToFindServerMessage();
 			e.printStackTrace();
@@ -54,44 +54,43 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		}
 	}
 
-	/**Client side of the handshake. Only protocol test for now */
-	private void shakeHands(InetAddress server) throws IOException{
+
+	private void openSession(InetAddress server) throws IOException{
 		socket = new Socket(server,PORT);
 		if(!socket.isConnected()){
 			throw new IOException("Server not found.");
 		}
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = new BufferedWriter(new PrintWriter(socket.getOutputStream()));
-		int waits = 0;
-		while(!input.ready() && waits < ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
-			waits++;
-			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {System.out.println(e.getMessage());e.printStackTrace();}
-		}
-		if(!input.ready() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_SYN) || waits >= ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
-			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
+
+		shakeHands(server);
+		retrieveBoard();
+	}
+
+	private void shakeHands(InetAddress server) throws IOException {
+		if(!waitForInput() || !input.readLine().equals(HANDSHAKE_SYN)){
+			output.write(HANDSHAKE_CANCEL);
 			flush();
 			socket.close();
 			return;
 		}
-		output.write(ProtocolConstants.HANDSHAKE_SYNACK);
+		output.write(HANDSHAKE_SYNACK);
 		flush();
-		waits = 0;
-		while(!input.ready() && waits < ProtocolConstants.HANDSHAKE_TIMEOUT/FREQUENCY){
-			waits++;
-			try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {System.out.println(e.getMessage());e.printStackTrace();}
-		}
-		if(!waitForInput() || !input.readLine().equals(ProtocolConstants.HANDSHAKE_ACK)){
-			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
+		if(!waitForInput() || !input.readLine().equals(HANDSHAKE_ACK)){
+			output.write(HANDSHAKE_CANCEL);
 			flush();
 			socket.close();
 			return;
 		}
 		if(!waitForInput() || !input.readLine().equals(BOARD_TRANSFER_START)){
-			output.write(ProtocolConstants.HANDSHAKE_CANCEL);
+			output.write(HANDSHAKE_CANCEL);
 			flush();
 			socket.close();
 			return;
 		}
+	}
+	
+	private void retrieveBoard() throws IOException {
 		String message = input.readLine();
 		if(message.startsWith(BOARD_SIZE))
 		{
@@ -107,10 +106,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			output.write(BOARD_TRANSFER_ACK);
 			flush();
 			connected = true;
-		} else {
-			JOptionPane.showMessageDialog(null, "failed to connect to server!");
 		}
-
 	}
 
 	/** Whether the Communicator has an active connection. */
@@ -126,7 +122,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 			output.write(SESSION_TEARDOWN);
 			output.newLine();
 			output.flush();
-		} catch (IOException e) {//The protocol calls for the server to close the TCP connection. This raises IOExceptions.
+		} catch (IOException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
@@ -134,9 +130,10 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 
 	}
 
-	/** Listens for board update events from the server and fills the incoming event queue.
-	 * 	Also transmits any events outstanding in main's event queue. 
-	 *  Ensure that connection is established before using. 
+	/** Listens for board update events from the server 
+	 * 	and fills the incoming event queue. Also transmits any events
+	 *  outstanding in main's event queue to the server. Ensure that connection is
+	 *  established before using. 
 	 */
 	public void run(){
 		while(connected){
@@ -194,7 +191,7 @@ public class ClientCommunicator implements ProtocolConstants,Runnable{
 		}
 		return input.ready();
 	}
-	
+
 	private void flush() throws IOException{
 		output.newLine();
 		output.flush();

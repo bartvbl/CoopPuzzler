@@ -1,6 +1,8 @@
 package common;
 
-public class BoardUpdateEvent implements ProtocolConstants{
+import static common.ProtocolConstants.*;
+
+public class BoardUpdateEvent{
 	private int row,column;
 	private char value;
 	private FontColour colour;
