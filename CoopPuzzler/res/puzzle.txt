@@ -29,16 +29,16 @@
      *      *        *   *   
 *    *      *        *   *   
 save
-           v                 
-           i                 
-           s                 
-           b                 
-           o                 
-           e                 
-           r                 
-                             
-                             
-                             
+ a         v                 
+ r         i                 
+ c         s                 
+ ea        b                 
+ na        o                 
+  v f      e                 
+  v        r                 
+  a                          
+  f                          
+  r                          
                              
                              
                              

@@ -43,8 +43,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 		try {
 			output.write(HANDSHAKE_SYN);
 			flush();
-			waitForInput();
-			if(!input.readLine().equals(HANDSHAKE_SYNACK)){
+			if(!waitForInput() ||!input.readLine().equals(HANDSHAKE_SYNACK)){
 				output.write(HANDSHAKE_CANCEL);
 				flush();
 				clientSocket.close();
@@ -63,7 +62,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 						flush();
 					}
 				}
-				try {Thread.sleep(100);} catch (InterruptedException e) {this.main.writeMessageInWindow(e.getMessage());}
+				try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {this.main.writeMessageInWindow(e.getMessage());}
 			}
 			if(shutdownRequested){
 				output.write(SESSION_TEARDOWN);

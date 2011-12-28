@@ -38,7 +38,7 @@ public interface ProtocolConstants {
 	/**
 	 * A full board update consists of BOARD_UPDATE, two integers for board position, one char for the tile value and one integer for the FontColour,
 	 * all separated by BOARD_UPDATE_SEPARATOR. Server responds to board updates by testing their validity and transmitting valid ones to all clients.
-	 *  Clients respond to them by updating their local model.
+	 * Clients respond to them by updating their local model.
 	 */
 	public final static String BOARD_UPDATE = "UPDATE";
 	public final static String BOARD_UPDATE_SEPARATOR = "/";

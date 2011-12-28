@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,7 +57,7 @@ public class ServerMain implements Runnable{
 			} catch (IOException e) {
 				System.err.println("Accept failed: " + ProtocolConstants.PORT );
 				e.printStackTrace();
-				if(e.getMessage().equals("Socket is closed")){return;}
+				return;
 			} 
 		}
 	}
@@ -93,6 +94,7 @@ public class ServerMain implements Runnable{
 	}
 
 	public void shutdown() {
+		this.window.writeMessage("Attempting graceful shutdown.");
 		threadpool.shutdown();
 		for(ClientHandler handler : handlers){
 			handler.initateShutdown();

@@ -70,25 +70,26 @@ public class ClientCommunicator implements Runnable{
 
 	private void shakeHands() throws IOException {
 		if(!waitForInput() || !input.readLine().equals(HANDSHAKE_SYN)){
-			output.write(HANDSHAKE_CANCEL);
-			flush();
-			socket.close();
+			cancelHandshake();
 			return;
 		}
 		output.write(HANDSHAKE_SYNACK);
 		flush();
 		if(!waitForInput() || !input.readLine().equals(HANDSHAKE_ACK)){
-			output.write(HANDSHAKE_CANCEL);
-			flush();
-			socket.close();
+			cancelHandshake();
 			return;
 		}
 		if(!waitForInput() || !input.readLine().equals(BOARD_TRANSFER_START)){
-			output.write(HANDSHAKE_CANCEL);
-			flush();
-			socket.close();
+			cancelHandshake();
 			return;
 		}
+	}
+
+	private void cancelHandshake() throws IOException {
+		output.write(HANDSHAKE_CANCEL);
+		flush();
+		socket.close();
+		return;
 	}
 
 	private void retrieveBoard() throws IOException {
