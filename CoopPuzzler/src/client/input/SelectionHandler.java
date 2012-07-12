@@ -90,6 +90,11 @@ public class SelectionHandler {
 							{
 								this.selectionArray.remove(0);
 							}
+							if(this.selectionArray.size() == 0){
+								this.isTyping = false;
+								this.waitForNextInput();
+								return;
+							}
 							point = this.selectionArray.remove(0);
 						} else {
 							point = this.selectionArray.get(0);

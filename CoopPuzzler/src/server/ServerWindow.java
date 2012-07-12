@@ -30,6 +30,7 @@ public class ServerWindow {
 		this.jframe.setContentPane(scroller);
 		this.jframe.pack();
 		this.jframe.setSize(300, 300);
+		this.jframe.setLocation(100, 100);
 		this.jframe.setVisible(true);
 		this.outputPane.setText("Coop puzzler server v0.1");
 		this.jframe.addWindowListener(new WindowListener() {public void windowOpened(WindowEvent e) {}public void windowIconified(WindowEvent e) {}public void windowDeactivated(WindowEvent e) {}public void windowClosed(WindowEvent e) {}public void windowActivated(WindowEvent e) {}public void windowDeiconified(WindowEvent e) {}
