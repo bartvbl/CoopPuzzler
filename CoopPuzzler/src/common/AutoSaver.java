@@ -64,6 +64,7 @@ public class AutoSaver implements ActionListener {
 			{
 				for(int column = 0; column < this.table[0].length; column++)
 				{
+					writer.append(""+this.table[row][column].getFieldTextColour().getColourIndex());
 					writer.append(this.table[row][column].getCurrentValueOfField());
 				}
 				writer.newLine();

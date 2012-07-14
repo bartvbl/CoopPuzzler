@@ -59,7 +59,6 @@ public class SelectionHandler {
 	public void handleSelection(float zoomLevel, float x, float y) {
 		if((Mouse.isButtonDown(0) == false) && (this.finishedClicking == false)) {
 			this.finishedClicking = true;
-			System.out.println("reset clicking");
 		}
 		Timer.tick();
 		if(isWaiting)
@@ -73,7 +72,6 @@ public class SelectionHandler {
 			{
 				if((this.cancelSelectionRequested()) && (this.finishedClicking == true))
 				{
-					System.out.println("cancelling");
 					this.isTyping = false;
 					this.finishedClicking = false;
 				}

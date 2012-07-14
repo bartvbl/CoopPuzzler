@@ -58,14 +58,14 @@ public class PuzzleLoader {
 		{
 			line = reader.readLine();
 			System.out.println("["+line+"]");
-			for(int column = 0; column < table[0].length; column++)
+			for(int column = 0; column < 2*table[0].length; column+=2)
 			{
-				System.out.println(row + ", " + column + ", " + table[row][column]);
-				if(!table[row][column].isFilled)
+				if(!table[row][column/2].isFilled)
 				{
-					if(line.charAt(column) != ' ')
+					if(line.charAt(column/2) != ' ')
 					{
-						table[row][column].setNewCharacterValue(line.charAt(column));
+						table[row][column/2].setFieldTextColour(new FontColour(Integer.parseInt(""+line.charAt(column))));
+						table[row][column/2].setNewCharacterValue(line.charAt(column+1));
 					}
 				}
 			}
