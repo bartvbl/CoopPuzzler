@@ -25,6 +25,7 @@ public class SelectionHandler {
 	private Timer selectionActionTimer = new Timer();
 	private float selectionActionStartTime;
 	private boolean isWaiting = false;
+	private boolean finishedClicking = true;
 	private ArrayList<Point> selectionUndoList = new ArrayList<Point>();
 	private char previousChar = ' ';
 	private int mapNumRows, mapNumColumns;
@@ -32,7 +33,7 @@ public class SelectionHandler {
 	private ClientWindow window;
 	
 	public ArrayList<Point> selectionArray = new ArrayList<Point>();
-	public boolean isTyping = false;
+	private boolean isTyping = false;
 	
 	public SelectionHandler(ClientMain main)
 	{
@@ -56,6 +57,10 @@ public class SelectionHandler {
 	}
 	
 	public void handleSelection(float zoomLevel, float x, float y) {
+		if((Mouse.isButtonDown(0) == false) && (this.finishedClicking == false)) {
+			this.finishedClicking = true;
+			System.out.println("reset clicking");
+		}
 		Timer.tick();
 		if(isWaiting)
 		{
@@ -66,15 +71,15 @@ public class SelectionHandler {
 		} else {
 			if(this.isTyping)
 			{
-				if(this.cancelSelectionRequested())
+				if((this.cancelSelectionRequested()) && (this.finishedClicking == true))
 				{
+					System.out.println("cancelling");
 					this.isTyping = false;
-					this.waitForNextInput();
+					this.finishedClicking = false;
 				}
 				char typedKey = KeyboardToCharConverter.getKeyCharValue();
 				if(typedKey != KeyboardToCharConverter.NO_MATCH)
 				{
-					
 					this.isWaiting = true;
 					this.selectionActionStartTime = this.selectionActionTimer.getTime();
 					
@@ -125,6 +130,7 @@ public class SelectionHandler {
 					int row = this.mapNumRows - point.getY() -1;
 					this.previousChar = this.puzzleTable.puzzleTable[row][column].getCurrentValueOfField();
 					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(' ');
+					this.main.puzzleDrawer.updateFeatureDisplayList();
 					this.waitForNextInput();
 				}
 			} else {
@@ -174,8 +180,9 @@ public class SelectionHandler {
 							counter++;
 						}
 					}
-					if(Mouse.isButtonDown(0))
+					if((Mouse.isButtonDown(0)) && (this.finishedClicking == true))
 					{
+						this.finishedClicking = false;
 						this.isTyping = true;
 						this.waitForNextInput();
 						this.previousChar = ' ';
