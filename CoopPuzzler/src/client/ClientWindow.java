@@ -14,6 +14,7 @@ import org.lwjgl.opengl.DisplayMode;
 
 import client.gui.EditorMainMenuPanel;
 import client.gui.EditorMainMenuView;
+import client.gui.EditorMainSwitcher;
 import client.gui.MainMenuPanel;
 import client.gui.MainMenuView;
 import client.puzzleFileList.PuzzleListPopulator;

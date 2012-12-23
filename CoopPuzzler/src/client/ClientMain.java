@@ -1,8 +1,12 @@
 package client;
 
 import static org.lwjgl.opengl.GL11.*;
-import client.gui.ColourPickerUI;
+import client.drawing.PuzzleDrawer;
 import client.gui.FeedbackProvider;
+import client.gui.ingame.ColourPickerUI;
+import client.input.InputHandler;
+import client.net.BoardEventHandler;
+import client.net.ClientCommunicator;
 import common.AutoSaver;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;

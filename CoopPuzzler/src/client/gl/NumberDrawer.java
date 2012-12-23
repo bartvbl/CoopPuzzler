@@ -4,7 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import common.PuzzleField;
 
-import client.PuzzleDrawer;
+import client.drawing.PuzzleDrawer;
 
 public class NumberDrawer {
 	private static final int FIELD_SIZE = PuzzleDrawer.FIELD_SIZE;

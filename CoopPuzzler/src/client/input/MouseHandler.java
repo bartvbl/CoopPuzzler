@@ -2,7 +2,6 @@ package client.input;
 
 import org.lwjgl.input.Mouse;
 
-import client.InputHandler;
 
 public class MouseHandler {
 	private InputHandler inputHandler;

@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import client.ClientMain;
-import client.EditorMainSwitcher;
 import client.GameStartSettings;
 import client.OperationMode;
 import client.puzzleFileList.PuzzleListItem;

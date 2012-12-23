@@ -9,8 +9,7 @@ import org.lwjgl.util.Timer;
 
 import client.ClientMain;
 import client.ClientWindow;
-import client.KeyboardToCharConverter;
-import client.TextureLibrary;
+import client.drawing.TextureLibrary;
 import client.utils.CoordConverter;
 
 import common.BoardUpdateEvent;
