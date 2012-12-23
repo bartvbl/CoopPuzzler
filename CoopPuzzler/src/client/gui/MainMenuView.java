@@ -47,7 +47,7 @@ public class MainMenuView extends javax.swing.JPanel {
         editPuzzleButton = new javax.swing.JButton();
 
         setName("Form"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(520, 241));
+        setPreferredSize(new java.awt.Dimension(520, 255));
         
         Font boldFont = new Font("Tahoma", Font.BOLD, 12);
         Font largeFont = new Font("Tahoma", Font.BOLD, 18);

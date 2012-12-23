@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -44,8 +45,12 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		}
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent event) {
+		if(MainMenuView.puzzleList.getSelectedValue() == null) {
+			JOptionPane.showMessageDialog(null, "You have to select a puzzle to play!", "oops!", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+		
 		boolean isOnlineGame = event.getSource() == MainMenuView.connectToServerButton;
 		String serverHostName = MainMenuView.serverAddressTextBox.getText();
 		String puzzleFileSrc = ((PuzzleListItem)MainMenuView.puzzleList.getSelectedValue()).getPath();
