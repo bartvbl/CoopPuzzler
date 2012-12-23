@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import client.ClientMain;
+import client.EditorMainSwitcher;
 import client.GameStartSettings;
 import client.puzzleFileList.PuzzleListItem;
 
@@ -24,6 +25,7 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		this.mainContentPanel = new MainMenuView();
 		this.add(this.mainContentPanel);
 		this.validate();
+		
 		MainMenuView.connectToServerButton.addActionListener(this);
 		MainMenuView.playButton.addActionListener(this);
 		MainMenuView.serverAddressTextBox.addKeyListener(new KeyListener(){

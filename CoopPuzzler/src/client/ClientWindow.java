@@ -12,6 +12,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
+import client.gui.EditorMainMenuPanel;
 import client.gui.MainMenuPanel;
 import client.gui.MainMenuView;
 import client.puzzleFileList.PuzzleListPopulator;
@@ -27,6 +28,7 @@ public class ClientWindow {
 	private AtomicReference<Dimension> canvasSize = new AtomicReference<Dimension>();
 	private ClientMain main;
 	private MainMenuPanel mainMenuPanel;
+	private EditorMainMenuPanel editorMainPanel;
 	
 	public ClientWindow(ClientMain main)
 	{
@@ -34,6 +36,8 @@ public class ClientWindow {
 		JFrame frame = new JFrame("Puzzler");
 		this.jframe = frame;
 		this.mainMenuPanel = new MainMenuPanel(this.main);
+		this.editorMainPanel = new EditorMainMenuPanel();
+		EditorMainSwitcher switcher = new EditorMainSwitcher(this.jframe, mainMenuPanel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocation(100, 100);
 		this.jframe.setIconImage(Toolkit.getDefaultToolkit().getImage("res/icon_32.png"));
