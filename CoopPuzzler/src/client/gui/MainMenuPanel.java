@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import client.ClientMain;
-import client.GameStarter;
+import client.GameStartSettings;
 
 @SuppressWarnings("serial")
 public class MainMenuPanel extends JPanel implements ActionListener{
@@ -37,20 +37,19 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		if(event.getKeyChar() == '\n')
 		{
 			this.main.window.disableMainMenu();
-			this.main.runGame(true, MainMenuView.serverAddressTextBox.getText());
+			String hostName = MainMenuView.serverAddressTextBox.getText();
+			GameStartSettings settings = new GameStartSettings(true, hostName, "");
+			this.main.runGame(settings);
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if(event.getSource() == MainMenuView.connectToServerButton)
-		{
-			this.main.window.disableMainMenu();
-			this.main.runGame(true, MainMenuView.serverAddressTextBox.getText());
-		} else if(event.getSource() == MainMenuView.playButton)
-		{
-			this.main.window.disableMainMenu();
-			this.main.runGame(false, "");
-		}
+		boolean isOnlineGame = event.getSource() == MainMenuView.connectToServerButton;
+		String serverHostName = MainMenuView.serverAddressTextBox.getText();
+		String puzzleFileSrc = "res/puzzles/puzzle.txt";
+		
+		this.main.window.disableMainMenu();
+		this.main.runGame(new GameStartSettings(isOnlineGame, serverHostName, puzzleFileSrc));
 	}
 }

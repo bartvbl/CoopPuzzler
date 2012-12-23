@@ -52,7 +52,7 @@ public class ClientWindow {
 	
 	public void enableMainMenu()
 	{
-		this.jframe.setSize(500, 170);
+		this.jframe.setSize(530, 281);
 		this.jframe.setResizable(false);
 		this.jframe.setVisible(true);
 		this.jframe.add(mainMenuPanel);

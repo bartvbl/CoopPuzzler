@@ -45,14 +45,14 @@ public class ClientMain implements ProtocolConstants{
 		this.window.enableMainMenu();
 	}
 	
-	public void runGame(boolean isOnline, String hostName)
+	public void runGame(GameStartSettings gameStartSettings)
 	{
 		//this.window.createOpenGLContext();
-		this.gameIsOnline = isOnline;
-		if(isOnline)
+		this.gameIsOnline = gameStartSettings.isOnlineGame;
+		if(gameStartSettings.isOnlineGame)
 		{
 			try {
-				communicator.init(InetAddress.getByName(hostName));
+				communicator.init(InetAddress.getByName(gameStartSettings.serverHostName));
 			} catch (UnknownHostException e) {
 				FeedbackProvider.showFailedToFindServerMessage();
 				System.exit(0);
@@ -125,5 +125,4 @@ public class ClientMain implements ProtocolConstants{
 		FeedbackProvider.showServerShutdownMessage();
 		this.gameIsOnline = false;
 	}
-	
 }
