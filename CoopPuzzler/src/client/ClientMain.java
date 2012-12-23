@@ -51,7 +51,7 @@ public class ClientMain implements ProtocolConstants {
 	public void runGame(GameStartSettings gameStartSettings)
 	{
 		this.gameSettings = gameStartSettings;
-		if(gameStartSettings.operationMode == OperationMode.ONLINE_GAME)
+		if(gameSettings.operationMode == OperationMode.ONLINE_GAME)
 		{
 			try {
 				communicator.init(InetAddress.getByName(gameStartSettings.serverHostName));
@@ -61,8 +61,14 @@ public class ClientMain implements ProtocolConstants {
 			}
 			Thread commsMonitor = new Thread(communicator);
 			commsMonitor.start();
-		} else {
+		} else if(gameSettings.operationMode == OperationMode.LOCAL_GAME){
 			this.puzzleTable.loadMapFromLocalFile(gameStartSettings.puzzleFileSrc);
+		} else if(gameSettings.operationMode == OperationMode.EDITOR) {
+			if(gameSettings.startWithEmptyEditor) {
+				
+			} else {
+				this.puzzleTable.loadMapFromLocalFile(gameStartSettings.puzzleFileSrc);
+			}
 		}
 		Thread mainThread = new Thread(new MainLoopThread(this));
 		mainThread.start();

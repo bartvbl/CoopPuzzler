@@ -9,6 +9,15 @@ public class PuzzleTable implements BoardUpdateListener{
 		this.puzzleTable = PuzzleLoader.loadTableFromFile(src);
 	}
 	
+	public void generateEmptyMap(int rows, int columns) {
+		this.createNewMap(rows, columns);
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < columns; j++) {
+				this.puzzleTable[i][j] = new PuzzleField(false, -1, true);
+			}
+		}
+	}
+	
 	public void createNewMap(int rows, int columns)
 	{
 		this.puzzleTable = new PuzzleField[rows][columns];

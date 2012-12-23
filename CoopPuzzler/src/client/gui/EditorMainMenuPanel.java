@@ -29,15 +29,20 @@ public class EditorMainMenuPanel implements ActionListener {
 		window.disableMainMenu();
 		int rows = -1, columns = -1;
 		String src = "";
+		boolean startWithEmptyBoard = false;
+		
 		if(event.getSource() == EditorMainMenuView.editCurrentButton) {
 			src = ((PuzzleListItem)EditorMainMenuView.existingPuzzleList.getSelectedValue()).getPath();
+			startWithEmptyBoard = false;
 		} else if(event.getSource() == EditorMainMenuView.createNewButton) {
 			rows = Integer.parseInt(EditorMainMenuView.rowsTextPane.getText());
-			columns = Integer.parseInt(EditorMainMenuView.columnsTextPane.getText());		
+			columns = Integer.parseInt(EditorMainMenuView.columnsTextPane.getText());
+			startWithEmptyBoard = true;
 		}
 		GameStartSettings settings = new GameStartSettings(OperationMode.EDITOR, "", src);
 		settings.rows = rows;
 		settings.columns = columns;
+		settings.startWithEmptyEditor = startWithEmptyBoard;
 		main.runGame(settings);
 	}
 

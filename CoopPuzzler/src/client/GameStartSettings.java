@@ -6,6 +6,7 @@ public class GameStartSettings {
 	public OperationMode operationMode;
 	public int rows = -1;
 	public int columns = -1;
+	public boolean startWithEmptyEditor = true;
 
 	public GameStartSettings(OperationMode operationMode, String serverHostName, String puzzleFileSrc) {
 		this.serverHostName = serverHostName;

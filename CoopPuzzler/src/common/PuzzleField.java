@@ -10,7 +10,7 @@ public class PuzzleField {
 	private AtomicReference<FontColour> fieldTextColour;
 	private AtomicInteger currentValueOfField;
 
-	public PuzzleField(boolean isFilled, boolean ignoreQuestionreference, int questionReference, boolean hasIgnoreReference)
+	public PuzzleField(boolean isFilled, int questionReference, boolean hasIgnoreReference)
 	{
 		this.initialize();
 		this.isFilled = isFilled;
