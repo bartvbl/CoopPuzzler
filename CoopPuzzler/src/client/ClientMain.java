@@ -68,15 +68,12 @@ public class ClientMain implements ProtocolConstants {
 		mainThread.start();
 	}
 	
-	public void doMainLoop()
+	public void initialize()
 	{
 		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
 		new AutoSaver(this.puzzleTable.puzzleTable, this.gameSettings.puzzleFileSrc);
-		this.window.mainLoop();
-		this.communicator.close();
-		Display.destroy();
 	}
 
 	public void doFrame() {

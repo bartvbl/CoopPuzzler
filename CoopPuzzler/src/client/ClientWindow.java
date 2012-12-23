@@ -24,13 +24,13 @@ import static org.lwjgl.util.glu.GLU.*;
 public class ClientWindow {
 	public float windowWidth = 640;
 	public float windowHeight = 480;
-	private boolean running = true;
 	public JFrame jframe;
 	public Canvas canvas;
 	private AtomicReference<Dimension> canvasSize = new AtomicReference<Dimension>();
 	private ClientMain main;
 	private MainMenuPanel mainMenuPanel;
 	private EditorMainMenuPanel editorMainPanel;
+	private Dimension dimension;
 	
 	public ClientWindow(ClientMain main)
 	{
@@ -38,8 +38,8 @@ public class ClientWindow {
 		JFrame frame = new JFrame("Puzzler");
 		this.jframe = frame;
 		this.mainMenuPanel = new MainMenuPanel(this.main);
-		this.editorMainPanel = new EditorMainMenuPanel(this);
-		EditorMainSwitcher switcher = new EditorMainSwitcher(this.jframe, mainMenuPanel);
+		this.editorMainPanel = new EditorMainMenuPanel(this, this.main);
+		new EditorMainSwitcher(this.jframe, mainMenuPanel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocation(100, 100);
 		this.jframe.setIconImage(Toolkit.getDefaultToolkit().getImage("res/icon_32.png"));
@@ -98,57 +98,24 @@ public class ClientWindow {
 		gluOrtho2D(0f, 640f, 0f, 480f);
 		glMatrixMode(GL_MODELVIEW);
 		glClearColor(94.0f/255.0f, 161.0f/255.0f, 255.0f/255.0f, 0.5f);
-		//glClearDepth(1.0);
 		glEnable (GL_BLEND);
 		glDepthFunc(GL_NEVER);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
-	public void mainLoop()
-	{
-		while(!Display.isCloseRequested())
-		{
-			Dimension newDim = canvasSize.getAndSet(null);
-			if(newDim != null) {
-				
-				try {
-					DisplayMode mode = new DisplayMode(newDim.width, newDim.width);
-					Display.setDisplayMode(mode);
-					this.windowHeight = newDim.height;
-					this.windowWidth = newDim.width;
-					mode = null;
-				} catch (LWJGLException e) {
-					e.printStackTrace();
-				}
+	public Dimension getSize() {
+		Dimension newDim = canvasSize.getAndSet(null);
+		if(newDim != null) {
+			try {
+				DisplayMode mode = new DisplayMode(newDim.width, newDim.width);
+				Display.setDisplayMode(mode);
+				this.dimension = newDim;
+				mode = null;
+			} catch (LWJGLException e) {
+				e.printStackTrace();
 			}
-			
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-			float windowWidth, windowHeight;
-			if((this.windowWidth == 0) || (this.windowHeight == 0))
-			{
-				windowWidth = 100f;
-				windowHeight = 100f;
-			} else {
-				windowWidth = this.windowWidth;
-				windowHeight = this.windowHeight;
-			}
-			float aspectRatio = windowWidth/windowHeight;
-			glViewport(0, 0, (int)windowWidth, (int)windowHeight);
-			gluOrtho2D(-1 * aspectRatio, 1*aspectRatio, -1, 1);
-			
-			main.doFrame();
-			
-			glOrtho(0.0f, windowWidth, 0.0f, windowHeight, -1.0f, 1.0f);
-			
-			main.handleUI();
-			Display.update();
-			Display.sync(50);
 		}
-		System.out.println("Main loop over!");
+		return this.dimension;
 	}
 	
 	public void resize()
