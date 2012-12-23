@@ -25,8 +25,8 @@ public class EditorMainMenuPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
+		window.disableMainMenu();
 		if(event.getSource() == EditorMainMenuView.editCurrentButton) {
-			window.disableMainMenu();
 			String src = ((PuzzleListItem)EditorMainMenuView.existingPuzzleList.getSelectedValue()).getPath();
 			this.editorMain.runGame(true, 0, 0, src);
 		} else if(event.getSource() == EditorMainMenuView.createNewButton) {
