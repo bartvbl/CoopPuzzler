@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 
 import client.ClientMain;
 import client.GameStartSettings;
+import client.puzzleFileList.PuzzleListItem;
 
 @SuppressWarnings("serial")
 public class MainMenuPanel extends JPanel implements ActionListener{
@@ -47,7 +48,7 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 		boolean isOnlineGame = event.getSource() == MainMenuView.connectToServerButton;
 		String serverHostName = MainMenuView.serverAddressTextBox.getText();
-		String puzzleFileSrc = "res/puzzles/puzzle.txt";
+		String puzzleFileSrc = ((PuzzleListItem)MainMenuView.puzzleList.getSelectedValue()).getPath();
 		
 		this.main.window.disableMainMenu();
 		this.main.runGame(new GameStartSettings(isOnlineGame, serverHostName, puzzleFileSrc));

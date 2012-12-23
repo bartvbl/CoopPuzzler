@@ -14,10 +14,11 @@ public class AutoSaver implements ActionListener {
 	private PuzzleField[][] table;
 	private Timer timer;
 	
-	private static final String AUTOSAVE_LOCATION = "res/puzzle.txt";
+	private final String AUTOSAVE_LOCATION;
 	
-	public AutoSaver(PuzzleField[][] table)
+	public AutoSaver(PuzzleField[][] table, String autosaveLocation)
 	{
+		this.AUTOSAVE_LOCATION = autosaveLocation;
 		this.table = table;
 		this.timer = new Timer(10000, this);
 		this.timer.start();
@@ -28,8 +29,8 @@ public class AutoSaver implements ActionListener {
 	}
 
 	private void doSave() {
-		System.out.println("saving..");
 		File destinationFile = new File(AUTOSAVE_LOCATION);
+		System.out.println("saving to " + destinationFile.getPath() + "..");
 		if(destinationFile.exists())
 		{
 			destinationFile.delete();

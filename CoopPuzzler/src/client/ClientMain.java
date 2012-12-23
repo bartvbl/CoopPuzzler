@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
-public class ClientMain implements ProtocolConstants{
+public class ClientMain implements ProtocolConstants {
 	public final ClientWindow window;
 	public final PuzzleTable puzzleTable;
 	public final PuzzleDrawer puzzleDrawer;
@@ -25,10 +25,9 @@ public class ClientMain implements ProtocolConstants{
 	public final BoardEventHandler boardEventHandler;
 	public final ColourPickerUI colourPickerUI;
 	
-	public boolean gameIsOnline = false;
-	
 	private AtomicReference<ArrayList<BoardUpdateEvent>> outputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	private AtomicReference<ArrayList<BoardUpdateEvent>> inputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
+	private GameStartSettings gameSettings;
 	
 	public ClientMain()
 	{
@@ -47,8 +46,7 @@ public class ClientMain implements ProtocolConstants{
 	
 	public void runGame(GameStartSettings gameStartSettings)
 	{
-		//this.window.createOpenGLContext();
-		this.gameIsOnline = gameStartSettings.isOnlineGame;
+		this.gameSettings = gameStartSettings;
 		if(gameStartSettings.isOnlineGame)
 		{
 			try {
@@ -60,7 +58,7 @@ public class ClientMain implements ProtocolConstants{
 			Thread commsMonitor = new Thread(communicator);
 			commsMonitor.start();
 		} else {
-			this.puzzleTable.loadMapFromLocalFile();
+			this.puzzleTable.loadMapFromLocalFile(gameStartSettings.puzzleFileSrc);
 		}
 		Thread mainThread = new Thread(new MainLoopThread(this));
 		mainThread.start();
@@ -71,7 +69,7 @@ public class ClientMain implements ProtocolConstants{
 		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
-		new AutoSaver(this.puzzleTable.puzzleTable);
+		new AutoSaver(this.puzzleTable.puzzleTable, this.gameSettings.puzzleFileSrc);
 		this.window.mainLoop();
 		this.communicator.close();
 		Display.destroy();
@@ -123,6 +121,10 @@ public class ClientMain implements ProtocolConstants{
 	
 	public void serverRequestsShutDown(){
 		FeedbackProvider.showServerShutdownMessage();
-		this.gameIsOnline = false;
+		this.gameSettings.isOnlineGame = false;
+	}
+	
+	public boolean gameIsOnline() {
+		return this.gameSettings.isOnlineGame;
 	}
 }

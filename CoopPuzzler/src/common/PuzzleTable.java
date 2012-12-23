@@ -3,11 +3,10 @@ package common;
 
 public class PuzzleTable implements BoardUpdateListener{
 	public PuzzleField[][] puzzleTable;
-	private static final String DEFAULT_FILE_SOURCE = "res/puzzle.txt";
 	
-	public void loadMapFromLocalFile()
+	public void loadMapFromLocalFile(String src)
 	{
-		this.puzzleTable = PuzzleLoader.loadTableFromFile(DEFAULT_FILE_SOURCE);
+		this.puzzleTable = PuzzleLoader.loadTableFromFile(src);
 	}
 	
 	public void createNewMap(int rows, int columns)

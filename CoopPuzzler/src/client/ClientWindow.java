@@ -13,6 +13,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import client.gui.MainMenuPanel;
+import client.gui.MainMenuView;
+import client.puzzleFileList.PuzzleListPopulator;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
@@ -52,6 +54,7 @@ public class ClientWindow {
 	
 	public void enableMainMenu()
 	{
+		PuzzleListPopulator.populatePuzzleList(MainMenuView.puzzleList);
 		this.jframe.setSize(530, 281);
 		this.jframe.setResizable(false);
 		this.jframe.setVisible(true);
@@ -98,9 +101,6 @@ public class ClientWindow {
 	{
 		while(!Display.isCloseRequested())
 		{
-	//	System.out.println("starting main loop " + this.canvas.getWidth() + ", " + this.canvas.getHeight());
-	//	this.canvasSize.set(new Dimension(this.canvas.getWidth(), this.canvas.getHeight()));
-	//	while (!Display.isCloseRequested() && running) {
 			Dimension newDim = canvasSize.getAndSet(null);
 			if(newDim != null) {
 				

@@ -106,7 +106,7 @@ public class SelectionHandler {
 					int column = point.getX();
 					int row = this.mapNumRows - point.getY() -1;
 					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,this.main.colourPickerUI.getSelectedColour());
-					if(this.main.gameIsOnline == true)
+					if(this.main.gameIsOnline() == true)
 					{
 						this.main.sendEventToServer(update);
 					} else {

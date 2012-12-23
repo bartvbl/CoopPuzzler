@@ -15,6 +15,7 @@ import common.PuzzleField;
 import common.PuzzleTable;
 
 public class ServerMain implements Runnable{
+	private static final String DEFAULT_FILE_SOURCE = "res/puzzle.txt";
 	private ServerSocket serverSocket = null;
 	private ServerWindow window;
 	private ExecutorService threadpool;
@@ -28,14 +29,14 @@ public class ServerMain implements Runnable{
 
 	public void initialize()
 	{
-		this.puzzleTable.loadMapFromLocalFile();
+		this.puzzleTable.loadMapFromLocalFile(DEFAULT_FILE_SOURCE);
 		this.window = new ServerWindow(this);
 		this.handlers = new ArrayList<ClientHandler>();
 		this.threadpool = Executors.newCachedThreadPool();
 		try{this.serverSocket = new ServerSocket(ProtocolConstants.PORT);}
 		catch(IOException e){e.printStackTrace();}
 		this.writeMessageInWindow("listening on port " + ProtocolConstants.PORT);
-		new AutoSaver(this.puzzleTable.puzzleTable);
+		new AutoSaver(this.puzzleTable.puzzleTable, DEFAULT_FILE_SOURCE);
 	}
 
 	public void writeMessageInWindow(String message)

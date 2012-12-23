@@ -1,7 +1,7 @@
 package client;
 
 public class GameStartSettings {
-	public final boolean isOnlineGame;
+	public boolean isOnlineGame;
 	public final String serverHostName;
 	public final String puzzleFileSrc;
 
