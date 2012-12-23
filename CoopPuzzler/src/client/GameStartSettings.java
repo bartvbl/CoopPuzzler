@@ -1,13 +1,13 @@
 package client;
 
 public class GameStartSettings {
-	public boolean isOnlineGame;
 	public final String serverHostName;
 	public final String puzzleFileSrc;
+	public OperationMode operationMode;
 
-	public GameStartSettings(boolean isOnlineGame, String serverHostName, String puzzleFileSrc) {
-		this.isOnlineGame = isOnlineGame;
+	public GameStartSettings(OperationMode operationMode, String serverHostName, String puzzleFileSrc) {
 		this.serverHostName = serverHostName;
 		this.puzzleFileSrc = puzzleFileSrc;
+		this.operationMode = operationMode;
 	}
 }

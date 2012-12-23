@@ -47,7 +47,7 @@ public class ClientMain implements ProtocolConstants {
 	public void runGame(GameStartSettings gameStartSettings)
 	{
 		this.gameSettings = gameStartSettings;
-		if(gameStartSettings.isOnlineGame)
+		if(gameStartSettings.operationMode == OperationMode.ONLINE_GAME)
 		{
 			try {
 				communicator.init(InetAddress.getByName(gameStartSettings.serverHostName));
@@ -121,10 +121,10 @@ public class ClientMain implements ProtocolConstants {
 	
 	public void serverRequestsShutDown(){
 		FeedbackProvider.showServerShutdownMessage();
-		this.gameSettings.isOnlineGame = false;
+		this.gameSettings.operationMode = OperationMode.LOCAL_GAME;
 	}
 	
 	public boolean gameIsOnline() {
-		return this.gameSettings.isOnlineGame;
+		return this.gameSettings.operationMode == OperationMode.ONLINE_GAME;
 	}
 }

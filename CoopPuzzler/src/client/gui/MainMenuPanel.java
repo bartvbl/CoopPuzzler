@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import client.ClientMain;
 import client.EditorMainSwitcher;
 import client.GameStartSettings;
+import client.OperationMode;
 import client.puzzleFileList.PuzzleListItem;
 
 @SuppressWarnings("serial")
@@ -42,7 +43,7 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		{
 			this.main.window.disableMainMenu();
 			String hostName = MainMenuView.serverAddressTextBox.getText();
-			GameStartSettings settings = new GameStartSettings(true, hostName, "");
+			GameStartSettings settings = new GameStartSettings(OperationMode.ONLINE_GAME, hostName, "");
 			this.main.runGame(settings);
 		}
 	}
@@ -57,7 +58,14 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		String serverHostName = MainMenuView.serverAddressTextBox.getText();
 		String puzzleFileSrc = ((PuzzleListItem)MainMenuView.puzzleList.getSelectedValue()).getPath();
 		
+		OperationMode operationMode;
+		if(isOnlineGame) {
+			operationMode = OperationMode.ONLINE_GAME;
+		} else {
+			operationMode = OperationMode.LOCAL_GAME;
+		}
+		
 		this.main.window.disableMainMenu();
-		this.main.runGame(new GameStartSettings(isOnlineGame, serverHostName, puzzleFileSrc));
+		this.main.runGame(new GameStartSettings(operationMode, serverHostName, puzzleFileSrc));
 	}
 }

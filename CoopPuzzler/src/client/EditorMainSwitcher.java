@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import client.gui.EditorMainMenuView;
 import client.gui.MainMenuPanel;
 import client.gui.MainMenuView;
+import client.puzzleFileList.PuzzleListPopulator;
 
 public class EditorMainSwitcher implements ActionListener {
 
@@ -25,6 +26,7 @@ public class EditorMainSwitcher implements ActionListener {
 		if(event.getSource() == MainMenuView.editPuzzleButton) {
 			this.jframe.remove(this.mainMenuPanel);
 			this.jframe.add(EditorMainMenuView.getInstance());
+			PuzzleListPopulator.populatePuzzleList(EditorMainMenuView.existingPuzzleList);
 		} else if(event.getSource() == EditorMainMenuView.mainMenuButton) {
 			this.jframe.remove(EditorMainMenuView.getInstance());
 			this.jframe.add(this.mainMenuPanel);

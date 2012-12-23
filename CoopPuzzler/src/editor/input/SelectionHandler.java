@@ -7,6 +7,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.Timer;
 
+import client.ClientWindow;
+
 
 import editor.EditorMain;
 import editor.EditorWindow;
@@ -24,7 +26,7 @@ public class SelectionHandler {
 	private boolean isWaiting = false;
 	private int mapNumRows, mapNumColumns;
 	private EditorMain main;
-	private EditorWindow window;
+	private ClientWindow window;
 
 	public ArrayList<Point> selectionArray = new ArrayList<Point>();
 	public boolean isTyping = false;

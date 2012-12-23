@@ -2,6 +2,8 @@ package editor.input;
 
 import org.lwjgl.input.Keyboard;
 
+import client.ClientWindow;
+
 import editor.EditorMain;
 import editor.EditorWindow;
 
@@ -10,7 +12,7 @@ public class KeyboardHandler {
 	private static final int MOVE_BOUNDARY_BORDER_INSET = 2;
 	
 	private final EditorMain main;
-	private EditorWindow window;
+	private ClientWindow window;
 	
 	private int mapNumRows;
 	private int mapNumColumns;

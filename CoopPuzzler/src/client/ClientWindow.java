@@ -13,6 +13,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import client.gui.EditorMainMenuPanel;
+import client.gui.EditorMainMenuView;
 import client.gui.MainMenuPanel;
 import client.gui.MainMenuView;
 import client.puzzleFileList.PuzzleListPopulator;
@@ -36,7 +37,7 @@ public class ClientWindow {
 		JFrame frame = new JFrame("Puzzler");
 		this.jframe = frame;
 		this.mainMenuPanel = new MainMenuPanel(this.main);
-		this.editorMainPanel = new EditorMainMenuPanel();
+		this.editorMainPanel = new EditorMainMenuPanel(this);
 		EditorMainSwitcher switcher = new EditorMainSwitcher(this.jframe, mainMenuPanel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocation(100, 100);
@@ -70,6 +71,7 @@ public class ClientWindow {
 	public void disableMainMenu()
 	{
 		this.jframe.remove(this.mainMenuPanel);
+		this.jframe.remove(EditorMainMenuView.getInstance());
 		this.jframe.setSize(640, 480);
 		this.jframe.setResizable(true);
 		this.createCanvas();

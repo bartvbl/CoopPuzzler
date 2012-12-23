@@ -10,33 +10,35 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
+import client.ClientWindow;
+
 import editor.common.AutoSaver;
 import editor.common.PuzzleTable;
 import editor.gui.ColourPickerUI;
 import editor.gui.FeedbackProvider;
 
 public class EditorMain {
-	public final EditorWindow window;
+	public final ClientWindow window;
 	public final PuzzleTable puzzleTable;
 	public final PuzzleDrawer puzzleDrawer;
 	public final InputHandler inputHandler;
 	
 	public boolean gameIsOnline = false;
 	
-	public EditorMain()
+	public EditorMain(ClientWindow window)
 	{
 		this.puzzleTable = new PuzzleTable();
-		this.window = new EditorWindow(this);
+		this.window = window;
 		this.inputHandler = new InputHandler(this);
 		this.puzzleDrawer = new PuzzleDrawer(this.puzzleTable, this.inputHandler);
 		
 		this.window.enableMainMenu();
 	}
 	
-	public void runGame(boolean editCurrent, int rows, int columns)
+	public void runGame(boolean editCurrent, int rows, int columns, String src)
 	{
 		if(editCurrent) {			
-			this.puzzleTable.loadMapFromLocalFile();
+			this.puzzleTable.loadMapFromFile(src);
 		} else {
 			this.puzzleTable.generateEmptyMap(rows, columns);
 		}
