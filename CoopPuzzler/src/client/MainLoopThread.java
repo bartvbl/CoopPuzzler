@@ -15,6 +15,7 @@ import static org.lwjgl.util.glu.GLU.gluOrtho2D;
 import java.awt.Dimension;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 public class MainLoopThread implements Runnable{
