@@ -33,6 +33,10 @@ public class EditorMainMenuPanel implements ActionListener {
 		boolean startWithEmptyBoard = false;
 		
 		if(event.getSource() == EditorMainMenuView.editCurrentButton) {
+			if(EditorMainMenuView.existingPuzzleList.getSelectedValue() == null) {
+				JOptionPane.showMessageDialog(null, "You have to select a puzzle to edit!", "oops!", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
 			src = ((PuzzleListItem)EditorMainMenuView.existingPuzzleList.getSelectedValue()).getPath();
 			startWithEmptyBoard = false;
 		} else if(event.getSource() == EditorMainMenuView.createNewButton) {
