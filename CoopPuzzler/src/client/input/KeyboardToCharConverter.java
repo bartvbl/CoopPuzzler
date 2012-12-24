@@ -1,95 +1,57 @@
 package client.input;
 
+import java.util.ArrayList;
+
 import org.lwjgl.input.Keyboard;
 
 public class KeyboardToCharConverter {
 	public static char NO_MATCH = '%';
-
+	private static char[] validCharacters = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' '};
+	private static ArrayList<Integer> pressedKeys = new ArrayList<Integer>();
+	
 	public static char getKeyCharValue()
-	{
-		if(Keyboard.isKeyDown(Keyboard.KEY_A))
-		{
-			return 'a';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_B))
-		{
-			return 'b';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_C))
-		{
-			return 'c';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_D))
-		{
-			return 'd';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_E))
-		{
-			return 'e';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_F))
-		{
-			return 'f';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_G))
-		{
-			return 'g';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_H))
-		{
-			return 'h';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_I))
-		{
-			return 'i';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_J))
-		{
-			return 'j';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_K))
-		{
-			return 'k';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_L))
-		{
-			return 'l';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_M))
-		{
-			return 'm';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_N))
-		{
-			return 'n';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_O))
-		{
-			return 'o';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_P))
-		{
-			return 'p';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_Q))
-		{
-			return 'q';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_R))
-		{
-			return 'r';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_S))
-		{
-			return 's';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_T))
-		{
-			return 't';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_U))
-		{
-			return 'u';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_V))
-		{
-			return 'v';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_W))
-		{
-			return 'w';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_X))
-		{
-			return 'x';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_Y))
-		{
-			return 'y';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_Z))
-		{
-			return 'z';
-		} else if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
-		{
-			return ' ';
-		} else {
-			return NO_MATCH;
+	{	
+		while(Keyboard.next()) {
+			char character = Keyboard.getEventCharacter();
+			int eventKeyCode = Keyboard.getEventKey();
+			
+			updatePressedKeys(eventKeyCode);
+			
+			int index = indexOf(character);
+			if(index != -1){
+				if(!isKeyDown(eventKeyCode)) {
+					pressedKeys.add(Keyboard.getEventKey());
+					return character;
+				}
+			}
 		}
+		
+		return NO_MATCH;
+	}
+
+	private static void updatePressedKeys(int eventKeyCode) {
+		if(isKeyDown(eventKeyCode)) {
+			for(int i = 0; i < pressedKeys.size(); i++) {
+				if(eventKeyCode == pressedKeys.get(i).intValue())
+					pressedKeys.remove(i);
+			}
+		}
+	}
+
+	private static boolean isKeyDown(int eventKey) {
+		for(Integer keyCode : pressedKeys) {
+			if(keyCode.intValue() == eventKey) return true;
+		}
+		return false;
+	}
+
+	private static int indexOf(char character) {
+		for(int i = 0; i < validCharacters.length; i++) {
+			char pressedKey = validCharacters[i];
+			if(pressedKey == character) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }

@@ -58,6 +58,7 @@ public class SelectionHandler {
 	}
 
 	public void handleSelection(float zoomLevel, float x, float y) {
+		char typedKey = KeyboardToCharConverter.getKeyCharValue();
 		if((Mouse.isButtonDown(0) == false) && (this.finishedClicking == false)) {
 			this.finishedClicking = true;
 		}
@@ -76,10 +77,9 @@ public class SelectionHandler {
 					this.isTyping = false;
 					this.finishedClicking = false;
 				}
-				char typedKey = KeyboardToCharConverter.getKeyCharValue();
 				if(typedKey != KeyboardToCharConverter.NO_MATCH)
 				{
-					this.isWaiting = true;
+					//this.isWaiting = true;
 					this.selectionActionStartTime = this.selectionActionTimer.getTime();
 
 					Point point;
