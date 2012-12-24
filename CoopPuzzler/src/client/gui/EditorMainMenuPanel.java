@@ -48,8 +48,14 @@ public class EditorMainMenuPanel implements ActionListener {
 					return;
 				}
 			}
-			rows = Integer.parseInt(EditorMainMenuView.rowsTextPane.getText());
-			columns = Integer.parseInt(EditorMainMenuView.columnsTextPane.getText());
+			try {
+				rows = Integer.parseInt(EditorMainMenuView.rowsTextPane.getText());
+				columns = Integer.parseInt(EditorMainMenuView.columnsTextPane.getText());
+			} catch(RuntimeException e) {
+				JOptionPane.showMessageDialog(null, "The row and column count have to be numbers.", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+				
 			startWithEmptyBoard = true;
 		}
 		

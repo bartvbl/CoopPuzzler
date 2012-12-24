@@ -54,7 +54,7 @@ public class EditorMainMenuView extends javax.swing.JPanel {
 		setPreferredSize(new java.awt.Dimension(520, 255));
 		
 		Font titleFont = new Font("Tahoma", Font.BOLD, 14);
-		Font headerFont = new Font("Tahoma", Font.BOLD, 11);
+		Font headerFont = new Font("Tahoma", Font.BOLD, 12);
 
 		titleLabel.setFont(titleFont); // NOI18N
 		titleLabel.setText("Puzzle Editor"); // NOI18N
@@ -81,7 +81,7 @@ public class EditorMainMenuView extends javax.swing.JPanel {
 		rowsTextPane.setName("rowsTextPane"); // NOI18N
 		rowsScrollPane.setViewportView(rowsTextPane);
 
-		rowsLabel.setText("Rows"); // NOI18N
+		rowsLabel.setText("Rows:"); // NOI18N
 		rowsLabel.setName("rowsLabel"); // NOI18N
 
 		columnsScrollPane.setName("columnsScrollPane"); // NOI18N
@@ -89,7 +89,7 @@ public class EditorMainMenuView extends javax.swing.JPanel {
 		columnsTextPane.setName("columnsTextPane"); // NOI18N
 		columnsScrollPane.setViewportView(columnsTextPane);
 
-		columnsLabel.setText("Columns"); // NOI18N
+		columnsLabel.setText("Columns:"); // NOI18N
 		columnsLabel.setName("columnsLabel"); // NOI18N
 
 		createNewButton.setText("Create New"); // NOI18N
@@ -168,7 +168,7 @@ public class EditorMainMenuView extends javax.swing.JPanel {
 		newPuzzleHeader.setName("newPuzzleHeader"); // NOI18N
 
 		existingPuzzleHeader.setFont(headerFont); // NOI18N
-		existingPuzzleHeader.setText("Edit an existing one"); // NOI18N
+		existingPuzzleHeader.setText("Edit an existing one:"); // NOI18N
 		existingPuzzleHeader.setName("existingPuzzleHeader"); // NOI18N
 
 		mainMenuButton.setText("< Main Menu"); // NOI18N
