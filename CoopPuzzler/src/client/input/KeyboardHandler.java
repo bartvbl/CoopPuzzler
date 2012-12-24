@@ -2,6 +2,9 @@ package client.input;
 
 import org.lwjgl.input.Keyboard;
 
+import common.AutoSaver;
+import common.ManualSaver;
+
 import client.ClientMain;
 import client.ClientWindow;
 
@@ -36,6 +39,9 @@ public class KeyboardHandler {
 		y = this.checkBoundsY(y, bound);
 		this.main.inputHandler.x = x;
 		this.main.inputHandler.y = y;
+		if((Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMETA)) && Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			ManualSaver.doManualSave();
+		}
 	}
 	private float handleKeyboardInputY(float y)
 	{

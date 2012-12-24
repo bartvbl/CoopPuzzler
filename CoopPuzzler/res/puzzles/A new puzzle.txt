@@ -1,0 +1,32 @@
+15x15
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+iiiiiiiiiiiiiii
+save
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 

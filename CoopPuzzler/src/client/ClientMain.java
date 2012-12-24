@@ -9,6 +9,7 @@ import client.net.BoardEventHandler;
 import client.net.ClientCommunicator;
 import common.AutoSaver;
 import common.BoardUpdateEvent;
+import common.ManualSaver;
 import common.ProtocolConstants;
 import common.PuzzleTable;
 
@@ -79,7 +80,8 @@ public class ClientMain implements ProtocolConstants {
 		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
-		new AutoSaver(this.puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
+		new AutoSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
+		new ManualSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
 	}
 
 	public void doFrame() {
@@ -101,6 +103,7 @@ public class ClientMain implements ProtocolConstants {
 		{
 			this.inputHandler.handleSelection();
 		}
+		ManualSaver.draw();
 	}
 
 	public ArrayList<BoardUpdateEvent> getEventQueueToServer() {
