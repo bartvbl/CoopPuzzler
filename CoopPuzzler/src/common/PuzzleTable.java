@@ -13,7 +13,7 @@ public class PuzzleTable implements BoardUpdateListener{
 		this.createNewMap(rows, columns);
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < columns; j++) {
-				this.puzzleTable[i][j] = new PuzzleField(false, -1, true);
+				this.puzzleTable[i][j] = new PuzzleField(false, -1, false);
 			}
 		}
 	}
