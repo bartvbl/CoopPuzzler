@@ -48,13 +48,13 @@ public class ClientMain implements ProtocolConstants {
 		this.window.enableMainMenu();
 	}
 	
-	public void runGame(GameStartSettings gameStartSettings)
+	public void runGame(GameStartSettings gameSettings)
 	{
-		this.gameSettings = gameStartSettings;
+		new GameSettings(gameSettings);
 		if(gameSettings.operationMode == OperationMode.ONLINE_GAME)
 		{
 			try {
-				communicator.init(InetAddress.getByName(gameStartSettings.serverHostName));
+				communicator.init(InetAddress.getByName(gameSettings.serverHostName));
 			} catch (UnknownHostException e) {
 				FeedbackProvider.showFailedToFindServerMessage();
 				System.exit(0);
@@ -62,12 +62,12 @@ public class ClientMain implements ProtocolConstants {
 			Thread commsMonitor = new Thread(communicator);
 			commsMonitor.start();
 		} else if(gameSettings.operationMode == OperationMode.LOCAL_GAME){
-			this.puzzleTable.loadMapFromLocalFile(gameStartSettings.puzzleFileSrc);
+			this.puzzleTable.loadMapFromLocalFile(gameSettings.puzzleFileSrc);
 		} else if(gameSettings.operationMode == OperationMode.EDITOR) {
 			if(gameSettings.startWithEmptyEditor) {
-				
+				this.puzzleTable.generateEmptyMap(gameSettings.rows, gameSettings.columns);
 			} else {
-				this.puzzleTable.loadMapFromLocalFile(gameStartSettings.puzzleFileSrc);
+				this.puzzleTable.loadMapFromLocalFile(gameSettings.puzzleFileSrc);
 			}
 		}
 		Thread mainThread = new Thread(new MainLoopThread(this));
@@ -79,7 +79,7 @@ public class ClientMain implements ProtocolConstants {
 		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
-		new AutoSaver(this.puzzleTable.puzzleTable, this.gameSettings.puzzleFileSrc);
+		new AutoSaver(this.puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
 	}
 
 	public void doFrame() {
@@ -93,7 +93,10 @@ public class ClientMain implements ProtocolConstants {
 	
 	public void handleUI()
 	{
-		boolean hasHandledMouse = this.colourPickerUI.draw();
+		boolean hasHandledMouse = false;
+		if(GameSettings.operationMode != OperationMode.EDITOR) {			
+			hasHandledMouse = this.colourPickerUI.draw();
+		}
 		if(!(hasHandledMouse && Mouse.isButtonDown(0)))
 		{
 			this.inputHandler.handleSelection();
@@ -132,6 +135,6 @@ public class ClientMain implements ProtocolConstants {
 	}
 	
 	public boolean gameIsOnline() {
-		return this.gameSettings.operationMode == OperationMode.ONLINE_GAME;
+		return GameSettings.operationMode == OperationMode.ONLINE_GAME;
 	}
 }

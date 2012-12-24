@@ -2,7 +2,9 @@ package client.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import client.ClientMain;
@@ -26,7 +28,6 @@ public class EditorMainMenuPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		window.disableMainMenu();
 		int rows = -1, columns = -1;
 		String src = "";
 		boolean startWithEmptyBoard = false;
@@ -35,14 +36,24 @@ public class EditorMainMenuPanel implements ActionListener {
 			src = ((PuzzleListItem)EditorMainMenuView.existingPuzzleList.getSelectedValue()).getPath();
 			startWithEmptyBoard = false;
 		} else if(event.getSource() == EditorMainMenuView.createNewButton) {
+			String puzzleName = EditorMainMenuView.nameTextPane.getText();
+			src = "res/puzzles/" + puzzleName + ".txt";
+			if(new File(src).exists()) {
+				int result = JOptionPane.showConfirmDialog(null, "A puzzle with this name already exists.\nDo you want to overwrite it?", "Overwrite puzzle?", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				if(result != 0) {
+					return;
+				}
+			}
 			rows = Integer.parseInt(EditorMainMenuView.rowsTextPane.getText());
 			columns = Integer.parseInt(EditorMainMenuView.columnsTextPane.getText());
 			startWithEmptyBoard = true;
 		}
+		
 		GameStartSettings settings = new GameStartSettings(OperationMode.EDITOR, "", src);
 		settings.rows = rows;
 		settings.columns = columns;
 		settings.startWithEmptyEditor = startWithEmptyBoard;
+		window.disableMainMenu();
 		main.runGame(settings);
 	}
 

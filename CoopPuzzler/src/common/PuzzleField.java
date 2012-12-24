@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PuzzleField {
-	public final boolean isFilled;
+	public boolean isFilled;
 	public final int questionReference;
 	public boolean hasIgnoreReference;
 	private AtomicReference<FontColour> fieldTextColour;

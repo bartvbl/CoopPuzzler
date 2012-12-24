@@ -1,0 +1,22 @@
+10x10
+iiiiiiiiii
+iiiiiiiiii
+iiiiiiiiii
+iiiiiiiiii
+iiiiiiiiii
+iiiiiiiiii
+iiiiiiiiii
+iiiiiiiiii
+iiiiiiiiii
+iiiiiiiiii
+save
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+0s0d0s0d0s0d0s0d0s0d
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 

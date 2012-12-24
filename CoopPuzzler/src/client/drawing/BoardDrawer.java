@@ -2,6 +2,8 @@ package client.drawing;
 
 import org.lwjgl.util.Color;
 
+import client.GameSettings;
+import client.OperationMode;
 import client.gl.NumberDrawer;
 import client.gl.Texture;
 import common.PuzzleField;
@@ -10,7 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class BoardDrawer {
 	private static final int FIELD_SIZE = PuzzleDrawer.FIELD_SIZE;
 	
-	public static int createBoardBareBonesDisplayList(PuzzleField[][] table, int boardBareBonesDisplayListID)
+	public static int createBoardBareBonesDisplayList(PuzzleField[][] table, int boardBareBonesDisplayListID, Texture nonumTexture)
 	{
 		if(boardBareBonesDisplayListID != -1)
 		{
@@ -20,6 +22,8 @@ public class BoardDrawer {
 		glNewList(listID, GL_COMPILE);
 		drawBackground(table);
 		drawFilledSquares(table);
+		if(GameSettings.operationMode == OperationMode.EDITOR)
+			drawNoReferenceTextures(table,nonumTexture);
 		glEndList();
 		return listID;
 	}
@@ -33,10 +37,38 @@ public class BoardDrawer {
 		int listID = glGenLists(1);
 		glNewList(listID, GL_COMPILE);
 		drawPuzzleGrid(table);
-		drawReferences(table, numberDrawer);
-		drawLetters(table, textureLibrary);
+		if(GameSettings.operationMode != OperationMode.EDITOR) {
+			drawReferences(table, numberDrawer);
+			drawLetters(table, textureLibrary);			
+		}
 		glEndList();
 		return listID;
+	}
+	
+	private static void drawNoReferenceTextures(PuzzleField[][] table, Texture nonumTexture) {
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, nonumTexture.texRef);
+		glBegin(GL_QUADS);
+		for(int i = 0; i < table.length; i++)
+		{
+			for(int j = 0; j < table[0].length; j++)
+			{
+				if(table[i][j].hasIgnoreReference)
+				{
+					glTexCoord2f(0,0);
+					drawVertex(FIELD_SIZE * j, FIELD_SIZE * (table.length - i-1));
+					glTexCoord2f(1,0);
+					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * (table.length - i-1));
+					glTexCoord2f(1,1);
+					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * (table.length - i-1) + FIELD_SIZE);
+					glTexCoord2f(0,1);
+					drawVertex(FIELD_SIZE * j, FIELD_SIZE * (table.length - i-1) + FIELD_SIZE);
+				}
+			}
+		}
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
 	}
 	
 	private static void drawFilledSquares(PuzzleField[][] table)

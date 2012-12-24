@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.lwjgl.util.Color;
 import org.lwjgl.util.Point;
 
+import client.ClientMain;
+import client.OperationMode;
 import client.gl.NumberDrawer;
 import client.gl.Texture;
 import client.input.InputHandler;
@@ -21,11 +23,16 @@ public class PuzzleDrawer {
 	private int boardBareBonesDisplayListID = -1;
 	private int boardFeaturesDisplayListID = -1;
 	private NumberDrawer numberDrawer;
+	private Texture nonumTexture;
 	
 	public PuzzleDrawer(PuzzleTable puzzleTable, InputHandler inputHandler)
 	{
 		this.puzzleTable = puzzleTable;
 		this.inputHandler = inputHandler;
+	}
+	
+	public void updateBareBonesDisplayList() {
+		this.boardBareBonesDisplayListID = BoardDrawer.createBoardBareBonesDisplayList(puzzleTable.puzzleTable, this.boardBareBonesDisplayListID, this.nonumTexture);
 	}
 	
 	public void updateFeatureDisplayList()
@@ -35,9 +42,10 @@ public class PuzzleDrawer {
 	
 	public void init()
 	{
+		this.nonumTexture = new Texture("res/nonum.png");
 		this.numberDrawer = new NumberDrawer();
 		this.textureLibrary = new TextureLibrary();
-		this.boardBareBonesDisplayListID = BoardDrawer.createBoardBareBonesDisplayList(puzzleTable.puzzleTable, this.boardBareBonesDisplayListID);
+		this.boardBareBonesDisplayListID = BoardDrawer.createBoardBareBonesDisplayList(puzzleTable.puzzleTable, this.boardBareBonesDisplayListID, this.nonumTexture);
 		this.boardFeaturesDisplayListID = BoardDrawer.createBoardDetailsDisplayList(puzzleTable.puzzleTable, numberDrawer, textureLibrary, this.boardFeaturesDisplayListID);
 	}
 
@@ -45,7 +53,7 @@ public class PuzzleDrawer {
 	{
 		PuzzleField[][] table = puzzleTable.puzzleTable;
 		glCallList(this.boardBareBonesDisplayListID);
-		this.drawSelection(table);
+		this.drawSelection(table);		
 		glCallList(this.boardFeaturesDisplayListID);
 	}
 	
