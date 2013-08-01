@@ -89,6 +89,7 @@ public class ClientWindow {
 			Display.setDisplayMode(new DisplayMode(dim.width, dim.height));
 			Display.setParent(canvas);
 			Display.create();
+			Display.setFullscreen(true);
 		} catch (LWJGLException e1) {
 			e1.printStackTrace();
 		}
