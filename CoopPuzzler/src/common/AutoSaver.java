@@ -18,7 +18,7 @@ public class AutoSaver extends PuzzleSaver implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		if(isEnabled) {			
+		if(isEnabled) {
 			this.doSave();
 		}
 	}

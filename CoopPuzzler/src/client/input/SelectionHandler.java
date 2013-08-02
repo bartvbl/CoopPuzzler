@@ -18,6 +18,7 @@ import common.BoardUpdateEvent;
 import common.FontColour;
 import common.PuzzleField;
 import common.PuzzleTable;
+import common.ReferenceUpdater;
 
 public class SelectionHandler {
 	private static final float WAITING_TIME = 0.2f;
@@ -156,7 +157,9 @@ public class SelectionHandler {
 								puzzleField.isFilled = false;
 								puzzleField.hasIgnoreReference = false;
 							}
+							ReferenceUpdater.updateReferences(this.puzzleTable.puzzleTable);
 							this.main.puzzleDrawer.updateBareBonesDisplayList();
+							this.main.puzzleDrawer.updateFeatureDisplayList();
 							this.waitForNextInput();
 						}
 					} else {

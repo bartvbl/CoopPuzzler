@@ -22,8 +22,9 @@ public class BoardDrawer {
 		glNewList(listID, GL_COMPILE);
 		drawBackground(table);
 		drawFilledSquares(table);
-		if(GameSettings.operationMode == OperationMode.EDITOR)
+		if(GameSettings.operationMode == OperationMode.EDITOR) {			
 			drawNoReferenceTextures(table,nonumTexture);
+		}
 		glEndList();
 		return listID;
 	}
@@ -37,8 +38,8 @@ public class BoardDrawer {
 		int listID = glGenLists(1);
 		glNewList(listID, GL_COMPILE);
 		drawPuzzleGrid(table);
+		drawReferences(table, numberDrawer);
 		if(GameSettings.operationMode != OperationMode.EDITOR) {
-			drawReferences(table, numberDrawer);
 			drawLetters(table, textureLibrary);			
 		}
 		glEndList();

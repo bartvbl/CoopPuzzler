@@ -88,7 +88,7 @@ public class PuzzleLoader {
 					puzzle[row][column] = new PuzzleField(true, -1, false);
 				} else if (fieldChar == ' ')
 				{
-					if(fieldHasReference(board, row, column))
+					if(ReferenceUpdater.fieldHasReference(board, row, column))
 					{
 						puzzle[row][column] = new PuzzleField(false, referenceID, false);
 						referenceID++;
@@ -104,30 +104,5 @@ public class PuzzleLoader {
 		return puzzle;
 	}
 
-	private static boolean fieldHasReference(char[][] board, int row, int column) {
-		boolean north = fieldIsInBounds(board, row-1, column);
-		boolean south = fieldIsInBounds(board, row+1, column);
-		boolean east = fieldIsInBounds(board, row, column+1);
-		boolean west = fieldIsInBounds(board, row, column-1);
-		return ((!north && south) || (!west && east));
-	}
 	
-	private static boolean fieldIsInBounds(char[][] board, int row, int column)
-	{
-		if(row < 0)
-		{
-			return false;
-		} else if (row >= board.length)
-		{
-			return false;
-		} else if (column < 0)
-		{
-			return false;
-		} else if (column >= board[0].length)
-		{
-			return false;
-		} else {
-			return ((board[row][column] == 'i') ||(board[row][column] == ' '));
-		}
-	}
 }
