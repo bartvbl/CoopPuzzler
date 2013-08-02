@@ -48,19 +48,21 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		if(MainMenuView.puzzleList.getSelectedValue() == null) {
-			JOptionPane.showMessageDialog(null, "You have to select a puzzle to play!", "oops!", JOptionPane.INFORMATION_MESSAGE);
-			return;
-		}
-		
 		boolean isOnlineGame = event.getSource() == MainMenuView.connectToServerButton;
-		String serverHostName = MainMenuView.serverAddressTextBox.getText();
-		String puzzleFileSrc = ((PuzzleListItem)MainMenuView.puzzleList.getSelectedValue()).getPath();
-		
 		OperationMode operationMode;
+		
+		String serverHostName = MainMenuView.serverAddressTextBox.getText();
+		String puzzleFileSrc = "";
+
 		if(isOnlineGame) {
 			operationMode = OperationMode.ONLINE_GAME;
 		} else {
+			if(MainMenuView.puzzleList.getSelectedValue() == null) {
+				JOptionPane.showMessageDialog(null, "You have to select a puzzle to play!", "oops!", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+			puzzleFileSrc = ((PuzzleListItem)MainMenuView.puzzleList.getSelectedValue()).getPath();
+			
 			operationMode = OperationMode.LOCAL_GAME;
 		}
 		

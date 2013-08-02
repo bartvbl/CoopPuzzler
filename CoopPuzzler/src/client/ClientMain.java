@@ -62,6 +62,7 @@ public class ClientMain implements ProtocolConstants {
 			}
 			Thread commsMonitor = new Thread(communicator);
 			commsMonitor.start();
+			AutoSaver.setEnabled(false);
 		} else if(gameSettings.operationMode == OperationMode.LOCAL_GAME){
 			this.puzzleTable.loadMapFromLocalFile(gameSettings.puzzleFileSrc);
 		} else if(gameSettings.operationMode == OperationMode.EDITOR) {
@@ -135,6 +136,7 @@ public class ClientMain implements ProtocolConstants {
 	public void serverRequestsShutDown(){
 		FeedbackProvider.showServerShutdownMessage();
 		this.gameSettings.operationMode = OperationMode.LOCAL_GAME;
+		AutoSaver.setEnabled(true);
 	}
 	
 	public boolean gameIsOnline() {
