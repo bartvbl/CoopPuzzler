@@ -33,16 +33,22 @@ public class TextureLibrary {
 	{
 		Font textFont = new Font(TEXT_FONT_FACE, TEXT_FONT_STYLE, TEXT_FONT_SIZE);
 		GLFont fontGenerator = this.createFontGenerator(textFont);
+		addCharacterRange(fontGenerator, 97, 122);//letters
+		addCharacterRange(fontGenerator, 48, 57);//numbers
+		addCharacterRange(fontGenerator, 63, 63);//? sign
+		Texture texture = fontGenerator.createFontTexture("ij");
+		this.textFontTextures.put(IJ, texture);
+	}
+
+	private void addCharacterRange(GLFont fontGenerator, int startID, int endID) {
 		char generatedCharacter;
 		Texture texture;
-		for(int i = 97; i < 123; i++)
+		for(int i = startID; i <= endID; i++)
 		{
 			generatedCharacter = (char)i;
 			texture = fontGenerator.createFontTexture(Character.toString(generatedCharacter));
 			this.textFontTextures.put(generatedCharacter, texture);
 		}
-		texture = fontGenerator.createFontTexture("ij");
-		this.textFontTextures.put(IJ, texture);
 	}
 	
 	private GLFont createFontGenerator(Font font)
