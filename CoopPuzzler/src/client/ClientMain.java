@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 import client.drawing.PuzzleDrawer;
 import client.gui.FeedbackProvider;
 import client.gui.ingame.ColourPickerUI;
+import client.gui.ingame.PlayButton;
 import client.input.InputHandler;
 import client.net.BoardEventHandler;
 import client.net.ClientCommunicator;
@@ -33,6 +34,7 @@ public class ClientMain implements ProtocolConstants {
 	private AtomicReference<ArrayList<BoardUpdateEvent>> outputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	private AtomicReference<ArrayList<BoardUpdateEvent>> inputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	private GameStartSettings gameSettings;
+	private PlayButton playButton;
 	
 	public ClientMain()
 	{
@@ -81,6 +83,7 @@ public class ClientMain implements ProtocolConstants {
 		this.window.createOpenGLContext();
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
+		this.playButton = new PlayButton(this);
 		new AutoSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
 		new ManualSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
 	}
@@ -99,6 +102,8 @@ public class ClientMain implements ProtocolConstants {
 		boolean hasHandledMouse = false;
 		if(GameSettings.operationMode != OperationMode.EDITOR) {			
 			hasHandledMouse = this.colourPickerUI.draw();
+		} else {
+			hasHandledMouse = this.playButton.draw(1);
 		}
 		if(!(hasHandledMouse && Mouse.isButtonDown(0)))
 		{
@@ -137,6 +142,12 @@ public class ClientMain implements ProtocolConstants {
 		FeedbackProvider.showServerShutdownMessage();
 		this.gameSettings.operationMode = OperationMode.LOCAL_GAME;
 		AutoSaver.setEnabled(true);
+	}
+	
+	public void exitEditorMode() {
+		GameSettings.operationMode = OperationMode.LOCAL_GAME;
+		this.puzzleDrawer.updateBareBonesDisplayList();
+		this.puzzleDrawer.updateFeatureDisplayList();
 	}
 	
 	public boolean gameIsOnline() {

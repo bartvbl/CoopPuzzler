@@ -26,13 +26,11 @@ public class ColourPickerUI {
 	
 	public boolean draw()
 	{
-		float scaleLevel = this.main.window.windowHeight / 480f;
-		glScalef(scaleLevel, scaleLevel, 0.0f);
 		boolean hasHandledMouse = false;
 		boolean lastDrawHandledMouse = false;
 		for(ColourPickerButton button : colourPickerButtons)
 		{
-			lastDrawHandledMouse = button.draw(scaleLevel);
+			lastDrawHandledMouse = button.draw(1);
 			if(lastDrawHandledMouse == true)
 			{
 				hasHandledMouse = true;

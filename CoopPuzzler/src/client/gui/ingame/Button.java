@@ -3,11 +3,12 @@ package client.gui.ingame;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Rectangle;
 
-public class Button {
+public abstract class Button {
 	protected final int x;
 	protected final int y;
 	protected final int width;
 	protected final int height;
+	private boolean wasMouseDown = false;
 	
 	public Button(int x, int y, int width, int height)
 	{
@@ -36,18 +37,26 @@ public class Button {
 		if(isHovering && Mouse.isButtonDown(0))
 		{
 			this.drawMouseDown();
+			if(!this.wasMouseDown) {
+				this.onClick();
+			}
+			this.wasMouseDown = true;
 			return true;
 		} else if(isHovering)
 		{
 			this.drawMouseOver();
+			this.wasMouseDown = false;
 			return true;
 		} else {
 			this.drawMouseUp();
+			this.wasMouseDown = false;
 			return false;
 		}
 	}
 	
-	protected void drawMouseDown(){}
-	protected void drawMouseOver(){}
-	protected void drawMouseUp(){}
+	protected void onClick() {}
+
+	protected abstract void drawMouseDown();
+	protected abstract void drawMouseOver();
+	protected abstract void drawMouseUp();
 }

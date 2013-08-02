@@ -17,6 +17,7 @@ public class ClientRunner {
 		{
 			String message = "launch failed: " + e.getMessage();
 			StackTraceElement[] elements = e.getStackTrace();
+			e.printStackTrace();
 			for(StackTraceElement element : elements) {
 				message += "\n" + element.toString();
 			}

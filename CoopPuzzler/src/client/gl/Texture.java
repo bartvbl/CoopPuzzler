@@ -13,6 +13,8 @@ import java.nio.IntBuffer;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.BufferUtils;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class Texture {
@@ -77,18 +79,10 @@ public class Texture {
     	}
     	catch (IOException ioe) {
     		ioe.printStackTrace();
-    		if (in != null) {
-    			try {
-    				in.close();
-    			}
-    			catch (Exception e) {}
-    			in = null;
-    		}
     	}
     	catch (Exception e) {System.out.println("oops. " + e.getMessage());}
 		
 		try {
-			
 			img = ImageIO.read(in);
 		}
 		catch (Exception e) {System.out.println("oops. " + e.getMessage());}
@@ -100,7 +94,7 @@ public class Texture {
 	}
 	private int createImage(BufferedImage image)
 	{
-		IntBuffer textureHandle = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer();
+		IntBuffer textureHandle = BufferUtils.createIntBuffer(1);
 		ByteBuffer bb = ByteBuffer.allocateDirect(bytes.length).order(ByteOrder.nativeOrder());
 		bb.put(bytes).flip();
 		glGenTextures(textureHandle);
