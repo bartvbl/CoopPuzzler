@@ -1,12 +1,12 @@
 10x10
 iiiiiiiiii
-iiiiiiiiii
-iiiiiiiiii
-iiiiiiiiii
-iiiiii* ii
-iiiiiiiiii
-iiiiiiiiii
-iiiiiiiiii
+iiiiii  ii
+ii*  *  ii
+ii **  iii
+ii* *** ii
+ i     *ii
+iiii i iii
+ii iiiiiii
 iiiiiiiiii
 iiiiiiiiii
 save

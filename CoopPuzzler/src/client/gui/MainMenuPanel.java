@@ -1,5 +1,6 @@
 package client.gui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -24,9 +25,12 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		this.main = main;
 		this.mainContentPanel = new MainMenuView();
 		this.add(this.mainContentPanel);
+		this.mainContentPanel.setPreferredSize(new Dimension(510, 261));
 		this.validate();
 		
+		
 		MainMenuView.connectToServerButton.addActionListener(this);
+		MainMenuView.createServerButton.addActionListener(this);
 		MainMenuView.playButton.addActionListener(this);
 		MainMenuView.serverAddressTextBox.addKeyListener(new KeyListener(){
 			public void keyPressed(KeyEvent arg0) {}
@@ -48,6 +52,7 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent event) {
+		boolean isHostedGame = event.getSource() == MainMenuView.createServerButton;
 		boolean isOnlineGame = event.getSource() == MainMenuView.connectToServerButton;
 		OperationMode operationMode;
 		
@@ -56,6 +61,15 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 
 		if(isOnlineGame) {
 			operationMode = OperationMode.ONLINE_GAME;
+		} else if(isHostedGame) {
+			if(MainMenuView.puzzleList.getSelectedValue() == null) {
+				JOptionPane.showMessageDialog(null, "You have to select a puzzle to host!", "oops!", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+			puzzleFileSrc = ((PuzzleListItem)MainMenuView.puzzleList.getSelectedValue()).getPath();
+			
+			serverHostName = "localhost";
+			operationMode = OperationMode.HOSTED_GAME; 
 		} else {
 			if(MainMenuView.puzzleList.getSelectedValue() == null) {
 				JOptionPane.showMessageDialog(null, "You have to select a puzzle to play!", "oops!", JOptionPane.INFORMATION_MESSAGE);

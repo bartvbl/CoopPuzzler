@@ -1,20 +1,36 @@
-9x13
-             
- * * * **    
-     *    *  
-   *      *  
-i     *i    *
-* *      *   
-  *    *     
-    ** * * * 
-             
+17x17
+   **        *   
+   *         *   
+   *     *   *   
+                *
+      **   *     
+        *   *    
+**   *          *
+   **    **      
+  *           *  
+      **    **   
+*          *   **
+    *   *        
+     *   **      
+*                
+   *   *     *   
+   *         *   
+   *        **   
 save
-0k0i0e0z0e0r0s0g0e0d0r0a0g
-0e0 0v0 0n0 0t0 0 0o0b0l0a
-0b0l0a0n0c0 0a0m0a0l0 0a0t
-0a0a0n0 3l3o3y3a3a3l0 0d0e
-2b2a2s2h2a2r0 0a0s0s0a0d0 
-0 0i0 0o0v0a0t0i0e0 0g0i0o
-0b0e0 0s0e0l0a0 0t0w0e0n0t
-0e0n0e0n0 0 0k0 0e0 0n0 0j
-010203040506070809000?0s0a
+0t0a0g0 0 0n0o0o0i0t0h0e0b0 0r0h0o
+0a0d0a0 0w0o0r0p0s0w0e0d0e0 0u0o0m
+0n0o0w0 0i0g0r0e0c0 0t0e0l0 0i0l0e
+0g0r0e0e0n0w0i0c0h0v0i0l0l0a0g0e0 
+0e0n0g0e0n0e0 0 0a0i0s0 0s0l0o0n0s
+0r0o0m0m0e0l0i0g0 0g0o0a0 0r0o0h0e
+0 0 0a0s0n0 0b0l0o0o0m0s0b0u0r0y0 
+0b0z0n0 0 0l0a0a0n0 0 0s0e0i0d0e0r
+0i0e0 0c0l0a0n0d0e0s0t0i0e0n0 0n0u
+0e0e0n0a0i0r0 0 0a0n0i0s0 0 0z0a0k
+0 0m0u0i0d0e0r0s0l0o0t0 0a0g0o0 0 
+0m0o0l0m0 0n0e0p0 0b0a0r0b0i0z0o0n
+0i0n0d0i0a0 0l0a0s0 0 0a0e0g0i0n0a
+0 0s0i0n0t0m0a0r0t0e0n0s0l0a0t0e0m
+0u0t0e0 0t0e0x0 0i0n0e0k0e0 0d0e0+
+0w0e0e0 0i0d0e0e0e0n0m0a0n0 0a0n0d
+0v0r0t0 0c0o0n0c0r0e0e0t0 0 0t0s0e

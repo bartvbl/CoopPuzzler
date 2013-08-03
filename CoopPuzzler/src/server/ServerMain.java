@@ -15,9 +15,7 @@ import common.PuzzleField;
 import common.PuzzleTable;
 
 public class ServerMain implements Runnable{
-	private static final String DEFAULT_FILE_SOURCE = "res/puzzle.txt";
 	private ServerSocket serverSocket = null;
-	private ServerWindow window;
 	private ExecutorService threadpool;
 	private ArrayList<ClientHandler> handlers;
 	public final PuzzleTable puzzleTable;
@@ -27,34 +25,33 @@ public class ServerMain implements Runnable{
 		this.puzzleTable = new PuzzleTable();
 	}
 
-	public void initialize()
+	public void initialize(String puzzleFileSrc)
 	{
-		this.puzzleTable.loadMapFromLocalFile(DEFAULT_FILE_SOURCE);
-		this.window = new ServerWindow(this);
+		this.puzzleTable.loadMapFromLocalFile(puzzleFileSrc);
 		this.handlers = new ArrayList<ClientHandler>();
 		this.threadpool = Executors.newCachedThreadPool();
 		try{this.serverSocket = new ServerSocket(ProtocolConstants.PORT);}
 		catch(IOException e){e.printStackTrace();}
 		this.writeMessageInWindow("listening on port " + ProtocolConstants.PORT);
-		new AutoSaver(this.puzzleTable.puzzleTable, DEFAULT_FILE_SOURCE);
+		new AutoSaver(this.puzzleTable.puzzleTable, puzzleFileSrc);
 	}
 
 	public void writeMessageInWindow(String message)
 	{
-		this.window.writeMessage(message);
+		System.out.println("SERVER: " + message);
 	}
 
 	public void run()
 	{
 		Socket clientSocket = null;
-		this.window.writeMessage("server started.");
+		writeMessageInWindow("server started.");
 		while(true){
 			try {
 				clientSocket = this.serverSocket.accept();
 				ClientHandler handler = new ClientHandler(this, clientSocket);
 				handlers.add(handler);
 				this.threadpool.execute(handler);
-				this.window.writeMessage("Accepted client from " + handler.toString());
+				writeMessageInWindow("Accepted client from " + handler.toString());
 			} catch (IOException e) {
 				System.err.println("Accept failed: " + ProtocolConstants.PORT );
 				e.printStackTrace();
@@ -91,11 +88,11 @@ public class ServerMain implements Runnable{
 
 	public synchronized void removeHandler(ClientHandler handler){
 		handlers.remove(handler);
-		this.window.writeMessage("Closing session from " + handler.toString());
+		writeMessageInWindow("Closing session from " + handler.toString());
 	}
 
 	public void shutdown() {
-		this.window.writeMessage("Attempting graceful shutdown.");
+		writeMessageInWindow("Attempting graceful shutdown.");
 		threadpool.shutdown();
 		for(ClientHandler handler : handlers){
 			handler.initateShutdown();
@@ -106,7 +103,7 @@ public class ServerMain implements Runnable{
 			e.printStackTrace();
 		}
 		while(handlers.size() > 0){
-			try{Thread.sleep(100);}catch(InterruptedException e){}
+			try{Thread.sleep(100);} catch(InterruptedException e){}
 		}
 		System.exit(0);
 	}

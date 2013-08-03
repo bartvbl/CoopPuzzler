@@ -22,6 +22,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
+import server.ServerMain;
+
 public class ClientMain implements ProtocolConstants {
 	public final ClientWindow window;
 	public final PuzzleTable puzzleTable;
@@ -54,6 +56,15 @@ public class ClientMain implements ProtocolConstants {
 	public void runGame(GameStartSettings gameSettings)
 	{
 		new GameSettings(gameSettings);
+		if(gameSettings.operationMode == OperationMode.HOSTED_GAME) {
+			gameSettings.operationMode = OperationMode.ONLINE_GAME;
+			
+			ServerMain main = new ServerMain();
+			main.initialize(gameSettings.puzzleFileSrc);
+			Thread server = new Thread(main);
+			server.start();
+		}
+		
 		if(gameSettings.operationMode == OperationMode.ONLINE_GAME)
 		{
 			try {

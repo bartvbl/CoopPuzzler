@@ -3,10 +3,10 @@ import server.ServerMain;
 
 
 public class ServerRunner {
+	@Deprecated //The server is integrated with the client as of 1.6 and onwards.
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		ServerMain main = new ServerMain();
-		main.initialize();
+		main.initialize("res/puzzle.txt");
 		Thread server = new Thread(main);
 		server.start();
 	}
