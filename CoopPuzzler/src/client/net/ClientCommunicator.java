@@ -36,11 +36,11 @@ public class ClientCommunicator implements Runnable{
 		return this.main.getEventQueueToServer();
 	}
 
-	public void init(InetAddress server)
+	public void init(InetAddress server, int serverPort)
 	{
 		System.out.println("initializing..");
 		try {
-			openSession(server);
+			openSession(server, serverPort);
 		} catch (UnknownHostException e) {
 			FeedbackProvider.showFailedToFindServerMessage();
 			e.printStackTrace();
@@ -55,8 +55,9 @@ public class ClientCommunicator implements Runnable{
 	}
 
 
-	private void openSession(InetAddress server) throws IOException{
-		socket = new Socket(server,PORT);
+	private void openSession(InetAddress server, int serverPort) throws IOException{
+		System.out.println("Connecting to server at: " + server + ":" + serverPort);
+		socket = new Socket(server, serverPort);
 		if(!socket.isConnected()){
 			throw new IOException("Server not found.");
 		}

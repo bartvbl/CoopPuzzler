@@ -68,7 +68,7 @@ public class ClientMain implements ProtocolConstants {
 		if(gameSettings.operationMode == OperationMode.ONLINE_GAME)
 		{
 			try {
-				communicator.init(InetAddress.getByName(gameSettings.serverHostName));
+				communicator.init(InetAddress.getByName(gameSettings.serverHostName), gameSettings.serverPort);
 			} catch (UnknownHostException e) {
 				FeedbackProvider.showFailedToFindServerMessage();
 				System.exit(0);

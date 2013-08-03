@@ -10,6 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import common.ProtocolConstants;
+
 import client.ClientMain;
 import client.GameStartSettings;
 import client.OperationMode;
@@ -45,8 +47,19 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		if(event.getKeyChar() == '\n')
 		{
 			this.main.window.disableMainMenu();
-			String hostName = MainMenuView.serverAddressTextBox.getText();
-			GameStartSettings settings = new GameStartSettings(OperationMode.ONLINE_GAME, hostName, "");
+			String serverHostName = MainMenuView.serverAddressTextBox.getText();
+			int port = ProtocolConstants.PORT;
+			if(serverHostName.contains(":")) {
+				String[] addressParts = serverHostName.split(":");
+				serverHostName = addressParts[0];
+				try{
+					port = Integer.parseInt(addressParts[1]);
+				} catch(Exception e) {
+					JOptionPane.showMessageDialog(null, "A port number must be an integer between 1 and 65535!", "oops!", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+			}
+			GameStartSettings settings = new GameStartSettings(OperationMode.ONLINE_GAME, serverHostName, port, "");
 			this.main.runGame(settings);
 		}
 	}
@@ -58,9 +71,20 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		
 		String serverHostName = MainMenuView.serverAddressTextBox.getText();
 		String puzzleFileSrc = "";
+		int port = 0;
 
 		if(isOnlineGame) {
 			operationMode = OperationMode.ONLINE_GAME;
+			if(serverHostName.contains(":")) {
+				String[] addressParts = serverHostName.split(":");
+				serverHostName = addressParts[0];
+				try{
+					port = Integer.parseInt(addressParts[1]);
+				} catch(Exception e) {
+					JOptionPane.showMessageDialog(null, "A port number must be an integer between 1 and 65535!", "oops!", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+			}
 		} else if(isHostedGame) {
 			if(MainMenuView.puzzleList.getSelectedValue() == null) {
 				JOptionPane.showMessageDialog(null, "You have to select a puzzle to host!", "oops!", JOptionPane.INFORMATION_MESSAGE);
@@ -68,8 +92,18 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 			}
 			puzzleFileSrc = ((PuzzleListItem)MainMenuView.puzzleList.getSelectedValue()).getPath();
 			
-			serverHostName = "localhost";
-			operationMode = OperationMode.HOSTED_GAME; 
+			try {
+				serverHostName = "127.0.0.1";
+				port = Integer.parseInt(MainMenuView.portTextField.getText());
+				if((port > 65535) || (port < 1)) {
+					JOptionPane.showMessageDialog(null, "A port number must be an integer between 1 and 65535!", "oops!", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+			} catch(Exception e) {
+				JOptionPane.showMessageDialog(null, "A port number must be an integer between 1 and 65535!", "oops!", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+			operationMode = OperationMode.HOSTED_GAME;
 		} else {
 			if(MainMenuView.puzzleList.getSelectedValue() == null) {
 				JOptionPane.showMessageDialog(null, "You have to select a puzzle to play!", "oops!", JOptionPane.INFORMATION_MESSAGE);
@@ -81,6 +115,6 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		}
 		
 		this.main.window.disableMainMenu();
-		this.main.runGame(new GameStartSettings(operationMode, serverHostName, puzzleFileSrc));
+		this.main.runGame(new GameStartSettings(operationMode, serverHostName, port, puzzleFileSrc));
 	}
 }
