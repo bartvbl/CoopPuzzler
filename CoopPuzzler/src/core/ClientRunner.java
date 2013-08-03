@@ -13,9 +13,9 @@ public class ClientRunner {
 	public static void main(String[] args) {
 		try{
 			//pre-initialization settings 
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "CoopPuzzler");
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			
 			//launching the game
 			new ClientMain();

@@ -27,7 +27,7 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		this.main = main;
 		this.mainContentPanel = new MainMenuView();
 		this.add(this.mainContentPanel);
-		this.mainContentPanel.setPreferredSize(new Dimension(510, 261));
+		this.mainContentPanel.setPreferredSize(new Dimension(500, 261));
 		this.validate();
 		
 		
@@ -46,21 +46,7 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 	protected void handleKeypress(KeyEvent event) {
 		if(event.getKeyChar() == '\n')
 		{
-			this.main.window.disableMainMenu();
-			String serverHostName = MainMenuView.serverAddressTextBox.getText();
-			int port = ProtocolConstants.PORT;
-			if(serverHostName.contains(":")) {
-				String[] addressParts = serverHostName.split(":");
-				serverHostName = addressParts[0];
-				try{
-					port = Integer.parseInt(addressParts[1]);
-				} catch(Exception e) {
-					JOptionPane.showMessageDialog(null, "A port number must be an integer between 1 and 65535!", "oops!", JOptionPane.INFORMATION_MESSAGE);
-					return;
-				}
-			}
-			GameStartSettings settings = new GameStartSettings(OperationMode.ONLINE_GAME, serverHostName, port, "");
-			this.main.runGame(settings);
+			this.actionPerformed(new ActionEvent(MainMenuView.connectToServerButton, 0, ""));
 		}
 	}
 
