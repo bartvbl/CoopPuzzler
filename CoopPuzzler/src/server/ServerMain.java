@@ -25,14 +25,14 @@ public class ServerMain implements Runnable{
 		this.puzzleTable = new PuzzleTable();
 	}
 
-	public void initialize(String puzzleFileSrc)
+	public void initialize(String puzzleFileSrc, int serverPort)
 	{
 		this.puzzleTable.loadMapFromLocalFile(puzzleFileSrc);
 		this.handlers = new ArrayList<ClientHandler>();
 		this.threadpool = Executors.newCachedThreadPool();
-		try{this.serverSocket = new ServerSocket(ProtocolConstants.PORT);}
+		try{this.serverSocket = new ServerSocket(serverPort);}
 		catch(IOException e){e.printStackTrace();}
-		this.writeMessageInWindow("listening on port " + ProtocolConstants.PORT);
+		this.writeMessageInWindow("listening on port " + serverPort);
 		new AutoSaver(this.puzzleTable.puzzleTable, puzzleFileSrc);
 	}
 
@@ -82,8 +82,7 @@ public class ServerMain implements Runnable{
 		return event.getRow()>= 0 &&
 		event.getRow() <= this.puzzleTable.puzzleTable.length &&
 		event.getColumn() >= 0 &&
-		event.getColumn() <= this.puzzleTable.puzzleTable[event.getRow()].length
-		;
+		event.getColumn() <= this.puzzleTable.puzzleTable[event.getRow()].length;
 	}
 
 	public synchronized void removeHandler(ClientHandler handler){

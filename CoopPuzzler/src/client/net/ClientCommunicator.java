@@ -44,12 +44,12 @@ public class ClientCommunicator implements Runnable{
 		} catch (UnknownHostException e) {
 			FeedbackProvider.showFailedToFindServerMessage();
 			e.printStackTrace();
-			System.out.println(e.getMessage());
+			System.out.println("Client communicator error: " + e.getMessage());
 			System.exit(0);
 		} catch (IOException e) {
 			FeedbackProvider.showConnectingToServerFailedMessage();
 			e.printStackTrace();
-			System.out.println(e.getMessage());
+			System.out.println("Client communicator error: " + e.getMessage());
 			System.exit(0);
 		}
 	}
@@ -126,7 +126,7 @@ public class ClientCommunicator implements Runnable{
 			output.newLine();
 			output.flush();
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			System.out.println("Client communicator error: " + e.getMessage());
 			e.printStackTrace();
 		}
 		connected = false;
@@ -165,10 +165,10 @@ public class ClientCommunicator implements Runnable{
 				Thread.sleep(1000/FREQUENCY);
 
 			} catch (IOException e) {
-				System.out.println(e.getMessage());
+				System.out.println("Client communicator error: " + e.getMessage());
 				e.printStackTrace();
 			} catch (InterruptedException e) {
-				System.out.println(e.getMessage());
+				System.out.println("Client communicator error: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}

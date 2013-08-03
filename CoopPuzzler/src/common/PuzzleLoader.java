@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 public class PuzzleLoader {
 
-	public static PuzzleField[][] loadTableFromFile(String src) {
+	public static synchronized PuzzleField[][] loadTableFromFile(String src) {
 		try
 		{
 			return loadFile(src);

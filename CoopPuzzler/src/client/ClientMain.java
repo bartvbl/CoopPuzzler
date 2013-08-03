@@ -37,6 +37,7 @@ public class ClientMain implements ProtocolConstants {
 	private AtomicReference<ArrayList<BoardUpdateEvent>> inputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	private GameStartSettings gameSettings;
 	private PlayButton playButton;
+	private AutoSaver autosaver;
 	
 	public ClientMain()
 	{
@@ -55,15 +56,16 @@ public class ClientMain implements ProtocolConstants {
 	
 	public void runGame(GameStartSettings gameSettings)
 	{
-		new GameSettings(gameSettings);
 		if(gameSettings.operationMode == OperationMode.HOSTED_GAME) {
-			gameSettings.operationMode = OperationMode.ONLINE_GAME;
 			
 			ServerMain main = new ServerMain();
-			main.initialize(gameSettings.puzzleFileSrc);
+			main.initialize(gameSettings.puzzleFileSrc, gameSettings.serverPort);
 			Thread server = new Thread(main);
 			server.start();
+			gameSettings.operationMode = OperationMode.ONLINE_GAME;
 		}
+
+		new GameSettings(gameSettings);
 		
 		if(gameSettings.operationMode == OperationMode.ONLINE_GAME)
 		{
@@ -75,7 +77,6 @@ public class ClientMain implements ProtocolConstants {
 			}
 			Thread commsMonitor = new Thread(communicator);
 			commsMonitor.start();
-			AutoSaver.setEnabled(false);
 		} else if(gameSettings.operationMode == OperationMode.LOCAL_GAME){
 			this.puzzleTable.loadMapFromLocalFile(gameSettings.puzzleFileSrc);
 		} else if(gameSettings.operationMode == OperationMode.EDITOR) {
@@ -95,8 +96,11 @@ public class ClientMain implements ProtocolConstants {
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
 		this.playButton = new PlayButton(this);
-		new AutoSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
 		new ManualSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
+		this.autosaver = new AutoSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
+		if(GameSettings.operationMode == OperationMode.ONLINE_GAME) {
+			this.autosaver.setEnabled(false);
+		}
 	}
 
 	public void doFrame() {
@@ -152,7 +156,7 @@ public class ClientMain implements ProtocolConstants {
 	public void serverRequestsShutDown(){
 		FeedbackProvider.showServerShutdownMessage();
 		this.gameSettings.operationMode = OperationMode.LOCAL_GAME;
-		AutoSaver.setEnabled(true);
+		this.autosaver.setEnabled(true);
 	}
 	
 	public void exitEditorMode() {
