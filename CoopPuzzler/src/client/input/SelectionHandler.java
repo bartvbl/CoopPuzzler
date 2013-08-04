@@ -67,7 +67,7 @@ public class SelectionHandler {
 			}
 			if((typedKey == KeyboardToCharConverter.BACKSPACE))
 			{
-				if(this.selectionCursor > 0) {
+				if(this.selectionCursor >= 0) {
 					Point point = this.selectionArray.get(selectionCursor);
 					int column = point.getX();
 					int row = this.mapNumRows - point.getY() -1;
@@ -75,6 +75,9 @@ public class SelectionHandler {
 					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(' ');
 					this.main.puzzleDrawer.updateFeatureDisplayList();
 					this.selectionCursor--;
+					if(selectionCursor < 0) {
+						selectionCursor = 0;
+					}
 				}
 			} else if(typedKey != KeyboardToCharConverter.NO_MATCH)
 			{

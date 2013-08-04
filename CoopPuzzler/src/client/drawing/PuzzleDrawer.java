@@ -74,7 +74,7 @@ public class PuzzleDrawer {
 		for(int i = 0; i < selectionList.size(); i++)
 		{
 			Point point = selectionList.get(i);
-			if((i != cursorIndex) && (this.inputHandler.isTyping())) 
+			if(this.inputHandler.isTyping())
 			{
 				glColor4d(1.0, 0.797, 0.0, 1.0);
 			} else {
