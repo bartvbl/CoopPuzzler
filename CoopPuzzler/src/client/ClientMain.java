@@ -13,6 +13,7 @@ import common.BoardUpdateEvent;
 import common.ManualSaver;
 import common.ProtocolConstants;
 import common.PuzzleTable;
+import common.ReferenceUpdater;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

@@ -16,6 +16,7 @@ public class PuzzleTable implements BoardUpdateListener{
 				this.puzzleTable[i][j] = new PuzzleField(false, -1, false);
 			}
 		}
+		ReferenceUpdater.updateReferences(this.puzzleTable);
 	}
 	
 	public void createNewMap(int rows, int columns)

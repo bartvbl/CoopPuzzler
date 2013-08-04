@@ -21,8 +21,6 @@ public class InputHandler {
 	private KeyboardHandler keyboardHandler;
 	private SelectionHandler selectionHandler;
 	
-	private int previousMouseX, previousMouseY;
-	
 	public InputHandler(ClientMain main)
 	{
 		this.mouseHandler = new MouseHandler(this);
