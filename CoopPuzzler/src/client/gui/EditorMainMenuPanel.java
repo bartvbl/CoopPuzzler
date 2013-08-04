@@ -1,11 +1,15 @@
 package client.gui;
 
+import java.awt.AWTKeyStroke;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashSet;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import client.ClientMain;
 import client.ClientWindow;
@@ -25,6 +29,10 @@ public class EditorMainMenuPanel implements ActionListener {
 		
 		EditorMainMenuView.editCurrentButton.addActionListener(this);
 		EditorMainMenuView.createNewButton.addActionListener(this);
+		EditorMainMenuView.getInstance().setFocusTraversalKeysEnabled(true);
+		EditorMainMenuView.nameTextPane.addKeyListener(new TabSurpressor(EditorMainMenuView.rowsTextPane));
+		EditorMainMenuView.rowsTextPane.addKeyListener(new TabSurpressor(EditorMainMenuView.columnsTextPane));
+		EditorMainMenuView.columnsTextPane.addKeyListener(new TabSurpressor(EditorMainMenuView.nameTextPane));
 	}
 
 	public void actionPerformed(ActionEvent event) {
