@@ -81,6 +81,8 @@ public class ClientCommunicator implements Runnable{
 		
 		connected = true;
 		System.out.println("Connection to server established.");
+		
+		Timer.tick();
 		pingTimer.reset();
 		pingTimer.resume();
 	}
