@@ -16,7 +16,7 @@ save
 0 0 0a0a0a0a0 0a0a0a
 0 0 0 000102030 0a0a
 0 0 0 0 0a0a0 0a0a0a
-0 0 0 0 0 0 0 0 0a0s
+0 0 0 0 0 0 0 0 0 0a
 0a0 0 0 0a0a0a0f0a0a
 0t0 0t0a0a0a0v0v0s0d
 3a3b3c3d0a0a0a0a0a0a

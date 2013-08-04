@@ -29,7 +29,6 @@ public class MainLoopThread implements Runnable{
 	@Override
 	public void run() {
 		main.initialize();
-		
 		this.mainLoop();
 	}
 	
@@ -65,7 +64,7 @@ public class MainLoopThread implements Runnable{
 			Display.update();
 			Display.sync(50);
 		}
-		System.out.println("Main loop finished");
+		System.out.println("Shutting down client..");
 		Display.destroy();
 		main.communicator.close();
 		main.shutdownInternalServer();

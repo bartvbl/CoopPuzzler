@@ -32,6 +32,7 @@ public class SelectionHandler {
 
 	public ArrayList<Point> selectionArray = new ArrayList<Point>();
 	private boolean isTyping = false;
+	private Point previousPoint;
 
 	public SelectionHandler(ClientMain main)
 	{
@@ -82,15 +83,12 @@ public class SelectionHandler {
 				Point point;
 				if((this.previousChar == 'i') && (typedKey == 'j'))
 				{
-					point = this.selectionArray.remove(0);
+					point = this.previousPoint;
 					typedKey = TextureLibrary.IJ;
+					this.selectionUndoList.remove(this.selectionUndoList.size() - 1);
 				} else {
-					if(typedKey!='i')
+					if(typedKey != 'i')
 					{
-						if(this.previousChar == 'i')
-						{
-							this.selectionArray.remove(0);
-						}
 						if(this.selectionArray.size() == 0){
 							this.isTyping = false;
 							return;
@@ -98,8 +96,11 @@ public class SelectionHandler {
 						point = this.selectionArray.remove(0);
 					} else {
 						point = this.selectionArray.get(0);
+						this.selectionArray.remove(0);
 					}
 				}
+				this.selectionUndoList.add(point);
+				this.previousPoint = point;
 				int column = point.getX();
 				int row = this.mapNumRows - point.getY() -1;
 				BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,this.main.colourPickerUI.getSelectedColour());
@@ -109,7 +110,6 @@ public class SelectionHandler {
 				} else {
 					this.main.sendEventToClient(update);
 				}
-				this.selectionUndoList.add(point);
 				this.previousChar = typedKey;
 				if((this.selectionArray.size() == 0) && (typedKey!='i'))
 				{
