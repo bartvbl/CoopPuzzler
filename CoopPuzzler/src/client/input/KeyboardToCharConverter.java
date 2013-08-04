@@ -13,6 +13,7 @@ public class KeyboardToCharConverter {
 	{	
 		while(Keyboard.next()) {
 			char character = Keyboard.getEventCharacter();
+			character = Character.toLowerCase(character);
 			int eventKeyCode = Keyboard.getEventKey();
 			
 			updatePressedKeys(eventKeyCode);

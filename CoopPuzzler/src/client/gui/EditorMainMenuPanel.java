@@ -55,7 +55,7 @@ public class EditorMainMenuPanel implements ActionListener {
 				JOptionPane.showMessageDialog(null, "The row and column count have to be numbers.", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-				
+			
 			startWithEmptyBoard = true;
 		}
 		
