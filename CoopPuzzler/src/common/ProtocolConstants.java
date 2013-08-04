@@ -10,6 +10,12 @@ package common;
 public interface ProtocolConstants {
 	public static final int PORT = 4444;
 	
+	public static final String PING = "ping";
+	public static final String PING_REPLY = "pong";
+	public static final int PING_FREQUENCY = 5;
+	public static final int PING_TIMEOUT = 5;
+	public static final float PING_SERVER_TIMEOUT = 20;
+	
 	/** 
 	 * The timeout a handshake participant must grant the other to respond, in milliseconds.
 	 * If a participant waits this long and/or their opposite doesn't respond as expected,
@@ -52,4 +58,5 @@ public interface ProtocolConstants {
 	
 	public static final String BOARD_FIELD = "BOARD_FIELD";
 	public static final String BOARD_SIZE = "BOARD SIZE";
+
 }

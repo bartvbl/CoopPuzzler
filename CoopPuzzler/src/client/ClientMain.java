@@ -35,9 +35,9 @@ public class ClientMain implements ProtocolConstants {
 	
 	private AtomicReference<ArrayList<BoardUpdateEvent>> outputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
 	private AtomicReference<ArrayList<BoardUpdateEvent>> inputEventQueue = new AtomicReference<ArrayList<BoardUpdateEvent>>();
-	private GameStartSettings gameSettings;
 	private PlayButton playButton;
 	private AutoSaver autosaver;
+	private ManualSaver manualSaver;
 	
 	public ClientMain()
 	{
@@ -96,10 +96,11 @@ public class ClientMain implements ProtocolConstants {
 		this.inputHandler.init();
 		this.puzzleDrawer.init();
 		this.playButton = new PlayButton(this);
-		new ManualSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
+		this.manualSaver = new ManualSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
 		this.autosaver = new AutoSaver(puzzleTable.puzzleTable, GameSettings.puzzleFileSrc);
 		if(GameSettings.operationMode == OperationMode.ONLINE_GAME) {
-			this.autosaver.setEnabled(false);
+			this.autosaver.setSavingEnabled(false);
+			this.manualSaver.setSavingEnabled(false);
 		}
 	}
 
@@ -154,9 +155,8 @@ public class ClientMain implements ProtocolConstants {
 	}
 	
 	public void serverRequestsShutDown(){
-		FeedbackProvider.showServerShutdownMessage();
-		this.gameSettings.operationMode = OperationMode.LOCAL_GAME;
-		this.autosaver.setEnabled(true);
+		GameSettings.operationMode = OperationMode.LOCAL_GAME;
+		
 	}
 	
 	public void exitEditorMode() {

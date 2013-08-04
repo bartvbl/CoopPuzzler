@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import org.lwjgl.util.Timer;
+
 import common.ProtocolConstants;
 import common.BoardUpdateEvent;
 import common.PuzzleField;
@@ -17,6 +19,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 	private BufferedWriter output;
 	private BufferedReader input;
 	private ServerMain main;
+	private final Timer pingTimer;
 	private boolean shutdownRequested = false;
 	/** 
 	 * When this task is waiting for a response from client,
@@ -28,6 +31,7 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 
 	public ClientHandler(ServerMain main,Socket clientSocket)
 	{
+		pingTimer = new Timer();
 		this.clientSocket = clientSocket;
 		this.main = main;
 		try {
@@ -53,16 +57,30 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			output.newLine();
 			this.sendBoard();
 			String request = "";
+			pingTimer.reset();
+			pingTimer.resume();
+			
 			while(!request.equals(SESSION_TEARDOWN)&&!shutdownRequested){
 				processEvents();
 				request = (input.ready() ? input.readLine() : "");
-				if(request != null && request.startsWith(BOARD_UPDATE)){
-					if(!main.processMessage(new BoardUpdateEvent(request))){
-						output.write(BOARD_UPDATE_REJECT);
+				if(request != null) {
+					if(request.startsWith(BOARD_UPDATE)){
+						if(!main.processMessage(new BoardUpdateEvent(request))){
+							output.write(BOARD_UPDATE_REJECT);
+							flush();
+						}
+					} else if(request.equals(PING)) {
+						output.write(PING_REPLY);
+						pingTimer.reset();
+						pingTimer.resume();
 						flush();
 					}
+					Timer.tick();
+					if(pingTimer.getTime() > ProtocolConstants.PING_SERVER_TIMEOUT) {
+						shutdownRequested = true;
+					}
 				}
-				try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {this.main.writeMessageInWindow(e.getMessage());}
+				try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {this.main.writeMessageInWindow(e.getMessage());e.printStackTrace();}
 			}
 			if(shutdownRequested){
 				output.write(SESSION_TEARDOWN);
@@ -107,10 +125,9 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 		while(event != null)
 		{
 			output.write(event.toString());
-			output.newLine();
+			flush();
 			event = this.getNextMessage();
 		}
-		output.flush();
 	}
 	private BoardUpdateEvent getNextMessage()
 	{

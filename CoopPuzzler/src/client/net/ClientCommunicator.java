@@ -8,17 +8,24 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+
+import org.lwjgl.util.Timer;
 
 import client.ClientMain;
 import client.gui.FeedbackProvider;
 
 import common.BoardUpdateEvent;
+import common.ProtocolConstants;
 
 public class ClientCommunicator implements Runnable{
 	private Socket socket;
+	private boolean isExpectingPingReply = false;
+	private Timer pingTimer;
 	private BufferedReader input;
 	private BufferedWriter output;
 	private final ClientMain main;
@@ -29,6 +36,8 @@ public class ClientCommunicator implements Runnable{
 	public ClientCommunicator(ClientMain main)
 	{
 		this.main = main;
+		this.pingTimer = new Timer();
+		pingTimer.pause();
 	}
 
 	private ArrayList<BoardUpdateEvent> getBoardUpdateEventQueue()
@@ -57,10 +66,13 @@ public class ClientCommunicator implements Runnable{
 
 	private void openSession(InetAddress server, int serverPort) throws IOException{
 		System.out.println("Connecting to server at: " + server + ":" + serverPort);
-		socket = new Socket(server, serverPort);
+		socket = new Socket();
+		InetSocketAddress address = new InetSocketAddress(server, serverPort);
+		socket.connect(address, 5000);
 		if(!socket.isConnected()){
 			throw new IOException("Server not found.");
 		}
+		socket.setKeepAlive(false);
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = new BufferedWriter(new PrintWriter(socket.getOutputStream()));
 
@@ -68,6 +80,9 @@ public class ClientCommunicator implements Runnable{
 		retrieveBoard();
 		
 		connected = true;
+		System.out.println("Connection to server established.");
+		pingTimer.reset();
+		pingTimer.resume();
 	}
 
 	private void shakeHands() throws IOException {
@@ -123,8 +138,7 @@ public class ClientCommunicator implements Runnable{
 		if(!connected){return;}
 		try {
 			output.write(SESSION_TEARDOWN);
-			output.newLine();
-			output.flush();
+			flush();
 		} catch (IOException e) {
 			System.out.println("Client communicator error: " + e.getMessage());
 			e.printStackTrace();
@@ -146,10 +160,18 @@ public class ClientCommunicator implements Runnable{
 					this.main.sendEventToClient(new BoardUpdateEvent(message));
 					message = this.readNextMessage();
 				}
+				if(message != null) {
+					if(message.equals(PING_REPLY)) {
+						isExpectingPingReply = false;
+						pingTimer.reset();
+						pingTimer.resume();
+					}
+				}
 				if(message.equals(SESSION_TEARDOWN)){
 					output.write(SESSION_TEARDOWN_ACK);
 					flush();
 					socket.close();
+					FeedbackProvider.showServerShutdownMessage();
 					main.serverRequestsShutDown();
 					return;
 				}
@@ -158,10 +180,23 @@ public class ClientCommunicator implements Runnable{
 				{
 					for(BoardUpdateEvent event : outgoing){
 						output.write(event.toString());
-						output.newLine();
+						flush();
 					}
 				}
-				output.flush();
+				Timer.tick();
+				if((!isExpectingPingReply) && (pingTimer.getTime() > PING_FREQUENCY)) {
+					output.write(PING);
+					flush();
+					pingTimer.reset();
+					pingTimer.resume();
+					isExpectingPingReply = true;
+				}
+				if((isExpectingPingReply) && (pingTimer.getTime() > PING_TIMEOUT)) {
+					socket.close();
+					FeedbackProvider.showConnectionLostMessage();
+					main.serverRequestsShutDown();
+					connected = false;
+				}
 				Thread.sleep(1000/FREQUENCY);
 
 			} catch (IOException e) {

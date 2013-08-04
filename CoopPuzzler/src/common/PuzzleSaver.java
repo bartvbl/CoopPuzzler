@@ -10,13 +10,21 @@ public class PuzzleSaver {
 
 	PuzzleField[][] table;
 	private String saveTargetLocation;
+	private boolean isSavingEnabled = true;;
 	
 	public PuzzleSaver(PuzzleField[][] table, String saveTarget) {
 		this.table = table;
 		this.saveTargetLocation = saveTarget;
 	}
+	
+	public void setSavingEnabled(boolean enabled) {
+		this.isSavingEnabled  = enabled;
+	}
 
 	protected void doSave() {
+		if(!isSavingEnabled) {
+			return;
+		}
 		File destinationFile = new File(saveTargetLocation);
 		System.out.println("saving to " + destinationFile.getPath() + "..");
 		if(destinationFile.exists())

@@ -17,6 +17,10 @@ public class FeedbackProvider {
 	}
 
 	public static void showServerShutdownMessage() {
-		showErrorMessage("Server has shut down.");
+		showErrorMessage("Server has shut down.\nYou can try to finish the puzzle, but it will not be saved.");
+	}
+	
+	public static void showConnectionLostMessage() {
+		showErrorMessage("Lost connection to server.\nYou can try to finish the puzzle, but it will not be saved.");
 	}
 }

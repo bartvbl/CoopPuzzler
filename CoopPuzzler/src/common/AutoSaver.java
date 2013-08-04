@@ -8,7 +8,6 @@ import javax.swing.Timer;
 
 public class AutoSaver extends PuzzleSaver implements ActionListener {
 	private Timer timer;
-	private boolean isEnabled = true;
 	
 	public AutoSaver(PuzzleField[][] table, String autosaveLocation)
 	{
@@ -18,12 +17,6 @@ public class AutoSaver extends PuzzleSaver implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		if(isEnabled) {
-			this.doSave();
-		}
-	}
-
-	public void setEnabled(boolean enabled) {
-		isEnabled = enabled;
+		this.doSave();
 	}
 }
