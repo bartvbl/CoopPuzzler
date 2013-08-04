@@ -45,12 +45,15 @@ public class ServerMain implements Runnable{
 	{
 		Socket clientSocket = null;
 		writeMessageInWindow("server started.");
+		int numCreatedClients = 0;
+		
 		while(true){
 			try {
 				clientSocket = this.serverSocket.accept();
-				ClientHandler handler = new ClientHandler(this, clientSocket);
+				ClientHandler handler = new ClientHandler(numCreatedClients, this, clientSocket);
 				handlers.add(handler);
 				this.threadpool.execute(handler);
+				numCreatedClients++;
 				writeMessageInWindow("Accepted client from " + handler.toString());
 			} catch (IOException e) {
 				System.err.println("Accept failed: " + ProtocolConstants.PORT );
@@ -85,9 +88,19 @@ public class ServerMain implements Runnable{
 		event.getColumn() <= this.puzzleTable.puzzleTable[event.getRow()].length;
 	}
 
-	public synchronized void removeHandler(ClientHandler handler){
-		handlers.remove(handler);
-		writeMessageInWindow("Closing session from " + handler.toString());
+	public synchronized void removeHandler(int handlerID){
+		synchronized(handlers) {
+			int index = -1;
+			for(int i = 0; i < handlers.size(); i++) {
+				if(handlerID == handlers.get(i).clientID) {
+					index = i;
+				}
+			}
+			if(index != -1) {
+				handlers.remove(index);
+				System.out.println("Removing client " + handlerID);
+			}
+		}
 	}
 
 	public void shutdown() {

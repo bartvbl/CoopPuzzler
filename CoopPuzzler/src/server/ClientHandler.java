@@ -15,6 +15,8 @@ import common.BoardUpdateEvent;
 import common.PuzzleField;
 
 public class ClientHandler implements Runnable,ProtocolConstants {
+	public final int clientID;
+
 	private Socket clientSocket;
 	private BufferedWriter output;
 	private BufferedReader input;
@@ -29,8 +31,9 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 
 	private ArrayList<BoardUpdateEvent> outgoingMessageQueue = new ArrayList<BoardUpdateEvent>();
 
-	public ClientHandler(ServerMain main,Socket clientSocket)
+	public ClientHandler(int clientID, ServerMain main,Socket clientSocket)
 	{
+		this.clientID = clientID;
 		pingTimer = new Timer();
 		this.clientSocket = clientSocket;
 		this.main = main;
@@ -60,8 +63,9 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			Timer.tick();
 			pingTimer.reset();
 			pingTimer.resume();
+			boolean isRunning = true;
 			
-			while(!request.equals(SESSION_TEARDOWN)&&!shutdownRequested){
+			while(!request.equals(SESSION_TEARDOWN) && !shutdownRequested && isRunning){
 				request = (input.ready() ? input.readLine() : "");
 				if(request != null) {
 					if(request.startsWith(BOARD_UPDATE)){
@@ -75,10 +79,12 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 						pingTimer.resume();
 						flush();
 					}
+					Timer.tick();
 					if(pingTimer.getTime() > ProtocolConstants.PING_SERVER_TIMEOUT) {
-						shutdownRequested = true;
+						isRunning = false;
 					}
 				}
+				processEvents();
 				try {Thread.sleep(1000/FREQUENCY);} catch (InterruptedException e) {this.main.writeMessageInWindow(e.getMessage());e.printStackTrace();}
 			}
 			if(shutdownRequested){
@@ -87,12 +93,12 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 				if(!waitForInput() || input.readLine().equals(SESSION_TEARDOWN_ACK)){
 					clientSocket.close();
 				}
-			}else{
+			} else{
 				output.write(SESSION_TEARDOWN_ACK);
 				flush();
 				clientSocket.close();
 			}
-			main.removeHandler(this);//Unsubscribe this handler from updates and mark it for garbage collection.
+			main.removeHandler(this.clientID);//Unsubscribe this handler from updates and mark it for garbage collection.
 		} catch (IOException e) {
 			this.main.writeMessageInWindow(e.getMessage());
 		}
