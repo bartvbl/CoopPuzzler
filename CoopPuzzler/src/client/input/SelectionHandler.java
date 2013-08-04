@@ -21,18 +21,14 @@ import common.PuzzleTable;
 import common.ReferenceUpdater;
 
 public class SelectionHandler {
-	private static final float WAITING_TIME = 0.2f;
-
 	private PuzzleTable puzzleTable;
-	private Timer selectionActionTimer = new Timer();
-	private float selectionActionStartTime;
-	private boolean isWaiting = false;
 	private boolean finishedClicking = true;
 	private ArrayList<Point> selectionUndoList = new ArrayList<Point>();
 	private char previousChar = ' ';
 	private int mapNumRows, mapNumColumns;
 	private ClientMain main;
 	private ClientWindow window;
+	private int selectionCursor = 0;
 
 	public ArrayList<Point> selectionArray = new ArrayList<Point>();
 	private boolean isTyping = false;
@@ -63,153 +59,138 @@ public class SelectionHandler {
 		if((Mouse.isButtonDown(0) == false) && (this.finishedClicking == false)) {
 			this.finishedClicking = true;
 		}
-		Timer.tick();
-		if(isWaiting)
+		if(this.isTyping)
 		{
-			if((this.selectionActionTimer.getTime() - this.selectionActionStartTime) > WAITING_TIME)
+			if((this.cancelSelectionRequested()) && (this.finishedClicking == true))
 			{
-				this.isWaiting = false;
+				this.isTyping = false;
+				this.finishedClicking = false;
 			}
-		} else {
-			if(this.isTyping)
+			if((typedKey == KeyboardToCharConverter.BACKSPACE))
 			{
-				if((this.cancelSelectionRequested()) && (this.finishedClicking == true))
-				{
-					this.isTyping = false;
-					this.finishedClicking = false;
-				}
-				if(typedKey != KeyboardToCharConverter.NO_MATCH)
-				{
-					//this.isWaiting = true;
-					this.selectionActionStartTime = this.selectionActionTimer.getTime();
-
-					Point point;
-					if((this.previousChar == 'i') && (typedKey == 'j'))
-					{
-						point = this.selectionArray.remove(0);
-						typedKey = TextureLibrary.IJ;
-					} else {
-						if(typedKey!='i')
-						{
-							if(this.previousChar == 'i')
-							{
-								this.selectionArray.remove(0);
-							}
-							if(this.selectionArray.size() == 0){
-								this.isTyping = false;
-								this.waitForNextInput();
-								return;
-							}
-							point = this.selectionArray.remove(0);
-						} else {
-							point = this.selectionArray.get(0);
-						}
-					}
-					int column = point.getX();
-					int row = this.mapNumRows - point.getY() -1;
-					BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,this.main.colourPickerUI.getSelectedColour());
-					if(this.main.gameIsOnline() == true)
-					{
-						this.main.sendEventToServer(update);
-					} else {
-						this.main.sendEventToClient(update);
-					}
-					this.selectionUndoList.add(point);
-					this.previousChar = typedKey;
-					if((this.selectionArray.size() == 0) && (typedKey!='i'))
-					{
-						this.isTyping = false;
-						this.waitForNextInput();
-					}
-				}
-				if(Keyboard.isKeyDown(Keyboard.KEY_BACK) && (this.selectionUndoList.size() > 0))
-				{
+				if(this.selectionUndoList.size() > 0) {
 					Point point = this.selectionUndoList.remove(this.selectionUndoList.size()-1);
 					this.selectionArray.add(0, point);
 					int column = point.getX();
 					int row = this.mapNumRows - point.getY() -1;
 					this.previousChar = this.puzzleTable.puzzleTable[row][column].getCurrentValueOfField();
 					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(' ');
-					this.main.puzzleDrawer.updateFeatureDisplayList();
-					this.waitForNextInput();
+					this.main.puzzleDrawer.updateFeatureDisplayList();				
 				}
-			} else {
-				this.selectionArray.clear();
-				float[] coords = this.getMapCoordinates(x, y, zoomLevel);
-
-				if(!((coords[0] < 0) || (coords[1] < 0) || (coords[1] >= this.mapNumRows) || (coords[0] >= this.mapNumColumns)))
+			} else if(typedKey != KeyboardToCharConverter.NO_MATCH)
+			{
+				Point point;
+				if((this.previousChar == 'i') && (typedKey == 'j'))
 				{
-					int column = (int)coords[0];
-					int row = this.mapNumRows - (int)coords[1] -1;
-					if(GameSettings.operationMode == OperationMode.EDITOR) {
-						this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
-
-						if(Mouse.isButtonDown(0))
+					point = this.selectionArray.remove(0);
+					typedKey = TextureLibrary.IJ;
+				} else {
+					if(typedKey!='i')
+					{
+						if(this.previousChar == 'i')
 						{
-							PuzzleField puzzleField = this.puzzleTable.puzzleTable[row][column];
-							if((puzzleField.isFilled == false) && (puzzleField.hasIgnoreReference == false)) {
-								puzzleField.isFilled = true;
-								puzzleField.hasIgnoreReference = false;
-							} else if((puzzleField.isFilled == true) && (puzzleField.hasIgnoreReference == false)) {
-								puzzleField.isFilled = false;
-								puzzleField.hasIgnoreReference = true;
-							} else if((puzzleField.isFilled == false) && (puzzleField.hasIgnoreReference == true)) {
-								puzzleField.isFilled = false;
-								puzzleField.hasIgnoreReference = false;
-							}
-							ReferenceUpdater.updateReferences(this.puzzleTable.puzzleTable);
-							this.main.puzzleDrawer.updateBareBonesDisplayList();
-							this.main.puzzleDrawer.updateFeatureDisplayList();
-							this.waitForNextInput();
+							this.selectionArray.remove(0);
 						}
-					} else {
-						if(this.puzzleTable.fieldIsOccupied(row, column))
-						{
+						if(this.selectionArray.size() == 0){
+							this.isTyping = false;
 							return;
 						}
-						this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
-						float remainderX = coords[0] % 1;
-						float remainderY = coords[1] % 1;
-						//lower quadrant
-						if((remainderX > remainderY) && (remainderX < (1 - remainderY)))
+						point = this.selectionArray.remove(0);
+					} else {
+						point = this.selectionArray.get(0);
+					}
+				}
+				int column = point.getX();
+				int row = this.mapNumRows - point.getY() -1;
+				BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,this.main.colourPickerUI.getSelectedColour());
+				if(GameSettings.operationMode == OperationMode.ONLINE_GAME)
+				{
+					this.main.sendEventToServer(update);
+				} else {
+					this.main.sendEventToClient(update);
+				}
+				this.selectionUndoList.add(point);
+				this.previousChar = typedKey;
+				if((this.selectionArray.size() == 0) && (typedKey!='i'))
+				{
+					this.isTyping = false;
+				}
+			}
+		} else {
+			this.selectionArray.clear();
+			float[] coords = this.getMapCoordinates(x, y, zoomLevel);
+
+			if(!((coords[0] < 0) || (coords[1] < 0) || (coords[1] >= this.mapNumRows) || (coords[0] >= this.mapNumColumns)))
+			{
+				int column = (int)coords[0];
+				int row = this.mapNumRows - (int)coords[1] -1;
+				if(GameSettings.operationMode == OperationMode.EDITOR) {
+					this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
+
+					if(Mouse.isButtonDown(0) && (finishedClicking == true))
+					{
+						finishedClicking = false;
+						PuzzleField puzzleField = this.puzzleTable.puzzleTable[row][column];
+						if((puzzleField.isFilled == false) && (puzzleField.hasIgnoreReference == false)) {
+							puzzleField.isFilled = true;
+							puzzleField.hasIgnoreReference = false;
+						} else if((puzzleField.isFilled == true) && (puzzleField.hasIgnoreReference == false)) {
+							puzzleField.isFilled = false;
+							puzzleField.hasIgnoreReference = true;
+						} else if((puzzleField.isFilled == false) && (puzzleField.hasIgnoreReference == true)) {
+							puzzleField.isFilled = false;
+							puzzleField.hasIgnoreReference = false;
+						}
+						ReferenceUpdater.updateReferences(this.puzzleTable.puzzleTable);
+						this.main.puzzleDrawer.updateBareBonesDisplayList();
+						this.main.puzzleDrawer.updateFeatureDisplayList();
+					}
+				} else {
+					if(this.puzzleTable.fieldIsOccupied(row, column))
+					{
+						return;
+					}
+					this.selectionArray.add(new Point((int)coords[0],(int)coords[1]));
+					float remainderX = coords[0] % 1;
+					float remainderY = coords[1] % 1;
+					//lower quadrant
+					if((remainderX > remainderY) && (remainderX < (1 - remainderY)))
+					{
+						int tracker = this.mapNumRows - (int)coords[1];
+						int counter = 1;
+						while(tracker < this.mapNumRows)
 						{
-							int tracker = this.mapNumRows - (int)coords[1];
-							int counter = 1;
-							while(tracker < this.mapNumRows)
+							if(this.puzzleTable.fieldIsOccupied(tracker, (int) coords[0]))
 							{
-								if(this.puzzleTable.fieldIsOccupied(tracker, (int) coords[0]))
-								{
-									break;
-								}
-								this.selectionArray.add(new Point((int)coords[0],(int)coords[1]-counter));
-								tracker++;
-								counter++;
+								break;
 							}
+							this.selectionArray.add(new Point((int)coords[0],(int)coords[1]-counter));
+							tracker++;
+							counter++;
 						}
-						//right quadrant
-						if((remainderX > remainderY) && (remainderX > (1 - remainderY)))
+					}
+					//right quadrant
+					if((remainderX > remainderY) && (remainderX > (1 - remainderY)))
+					{
+						int tracker = (int)coords[0] + 1;
+						int counter = 1;
+						while(tracker < this.mapNumColumns)
 						{
-							int tracker = (int)coords[0] + 1;
-							int counter = 1;
-							while(tracker < this.mapNumColumns)
+							if(this.puzzleTable.fieldIsOccupied((int) this.mapNumRows - (int)coords[1]-1,tracker))
 							{
-								if(this.puzzleTable.fieldIsOccupied((int) this.mapNumRows - (int)coords[1]-1,tracker))
-								{
-									break;
-								}
-								this.selectionArray.add(new Point((int)coords[0]+counter,(int)coords[1]));
-								tracker++;
-								counter++;
+								break;
 							}
+							this.selectionArray.add(new Point((int)coords[0]+counter,(int)coords[1]));
+							tracker++;
+							counter++;
 						}
-						if((Mouse.isButtonDown(0)) && (this.finishedClicking == true))
-						{
-							this.finishedClicking = false;
-							this.isTyping = true;
-							this.waitForNextInput();
-							this.previousChar = ' ';
-							this.selectionUndoList = new ArrayList<Point>();
-						}
+					}
+					if((Mouse.isButtonDown(0)) && (this.finishedClicking == true))
+					{
+						this.finishedClicking = false;
+						this.isTyping = true;
+						this.previousChar = ' ';
+						this.selectionUndoList = new ArrayList<Point>();
 					}
 				}
 			}
@@ -218,12 +199,6 @@ public class SelectionHandler {
 
 	private boolean cancelSelectionRequested() {
 		return (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) || (Mouse.isButtonDown(1)) || (Mouse.isButtonDown(0));
-	}
-
-	private void waitForNextInput()
-	{
-		this.isWaiting = true;
-		this.selectionActionStartTime = this.selectionActionTimer.getTime();
 	}
 
 	public float[] getMapCoordinates(float x, float y, float zoomLevel)
@@ -236,6 +211,10 @@ public class SelectionHandler {
 
 	public ArrayList<Point> getSelectionArray() {
 		return this.selectionArray;
+	}
+
+	public int getSelectionCursor() {
+		return 0;
 	}
 
 	public boolean isTyping() {

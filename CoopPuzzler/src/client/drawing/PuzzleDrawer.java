@@ -66,8 +66,10 @@ public class PuzzleDrawer {
 		{
 			glColor4f(1.0f, 0.797f, 0.0f, 1.0f);
 		} else {
-			glColor4f(1.0f, 0.797f, 0.0f, 0.7f);
+			glColor4f(1.0f, 0.797f, 0.0f, 0.5f);
 		}
+		
+		int cursorIndex = this.inputHandler.getSelectionCursorIndex();
 		
 		for(Point point : selectionList)
 		{

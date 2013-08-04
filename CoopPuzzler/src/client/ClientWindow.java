@@ -24,7 +24,7 @@ import static org.lwjgl.util.glu.GLU.*;
 public class ClientWindow {
 	public float windowWidth = 640;
 	public float windowHeight = 480;
-	public JFrame jframe;
+	public final JFrame jframe;
 	public Canvas canvas;
 	private AtomicReference<Dimension> canvasSize = new AtomicReference<Dimension>();
 	private ClientMain main;
@@ -40,7 +40,7 @@ public class ClientWindow {
 		this.mainMenuPanel = new MainMenuPanel(this.main);
 		this.editorMainPanel = new EditorMainMenuPanel(this, this.main);
 		new EditorMainSwitcher(this.jframe, mainMenuPanel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLocation(100, 100);
 		this.jframe.setIconImage(Toolkit.getDefaultToolkit().getImage("res/icon_32.png"));
 	}

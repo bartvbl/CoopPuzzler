@@ -38,6 +38,7 @@ public class ClientMain implements ProtocolConstants {
 	private PlayButton playButton;
 	private AutoSaver autosaver;
 	private ManualSaver manualSaver;
+	private ServerMain serverMain = null;
 	
 	public ClientMain()
 	{
@@ -60,6 +61,7 @@ public class ClientMain implements ProtocolConstants {
 			
 			ServerMain main = new ServerMain();
 			main.initialize(gameSettings.puzzleFileSrc, gameSettings.serverPort);
+			this.serverMain  = main;
 			Thread server = new Thread(main);
 			server.start();
 			gameSettings.operationMode = OperationMode.ONLINE_GAME;
@@ -165,7 +167,10 @@ public class ClientMain implements ProtocolConstants {
 		this.puzzleDrawer.updateFeatureDisplayList();
 	}
 	
-	public boolean gameIsOnline() {
-		return GameSettings.operationMode == OperationMode.ONLINE_GAME;
+	public void shutdownInternalServer() {
+		if(this.serverMain != null) {
+			serverMain.shutdown();
+		}
+		this.serverMain = null;
 	}
 }

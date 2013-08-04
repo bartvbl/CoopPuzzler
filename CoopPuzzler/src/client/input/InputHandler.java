@@ -46,6 +46,10 @@ public class InputHandler {
 		return this.selectionHandler.getSelectionArray();
 	}
 	
+	public int getSelectionCursorIndex() {
+		return this.selectionHandler.getSelectionCursor();
+	}
+	
 	public boolean isTyping()
 	{
 		return this.selectionHandler.isTyping();

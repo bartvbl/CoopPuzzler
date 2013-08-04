@@ -35,7 +35,7 @@ public class MainLoopThread implements Runnable{
 	
 	public void mainLoop()
 	{
-		while(!Display.isCloseRequested())
+		while(main.window.jframe.isVisible())
 		{
 			Dimension windowSize = this.main.window.getSize();
 			
@@ -65,5 +65,9 @@ public class MainLoopThread implements Runnable{
 			Display.update();
 			Display.sync(50);
 		}
+		System.out.println("Main loop finished");
+		Display.destroy();
+		main.communicator.close();
+		main.shutdownInternalServer();
 	}
 }
