@@ -23,16 +23,14 @@ import common.ReferenceUpdater;
 public class SelectionHandler {
 	private PuzzleTable puzzleTable;
 	private boolean finishedClicking = true;
-	private ArrayList<Point> selectionUndoList = new ArrayList<Point>();
 	private char previousChar = ' ';
 	private int mapNumRows, mapNumColumns;
 	private ClientMain main;
 	private ClientWindow window;
-	private int selectionCursor = 0;
 
+	private int selectionCursor = 0;
 	public ArrayList<Point> selectionArray = new ArrayList<Point>();
 	private boolean isTyping = false;
-	private Point previousPoint;
 
 	public SelectionHandler(ClientMain main)
 	{
@@ -69,38 +67,34 @@ public class SelectionHandler {
 			}
 			if((typedKey == KeyboardToCharConverter.BACKSPACE))
 			{
-				if(this.selectionUndoList.size() > 0) {
-					Point point = this.selectionUndoList.remove(this.selectionUndoList.size()-1);
-					this.selectionArray.add(0, point);
+				if(this.selectionCursor > 0) {
+					Point point = this.selectionArray.get(selectionCursor);
 					int column = point.getX();
 					int row = this.mapNumRows - point.getY() -1;
 					this.previousChar = this.puzzleTable.puzzleTable[row][column].getCurrentValueOfField();
 					this.puzzleTable.puzzleTable[row][column].setNewCharacterValue(' ');
-					this.main.puzzleDrawer.updateFeatureDisplayList();				
+					this.main.puzzleDrawer.updateFeatureDisplayList();
+					this.selectionCursor--;
 				}
 			} else if(typedKey != KeyboardToCharConverter.NO_MATCH)
 			{
 				Point point;
 				if((this.previousChar == 'i') && (typedKey == 'j'))
 				{
-					point = this.previousPoint;
 					typedKey = TextureLibrary.IJ;
-					this.selectionUndoList.remove(this.selectionUndoList.size() - 1);
 				} else {
 					if(typedKey != 'i')
 					{
-						if(this.selectionArray.size() == 0){
+						if(this.previousChar == 'i') {
+							this.selectionCursor++;
+						}
+						if(this.selectionArray.size() == 0) {
 							this.isTyping = false;
 							return;
 						}
-						point = this.selectionArray.remove(0);
-					} else {
-						point = this.selectionArray.get(0);
-						this.selectionArray.remove(0);
 					}
 				}
-				this.selectionUndoList.add(point);
-				this.previousPoint = point;
+				point = this.selectionArray.get(this.selectionCursor);
 				int column = point.getX();
 				int row = this.mapNumRows - point.getY() -1;
 				BoardUpdateEvent update = new BoardUpdateEvent(row,column,typedKey,this.main.colourPickerUI.getSelectedColour());
@@ -110,8 +104,12 @@ public class SelectionHandler {
 				} else {
 					this.main.sendEventToClient(update);
 				}
+				this.selectionCursor++;
 				this.previousChar = typedKey;
-				if((this.selectionArray.size() == 0) && (typedKey!='i'))
+				if(typedKey == 'i') {
+					selectionCursor--;
+				}
+				if((this.selectionCursor == this.selectionArray.size()) && (typedKey!='i'))
 				{
 					this.isTyping = false;
 				}
@@ -190,7 +188,7 @@ public class SelectionHandler {
 						this.finishedClicking = false;
 						this.isTyping = true;
 						this.previousChar = ' ';
-						this.selectionUndoList = new ArrayList<Point>();
+						this.selectionCursor = 0;
 					}
 				}
 			}
@@ -214,7 +212,7 @@ public class SelectionHandler {
 	}
 
 	public int getSelectionCursor() {
-		return 0;
+		return this.selectionCursor;
 	}
 
 	public boolean isTyping() {
