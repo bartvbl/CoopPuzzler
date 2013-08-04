@@ -57,11 +57,11 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 			output.newLine();
 			this.sendBoard();
 			String request = "";
+			Timer.tick();
 			pingTimer.reset();
 			pingTimer.resume();
 			
 			while(!request.equals(SESSION_TEARDOWN)&&!shutdownRequested){
-				processEvents();
 				request = (input.ready() ? input.readLine() : "");
 				if(request != null) {
 					if(request.startsWith(BOARD_UPDATE)){
@@ -75,7 +75,6 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 						pingTimer.resume();
 						flush();
 					}
-					Timer.tick();
 					if(pingTimer.getTime() > ProtocolConstants.PING_SERVER_TIMEOUT) {
 						shutdownRequested = true;
 					}
