@@ -9,6 +9,7 @@ public abstract class Button {
 	protected final int width;
 	protected final int height;
 	private boolean wasMouseDown = false;
+	private boolean wasHovering = false;
 	
 	public Button(int x, int y, int width, int height)
 	{
@@ -34,7 +35,7 @@ public abstract class Button {
 	public boolean draw(float scaleLevel)
 	{
 		boolean isHovering = this.isHovering(scaleLevel);
-		if(isHovering && Mouse.isButtonDown(0))
+		if(wasHovering && isHovering && Mouse.isButtonDown(0))
 		{
 			this.drawMouseDown();
 			if(!this.wasMouseDown) {
@@ -42,14 +43,16 @@ public abstract class Button {
 			}
 			this.wasMouseDown = true;
 			return true;
-		} else if(isHovering)
+		} else if(isHovering && !Mouse.isButtonDown(0))
 		{
 			this.drawMouseOver();
 			this.wasMouseDown = false;
+			this.wasHovering = true;
 			return true;
 		} else {
 			this.drawMouseUp();
 			this.wasMouseDown = false;
+			this.wasHovering = false;
 			return false;
 		}
 	}
