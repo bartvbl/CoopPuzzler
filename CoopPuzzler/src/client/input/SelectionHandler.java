@@ -115,9 +115,11 @@ public class SelectionHandler {
 				if((this.selectionCursor == this.selectionArray.size()) && (typedKey!='i'))
 				{
 					this.isTyping = false;
+					this.selectionCursor = 0;
 				}
 			}
 		} else {
+			this.selectionCursor = 0;
 			this.selectionArray.clear();
 			float[] coords = this.getMapCoordinates(x, y, zoomLevel);
 

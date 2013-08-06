@@ -61,7 +61,7 @@ public class ClientWindow {
 	public void enableMainMenu()
 	{
 		PuzzleListPopulator.populatePuzzleList(MainMenuView.puzzleList);
-		this.jframe.setSize(530, 301);
+		this.jframe.setSize(550, 326);
 		this.jframe.setResizable(false);
 		this.jframe.setVisible(true);
 		this.jframe.add(mainMenuPanel);

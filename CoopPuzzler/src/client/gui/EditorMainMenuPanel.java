@@ -1,15 +1,10 @@
 package client.gui;
 
-import java.awt.AWTKeyStroke;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.HashSet;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
 import client.ClientMain;
 import client.ClientWindow;

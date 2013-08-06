@@ -27,7 +27,7 @@ public class MainMenuPanel extends JPanel implements ActionListener{
 		this.main = main;
 		this.mainContentPanel = new MainMenuView();
 		this.add(this.mainContentPanel);
-		this.mainContentPanel.setPreferredSize(new Dimension(500, 261));
+		this.mainContentPanel.setPreferredSize(new Dimension(530, 311));
 		this.validate();
 		
 		

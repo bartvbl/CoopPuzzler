@@ -37,119 +37,173 @@ public class MainMenuView extends javax.swing.JPanel {
 
 
 		mainMenuLabel = new javax.swing.JLabel();
-		playLocalGameLabel = new javax.swing.JLabel();
-		puzzleListScrollPane = new javax.swing.JScrollPane();
-		puzzleList = new javax.swing.JList();
-		playButton = new javax.swing.JButton();
-		puzzleListDescriptionLabel = new javax.swing.JLabel();
-		mainSeparator = new javax.swing.JSeparator();
-		playGameOnServer = new javax.swing.JLabel();
-		serverAddressLabel = new javax.swing.JLabel();
-		serverAddressScrollPane = new javax.swing.JScrollPane();
-		serverAddressTextBox = new javax.swing.JTextPane();
-		connectToServerButton = new javax.swing.JButton();
-		editPuzzleButton = new javax.swing.JButton();
-		postPaneScrollPane = new javax.swing.JScrollPane();
-		portTextField = new javax.swing.JTextPane();
-		portLabel = new javax.swing.JLabel();
-		createServerButton = new javax.swing.JButton();
+        playLocalGameLabel = new javax.swing.JLabel();
+        puzzleListScrollPane = new javax.swing.JScrollPane();
+        puzzleList = new javax.swing.JList();
+        playButton = new javax.swing.JButton();
+        puzzleListDescriptionLabel = new javax.swing.JLabel();
+        mainSeparator = new javax.swing.JSeparator();
+        playGameOnServer = new javax.swing.JLabel();
+        serverAddressLabel = new javax.swing.JLabel();
+        serverAddressScrollPane = new javax.swing.JScrollPane();
+        serverAddressTextBox = new javax.swing.JTextPane();
+        connectToServerButton = new javax.swing.JButton();
+        editPuzzleButton = new javax.swing.JButton();
+        portPaneScrollPane = new javax.swing.JScrollPane();
+        portTextField = new javax.swing.JTextPane();
+        portLabel = new javax.swing.JLabel();
+        createServerButton = new javax.swing.JButton();
 
-		setName("Form"); // NOI18N
-		setPreferredSize(new java.awt.Dimension(500, 241));
-		setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setName("Form"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(500, 241));
 
-		mainMenuLabel.setFont(mainMenuFont); // NOI18N
-		mainMenuLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		mainMenuLabel.setText("Main Menu"); // NOI18N
-		mainMenuLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-		mainMenuLabel.setName("mainMenuLabel"); // NOI18N
-		add(mainMenuLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 500, 25));
+        mainMenuLabel.setFont(mainMenuFont); // NOI18N
+        mainMenuLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mainMenuLabel.setText("Main Menu"); // NOI18N
+        mainMenuLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        mainMenuLabel.setName("mainMenuLabel"); // NOI18N
 
-		playLocalGameLabel.setFont(boldFont); // NOI18N
-		playLocalGameLabel.setText("Play local game"); // NOI18N
-		playLocalGameLabel.setName("playLocalGameLabel"); // NOI18N
-		add(playLocalGameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 31, -1, -1));
+        playLocalGameLabel.setFont(boldFont); // NOI18N
+        playLocalGameLabel.setText("Play local game"); // NOI18N
+        playLocalGameLabel.setName("playLocalGameLabel"); // NOI18N
 
-		puzzleListScrollPane.setName("puzzleListScrollPane"); // NOI18N
+        puzzleListScrollPane.setName("puzzleListScrollPane"); // NOI18N
 
-		puzzleList.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Failed to list puzzles" };
-			public int getSize() { return strings.length; }
-			public Object getElementAt(int i) { return strings[i]; }
-		});
-		puzzleList.setName("puzzleList"); // NOI18N
-		puzzleListScrollPane.setViewportView(puzzleList);
+        puzzleList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Failed to list puzzles" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        puzzleList.setName("puzzleList"); // NOI18N
+        puzzleListScrollPane.setViewportView(puzzleList);
 
-		add(puzzleListScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 71, 200, -1));
+        playButton.setText("Play"); // NOI18N
+        playButton.setName("playButton"); // NOI18N
 
-		playButton.setText("Play"); // NOI18N
-		playButton.setName("playButton"); // NOI18N
-		add(playButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(157, 207, -1, -1));
+        puzzleListDescriptionLabel.setText("Select a puzzle to solve:"); // NOI18N
+        puzzleListDescriptionLabel.setName("puzzleListDescriptionLabel"); // NOI18N
 
-		puzzleListDescriptionLabel.setText("Select a puzzle to solve:"); // NOI18N
-		puzzleListDescriptionLabel.setName("puzzleListDescriptionLabel"); // NOI18N
-		add(puzzleListDescriptionLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 51, -1, -1));
+        mainSeparator.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        mainSeparator.setName("mainSeparator"); // NOI18N
 
-		mainSeparator.setOrientation(javax.swing.SwingConstants.VERTICAL);
-		mainSeparator.setName("mainSeparator"); // NOI18N
-		add(mainSeparator, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 31, 13, 228));
+        playGameOnServer.setFont(boldFont); // NOI18N
+        playGameOnServer.setText("Play game on a server"); // NOI18N
+        playGameOnServer.setName("playGameOnServer"); // NOI18N
 
-		playGameOnServer.setFont(boldFont); // NOI18N
-		playGameOnServer.setText("Play game on a server"); // NOI18N
-		playGameOnServer.setName("playGameOnServer"); // NOI18N
-		add(playGameOnServer, new org.netbeans.lib.awtextra.AbsoluteConstraints(239, 31, -1, -1));
+        serverAddressLabel.setText("Server address:"); // NOI18N
+        serverAddressLabel.setName("serverAddressLabel"); // NOI18N
 
-		serverAddressLabel.setText("Server address:"); // NOI18N
-		serverAddressLabel.setName("serverAddressLabel"); // NOI18N
-		add(serverAddressLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(239, 51, -1, 23));
+        serverAddressScrollPane.setName("serverAddressScrollPane"); // NOI18N
 
-		serverAddressScrollPane.setName("serverAddressScrollPane"); // NOI18N
+        serverAddressTextBox.setName("serverAddressTextBox"); // NOI18N
+        serverAddressScrollPane.setViewportView(serverAddressTextBox);
 
-		serverAddressTextBox.setName("serverAddressTextBox"); // NOI18N
-		serverAddressScrollPane.setViewportView(serverAddressTextBox);
+        connectToServerButton.setText("Connect"); // NOI18N
+        connectToServerButton.setName("connectToServerButton"); // NOI18N
 
-		add(serverAddressScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 51, 161, 23));
+        editPuzzleButton.setText("Create/edit a puzzle"); // NOI18N
+        editPuzzleButton.setName("editPuzzleButton"); // NOI18N
 
-		connectToServerButton.setText("Connect"); // NOI18N
-		connectToServerButton.setName("connectToServerButton"); // NOI18N
-		add(connectToServerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(239, 80, -1, -1));
+        portPaneScrollPane.setName("postPaneScrollPane"); // NOI18N
 
-		editPuzzleButton.setText("Create/edit a puzzle"); // NOI18N
-		editPuzzleButton.setName("editPuzzleButton"); // NOI18N
-		add(editPuzzleButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 207, -1, -1));
+        portTextField.setName("portTextField"); // NOI18N
+        portPaneScrollPane.setViewportView(portTextField);
 
-		postPaneScrollPane.setName("postPaneScrollPane"); // NOI18N
+        portLabel.setText("Port:"); // NOI18N
+        portLabel.setName("portLabel"); // NOI18N
 
-		portTextField.setName("portTextField"); // NOI18N
-		postPaneScrollPane.setViewportView(portTextField);
+        createServerButton.setText("Host game"); // NOI18N
+        createServerButton.setName("createServerButton"); // NOI18N
 
-		add(postPaneScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(64, 236, 41, 23));
-
-		portLabel.setText("Port:"); // NOI18N
-		portLabel.setName("portLabel"); // NOI18N
-		add(portLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 236, -1, 23));
-
-		createServerButton.setText("Host game"); // NOI18N
-		createServerButton.setName("createServerButton"); // NOI18N
-		add(createServerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(111, 236, -1, -1));
-	}// </editor-fold>
-	// Variables declaration - do not modify
-	public static javax.swing.JButton connectToServerButton;
-	public static javax.swing.JButton createServerButton;
-	public static javax.swing.JButton editPuzzleButton;
-	public static javax.swing.JLabel mainMenuLabel;
-	public static javax.swing.JSeparator mainSeparator;
-	public static javax.swing.JButton playButton;
-	public static javax.swing.JLabel playGameOnServer;
-	public static javax.swing.JLabel playLocalGameLabel;
-	public static javax.swing.JLabel portLabel;
-	public static javax.swing.JTextPane portTextField;
-	public static javax.swing.JScrollPane postPaneScrollPane;
-	public static javax.swing.JList puzzleList;
-	public static javax.swing.JLabel puzzleListDescriptionLabel;
-	public static javax.swing.JScrollPane puzzleListScrollPane;
-	public static javax.swing.JLabel serverAddressLabel;
-	public static javax.swing.JScrollPane serverAddressScrollPane;
-	public static javax.swing.JTextPane serverAddressTextBox;
-	// End of variables declaration
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(mainMenuLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(playLocalGameLabel)
+                            .addComponent(puzzleListDescriptionLabel)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(editPuzzleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(portLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(portPaneScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(createServerButton))
+                            .addComponent(puzzleListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addComponent(mainSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(playGameOnServer)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(serverAddressLabel)
+                                .addGap(13, 13, 13)
+                                .addComponent(serverAddressScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+                            .addComponent(connectToServerButton))
+                        .addContainerGap())))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(mainMenuLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(playGameOnServer)
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(serverAddressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(7, 7, 7)
+                                .addComponent(connectToServerButton))
+                            .addComponent(serverAddressScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(playLocalGameLabel)
+                        .addGap(6, 6, 6)
+                        .addComponent(puzzleListDescriptionLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(puzzleListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(editPuzzleButton)
+                            .addComponent(playButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(portPaneScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 25, 25)
+                            .addComponent(createServerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, 23)
+                            .addComponent(portLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, 25))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(mainSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
+        );
+    }// </editor-fold>
+    // Variables declaration - do not modify
+    public static javax.swing.JButton connectToServerButton;
+    public static javax.swing.JButton createServerButton;
+    public static javax.swing.JButton editPuzzleButton;
+    public static javax.swing.JLabel mainMenuLabel;
+    public static javax.swing.JSeparator mainSeparator;
+    public static javax.swing.JButton playButton;
+    public static javax.swing.JLabel playGameOnServer;
+    public static javax.swing.JLabel playLocalGameLabel;
+    public static javax.swing.JLabel portLabel;
+    public static javax.swing.JTextPane portTextField;
+    public static javax.swing.JScrollPane portPaneScrollPane;
+    public static javax.swing.JList puzzleList;
+    public static javax.swing.JLabel puzzleListDescriptionLabel;
+    public static javax.swing.JScrollPane puzzleListScrollPane;
+    public static javax.swing.JLabel serverAddressLabel;
+    public static javax.swing.JScrollPane serverAddressScrollPane;
+    public static javax.swing.JTextPane serverAddressTextBox;
+    // End of variables declaration
 }
