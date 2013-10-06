@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import common.BoardUpdateEvent;
+import common.PuzzleField;
 
 import client.ClientMain;
 import client.utils.Point;
@@ -17,12 +18,14 @@ public class InputHandler {
 	public float x = -6.5f;
 	public float y = -4.5f;
 	
-	private MouseHandler mouseHandler;
-	private KeyboardHandler keyboardHandler;
-	private SelectionHandler selectionHandler;
+	private final MouseHandler mouseHandler;
+	private final KeyboardHandler keyboardHandler;
+	private final SelectionHandler selectionHandler;
+	private final ClientMain main;
 	
 	public InputHandler(ClientMain main)
 	{
+		this.main = main;
 		this.mouseHandler = new MouseHandler(this);
 		this.keyboardHandler = new KeyboardHandler(main);
 		this.selectionHandler = new SelectionHandler(main);
@@ -51,7 +54,10 @@ public class InputHandler {
 	
 	public void setField(BoardUpdateEvent event)
 	{
-		this.selectionHandler.updateCharacter(event);
+		PuzzleField field = this.main.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
+		field.setNewCharacterValue(event.getCharacterValue());
+		field.setFieldTextColour(event.getColour());
+		this.main.puzzleDrawer.updateFeatureDisplayList();
 	}
 
 	public void init() {

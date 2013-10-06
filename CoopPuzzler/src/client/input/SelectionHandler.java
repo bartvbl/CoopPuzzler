@@ -4,61 +4,100 @@ import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.util.Timer;
 
 import client.ClientMain;
 import client.ClientWindow;
 import client.GameSettings;
 import client.OperationMode;
-import client.drawing.TextureLibrary;
+import client.input.selection.EditorSelectionHandler;
+import client.input.selection.PuzzleSelectionHandler;
 import client.utils.CoordConverter;
 import client.utils.Point;
 
-import common.BoardUpdateEvent;
-import common.FontColour;
-import common.PuzzleField;
-import common.PuzzleTable;
-import common.ReferenceUpdater;
-
 public class SelectionHandler {
-	private final PuzzleTable puzzleTable;
 	private final ClientMain main;
 	private final ClientWindow window;
-	private final ArrayList<Point> currentSelection = new ArrayList<Point>();
 	
-	private int mapNumRows, mapNumColumns;
-	private boolean isTyping = false;
+	private PuzzleSelectionHandler puzzleHandler;
+	private EditorSelectionHandler editorHandler;
+
+	private boolean wasMouseDown = false;
+	private boolean isSelected = false;
+	private ArrayList<Point> currentSelection = new ArrayList<Point>();
 	
 	public SelectionHandler(ClientMain main)
 	{
-		this.puzzleTable = main.puzzleTable;
 		this.window = main.window;
 		this.main = main;
+
+		this.puzzleHandler = new PuzzleSelectionHandler(main);
+		this.editorHandler = new EditorSelectionHandler(main);
 	}
 
 	public void init()
 	{
-		this.mapNumColumns = main.puzzleTable.puzzleTable[0].length;
-		this.mapNumRows = main.puzzleTable.puzzleTable.length;
+		int numMapColumns = main.puzzleTable.puzzleTable[0].length;
+		int numMapRows = main.puzzleTable.puzzleTable.length;	
+		Point puzzleDimensions = new Point(numMapRows, numMapColumns);
+		this.puzzleHandler.init(puzzleDimensions);
+		this.editorHandler.init(puzzleDimensions);
+	}
+	
+	public void handleSelection(double zoomLevel, double mouseX, double mouseY) {
+		Point mapCoordinates = getMapCoordinates(mouseX, mouseY, zoomLevel);
+		if(isSelected) {
+			if(cancelSelectionRequested()) {
+				isSelected = false;
+			} else {
+				handleSelected(mapCoordinates);
+			}
+		} else {
+			if(wasClicked()) {
+				isSelected = true;
+			} else {
+				handleHovering(mapCoordinates);
+			}
+		}
+	}
+	
+	private void handleHovering(Point mapCoordinates) {
+		if(isEditorMode()) {
+			currentSelection = editorHandler.getCurrentSelection(mapCoordinates);
+		} else {
+			currentSelection = puzzleHandler.getCurrentSelection(mapCoordinates);
+		}
+	}
+	
+	private void handleSelected(Point mapCoordinates) {
+		if(isEditorMode()) {
+			isSelected = editorHandler.handleSelection(mapCoordinates);
+		} else {
+			isSelected = puzzleHandler.handleSelection(mapCoordinates);
+		}
 	}
 
-	public void updateCharacter(BoardUpdateEvent event)
-	{
-		PuzzleField field = this.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
-		field.setNewCharacterValue(event.getCharacterValue());
-		field.setFieldTextColour(event.getColour());
-		this.main.puzzleDrawer.updateFeatureDisplayList();
+	private boolean isEditorMode() {
+		return GameSettings.operationMode == OperationMode.EDITOR;
 	}
 
-	public void handleSelection(float zoomLevel, float x, float y) {
-		
+	private boolean wasClicked() {
+		if((Mouse.isButtonDown(0) == false) && (wasMouseDown == true)) {
+			this.wasMouseDown = false;
+			return true;
+		}
+		if(Mouse.isButtonDown(0)) {
+			this.wasMouseDown = true;
+		} else {
+			this.wasMouseDown = false;
+		}
+		return false;
 	}
 
 	private boolean cancelSelectionRequested() {
 		return (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) || (Mouse.isButtonDown(1)) || (Mouse.isButtonDown(0));
 	}
 
-	public Point getMapCoordinates(double x, double y, float zoomLevel)
+	public Point getMapCoordinates(double x, double y, double zoomLevel)
 	{
 		Point coords = CoordConverter.getMapCoordinates(x, y, zoomLevel, this.window.windowWidth, this.window.windowHeight);
 		return coords.displaceBy(new Point(-x, -y));
@@ -69,6 +108,6 @@ public class SelectionHandler {
 	}
 	
 	public boolean isTyping() {
-		return this.isTyping;
+		return this.isSelected && !isEditorMode();
 	}
 }
