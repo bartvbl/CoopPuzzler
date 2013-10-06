@@ -2,8 +2,8 @@
 iiiiiiiiii
 iiiiii  ii
 ii*  *  ii
-ii **  iii
-ii* *** ii
+ii ** *iii
+ii* iii ii
  i     *ii
 iiii i iii
 ii iiiiiii

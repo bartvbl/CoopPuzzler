@@ -85,8 +85,8 @@ public class PuzzleDrawer {
 		}
 		glEnd();
 		
-		if(this.inputHandler.isTyping())
-		{			
+		if(this.inputHandler.isTyping() && this.inputHandler.getSelectionArray().length > 0)
+		{
 			Point cursorLocation = selectionList[0];
 			glColor4d(0, 0, 0, 1);
 			glLineWidth(4);
