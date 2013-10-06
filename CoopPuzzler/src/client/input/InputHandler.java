@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.util.Point;
 
 import common.BoardUpdateEvent;
 
 import client.ClientMain;
+import client.utils.Point;
 
 import static org.lwjgl.opengl.GL11.*;
 

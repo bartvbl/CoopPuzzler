@@ -3,13 +3,13 @@ package client.drawing;
 import java.util.ArrayList;
 
 import org.lwjgl.util.Color;
-import org.lwjgl.util.Point;
 
 import client.ClientMain;
 import client.OperationMode;
 import client.gl.NumberDrawer;
 import client.gl.Texture;
 import client.input.InputHandler;
+import client.utils.Point;
 import common.FontColour;
 import common.PuzzleField;
 import common.PuzzleTable;
@@ -78,10 +78,10 @@ public class PuzzleDrawer {
 			} else {
 				glColor4d(1.0, 0.797, 0.0, 0.5);
 			}
-			this.drawVertex(FIELD_SIZE * point.getX(), FIELD_SIZE * point.getY());
-			this.drawVertex(FIELD_SIZE * point.getX() + FIELD_SIZE, FIELD_SIZE * point.getY());
-			this.drawVertex(FIELD_SIZE * point.getX() + FIELD_SIZE, FIELD_SIZE * point.getY() + FIELD_SIZE);
-			this.drawVertex(FIELD_SIZE * point.getX(), FIELD_SIZE * point.getY() + FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * point.x, FIELD_SIZE * point.y);
+			this.drawVertex(FIELD_SIZE * point.x + FIELD_SIZE, FIELD_SIZE * point.y);
+			this.drawVertex(FIELD_SIZE * point.x + FIELD_SIZE, FIELD_SIZE * point.y + FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * point.x, FIELD_SIZE * point.y + FIELD_SIZE);
 		}
 		glEnd();
 		
@@ -91,20 +91,20 @@ public class PuzzleDrawer {
 			glColor4d(0, 0, 0, 1);
 			glLineWidth(4);
 			glBegin(GL_LINES);
-			this.drawVertex(FIELD_SIZE * cursorLocation.getX(), FIELD_SIZE * cursorLocation.getY());
-			this.drawVertex(FIELD_SIZE * cursorLocation.getX() + FIELD_SIZE, FIELD_SIZE * cursorLocation.getY());
-			this.drawVertex(FIELD_SIZE * cursorLocation.getX() + FIELD_SIZE, FIELD_SIZE * cursorLocation.getY());
-			this.drawVertex(FIELD_SIZE * cursorLocation.getX() + FIELD_SIZE, FIELD_SIZE * cursorLocation.getY() + FIELD_SIZE);
-			this.drawVertex(FIELD_SIZE * cursorLocation.getX() + FIELD_SIZE, FIELD_SIZE * cursorLocation.getY() + FIELD_SIZE);
-			this.drawVertex(FIELD_SIZE * cursorLocation.getX(), FIELD_SIZE * cursorLocation.getY() + FIELD_SIZE);
-			this.drawVertex(FIELD_SIZE * cursorLocation.getX(), FIELD_SIZE * cursorLocation.getY() + FIELD_SIZE);
-			this.drawVertex(FIELD_SIZE * cursorLocation.getX(), FIELD_SIZE * cursorLocation.getY());
+			this.drawVertex(FIELD_SIZE * cursorLocation.x, FIELD_SIZE * cursorLocation.y);
+			this.drawVertex(FIELD_SIZE * cursorLocation.x + FIELD_SIZE, FIELD_SIZE * cursorLocation.y);
+			this.drawVertex(FIELD_SIZE * cursorLocation.x + FIELD_SIZE, FIELD_SIZE * cursorLocation.y);
+			this.drawVertex(FIELD_SIZE * cursorLocation.x + FIELD_SIZE, FIELD_SIZE * cursorLocation.y + FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * cursorLocation.x + FIELD_SIZE, FIELD_SIZE * cursorLocation.y + FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * cursorLocation.x, FIELD_SIZE * cursorLocation.y + FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * cursorLocation.x, FIELD_SIZE * cursorLocation.y + FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * cursorLocation.x, FIELD_SIZE * cursorLocation.y);
 			glEnd();
 		}
 	}
 
-	private void drawVertex(float x, float y)
+	private void drawVertex(double x, double y)
 	{
-		glVertex2f(x, y);
+		glVertex2d(x, y);
 	}
 }

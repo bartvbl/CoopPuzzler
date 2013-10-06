@@ -3,11 +3,11 @@ package client.utils;
 import org.lwjgl.input.Mouse;
 
 public class CoordConverter {
-	public static float[] getMapCoordinates(float x, float y, float zoomLevel, float windowWidth, float windowHeight)
+	public static Point getMapCoordinates(double x, double y, double zoomLevel, double windowWidth, double windowHeight)
 	{
-		float aspect = windowWidth / windowHeight;
-		float xCoord = Mouse.getX();
-		float yCoord = Mouse.getY();
+		double aspect = windowWidth / windowHeight;
+		double xCoord = Mouse.getX();
+		double yCoord = Mouse.getY();
 		xCoord /= windowHeight/2;
 		xCoord -= 1;
 		xCoord /= zoomLevel;
@@ -17,6 +17,6 @@ public class CoordConverter {
 		yCoord -= 1;
 		yCoord /= zoomLevel;
 		
-		return new float[]{xCoord, yCoord};
+		return new Point(xCoord, yCoord);
 	}
 }

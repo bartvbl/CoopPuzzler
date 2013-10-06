@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.util.Point;
 import org.lwjgl.util.Timer;
 
 import client.ClientMain;
@@ -13,6 +12,7 @@ import client.GameSettings;
 import client.OperationMode;
 import client.drawing.TextureLibrary;
 import client.utils.CoordConverter;
+import client.utils.Point;
 
 import common.BoardUpdateEvent;
 import common.FontColour;
@@ -58,12 +58,10 @@ public class SelectionHandler {
 		return (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) || (Mouse.isButtonDown(1)) || (Mouse.isButtonDown(0));
 	}
 
-	public float[] getMapCoordinates(float x, float y, float zoomLevel)
+	public Point getMapCoordinates(double x, double y, float zoomLevel)
 	{
-		float[] coords = CoordConverter.getMapCoordinates(x, y, zoomLevel, this.window.windowWidth, this.window.windowHeight);
-		coords[0] -= x;
-		coords[1] -= y;
-		return coords;
+		Point coords = CoordConverter.getMapCoordinates(x, y, zoomLevel, this.window.windowWidth, this.window.windowHeight);
+		return coords.displaceBy(new Point(-x, -y));
 	}
 
 	public Point[] getSelectionArray() {
