@@ -60,7 +60,7 @@ public class PuzzleDrawer {
 	
 
 	private void drawSelection(PuzzleField[][] table) {
-		ArrayList<Point> selectionList = this.inputHandler.getSelectionArray();
+		Point[] selectionList = this.inputHandler.getSelectionArray();
 		glBegin(GL_QUADS);
 		if(this.inputHandler.isTyping())
 		{
@@ -69,29 +69,25 @@ public class PuzzleDrawer {
 			glColor4d(1.0, 0.797, 0.0, 0.5);
 		}
 		
-		int cursorIndex = this.inputHandler.getSelectionCursorIndex();
-		
-		for(int i = 0; i < selectionList.size(); i++)
+		for(int i = 0; i < selectionList.length; i++)
 		{
-			Point point = selectionList.get(i);
+			Point point = selectionList[i];
 			if(this.inputHandler.isTyping())
 			{
 				glColor4d(1.0, 0.797, 0.0, 1.0);
 			} else {
 				glColor4d(1.0, 0.797, 0.0, 0.5);
 			}
-			if(i >= cursorIndex) {				
-				this.drawVertex(FIELD_SIZE * point.getX(), FIELD_SIZE * point.getY());
-				this.drawVertex(FIELD_SIZE * point.getX() + FIELD_SIZE, FIELD_SIZE * point.getY());
-				this.drawVertex(FIELD_SIZE * point.getX() + FIELD_SIZE, FIELD_SIZE * point.getY() + FIELD_SIZE);
-				this.drawVertex(FIELD_SIZE * point.getX(), FIELD_SIZE * point.getY() + FIELD_SIZE);
-			}
+			this.drawVertex(FIELD_SIZE * point.getX(), FIELD_SIZE * point.getY());
+			this.drawVertex(FIELD_SIZE * point.getX() + FIELD_SIZE, FIELD_SIZE * point.getY());
+			this.drawVertex(FIELD_SIZE * point.getX() + FIELD_SIZE, FIELD_SIZE * point.getY() + FIELD_SIZE);
+			this.drawVertex(FIELD_SIZE * point.getX(), FIELD_SIZE * point.getY() + FIELD_SIZE);
 		}
 		glEnd();
 		
 		if(this.inputHandler.isTyping())
 		{			
-			Point cursorLocation = selectionList.get(cursorIndex);
+			Point cursorLocation = selectionList[0];
 			glColor4d(0, 0, 0, 1);
 			glLineWidth(4);
 			glBegin(GL_LINES);
