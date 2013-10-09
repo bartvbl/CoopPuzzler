@@ -91,7 +91,7 @@ public class SelectionHandler {
 						if(this.previousChar == 'i') {
 							this.selectionCursor++;
 						}
-						if(this.selectionArray.size() == 0) {
+						if(this.selectionCursor >= this.selectionArray.size()) {
 							this.isTyping = false;
 							return;
 						}
