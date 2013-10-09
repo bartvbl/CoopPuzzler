@@ -58,13 +58,13 @@ public class BoardDrawer {
 				if(table[i][j].hasIgnoreReference)
 				{
 					glTexCoord2f(0,0);
-					drawVertex(FIELD_SIZE * j, FIELD_SIZE * (table.length - i-1));
+					drawVertex(FIELD_SIZE * j, FIELD_SIZE * i);
 					glTexCoord2f(1,0);
-					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * (table.length - i-1));
+					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * i);
 					glTexCoord2f(1,1);
-					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * (table.length - i-1) + FIELD_SIZE);
+					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * i + FIELD_SIZE);
 					glTexCoord2f(0,1);
-					drawVertex(FIELD_SIZE * j, FIELD_SIZE * (table.length - i-1) + FIELD_SIZE);
+					drawVertex(FIELD_SIZE * j, FIELD_SIZE * i + FIELD_SIZE);
 				}
 			}
 		}
@@ -82,10 +82,10 @@ public class BoardDrawer {
 			{
 				if(table[i][j].isFilled)
 				{
-					drawVertex(FIELD_SIZE * j, FIELD_SIZE * (table.length - i-1));
-					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * (table.length - i-1));
-					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * (table.length - i-1) + FIELD_SIZE);
-					drawVertex(FIELD_SIZE * j, FIELD_SIZE * (table.length - i-1) + FIELD_SIZE);
+					drawVertex(FIELD_SIZE * j, FIELD_SIZE * i);
+					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * i);
+					drawVertex(FIELD_SIZE * j + FIELD_SIZE, FIELD_SIZE * i + FIELD_SIZE);
+					drawVertex(FIELD_SIZE * j, FIELD_SIZE * i + FIELD_SIZE);
 				}
 			}
 		}
@@ -128,8 +128,8 @@ public class BoardDrawer {
 		glColor3f(0.0f, 0.0f, 0.0f);
 		for(int i = 0; i <= table.length; i++)
 		{
-			drawVertex(0, (table.length - i)*FIELD_SIZE);
-			drawVertex(FIELD_SIZE * table[0].length, (table.length - i)*FIELD_SIZE);
+			drawVertex(0, i*FIELD_SIZE);
+			drawVertex(FIELD_SIZE * table[0].length, i*FIELD_SIZE);
 		}
 		for(int j = 0; j <= table[0].length; j++)
 		{
@@ -154,19 +154,21 @@ public class BoardDrawer {
 					Texture tex = textureLibrary.getTextTexture(table[i][j].getCurrentValueOfField());
 					glBindTexture(GL_TEXTURE_2D, tex.texRef);
 					Color colour = table[i][j].getFieldTextColour().getColour();
+					
 					float red = ((float)colour.getRed())/255;
 					float green = ((float)colour.getGreen())/255;
 					float blue = ((float)colour.getBlue())/255;
+					
 					glColor4f(red, green, blue, 1.0f);
 					glBegin(GL_QUADS);
 					glTexCoord2f(1,1);
-					drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET + XOFFSET, (table.length - i-1) * FIELD_SIZE + OFFSET + YOFFSET);
+					drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET + XOFFSET, i * FIELD_SIZE + OFFSET + YOFFSET);
 					glTexCoord2f(0,1);
-					drawVertex(j * FIELD_SIZE + OFFSET + XOFFSET, (table.length - i-1) * FIELD_SIZE + OFFSET + YOFFSET);
+					drawVertex(j * FIELD_SIZE + OFFSET + XOFFSET, i * FIELD_SIZE + OFFSET + YOFFSET);
 					glTexCoord2f(0,0);
-					drawVertex(j * FIELD_SIZE + OFFSET + XOFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET + YOFFSET);
+					drawVertex(j * FIELD_SIZE + OFFSET + XOFFSET, i * FIELD_SIZE + FIELD_SIZE - OFFSET + YOFFSET);
 					glTexCoord2f(1,0);
-					drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET + XOFFSET, (table.length - i-1) * FIELD_SIZE + FIELD_SIZE - OFFSET + YOFFSET);
+					drawVertex(j * FIELD_SIZE + FIELD_SIZE - OFFSET + XOFFSET, i * FIELD_SIZE + FIELD_SIZE - OFFSET + YOFFSET);
 					glEnd();
 					
 				}

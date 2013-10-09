@@ -3,7 +3,8 @@ package common;
 public class ReferenceUpdater {
 	public static void updateReferences(PuzzleField[][] table) {
 		int count = 0;
-		for(int i = 0; i < table.length; i++) {
+		int rowCount = table.length;
+		for(int i = rowCount - 1; i >= 0; i--) {
 			for(int j = 0; j < table[0].length; j++) {
 				if(!table[i][j].isFilled && !table[i][j].hasIgnoreReference && fieldHasReference(table, i, j)) {
 					count++;
@@ -16,8 +17,8 @@ public class ReferenceUpdater {
 	}
 	
 	public static boolean fieldHasReference(char[][] board, int row, int column) {
-		boolean north = fieldIsInBounds(board, row-1, column);
-		boolean south = fieldIsInBounds(board, row+1, column);
+		boolean north = fieldIsInBounds(board, row+1, column);
+		boolean south = fieldIsInBounds(board, row-1, column);
 		boolean east = fieldIsInBounds(board, row, column+1);
 		boolean west = fieldIsInBounds(board, row, column-1);
 		return ((!north && south) || (!west && east));
@@ -43,8 +44,8 @@ public class ReferenceUpdater {
 	}
 	
 	public static boolean fieldHasReference(PuzzleField[][] board, int row, int column) {
-		boolean north = fieldIsInBounds(board, row-1, column);
-		boolean south = fieldIsInBounds(board, row+1, column);
+		boolean north = fieldIsInBounds(board, row+1, column);
+		boolean south = fieldIsInBounds(board, row-1, column);
 		boolean east = fieldIsInBounds(board, row, column+1);
 		boolean west = fieldIsInBounds(board, row, column-1);
 		return ((!north && south) || (!west && east));

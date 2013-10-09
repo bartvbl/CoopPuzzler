@@ -25,12 +25,6 @@ public abstract class FieldSelectionHandler {
 			return new ArrayList<Point>();
 		}
 	}
-	
-	protected Point getSelectedField(Point mouseLocation) {
-		int row = (int) (this.mapBounds.row - mouseLocation.y);
-		int column = (int) mouseLocation.x;
-		return new Point(row, column);
-	}
 
 	protected abstract ArrayList<Point> getSelectedFields(Point mapCoordinates);
 	public abstract boolean handleSelection(Point mapCoordinates);

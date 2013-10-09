@@ -24,30 +24,29 @@ public class PuzzleSelectionHandler extends FieldSelectionHandler {
 	protected ArrayList<Point> getSelectedFields(Point mapCoordinates) {
 		ArrayList<Point> selection = new ArrayList<Point>();
 
-		Point puzzleLocation = this.getSelectedField(mapCoordinates);
-		int row = (int) puzzleLocation.row;
-		int column = (int) puzzleLocation.column;
+		int x = (int) mapCoordinates.x;
+		int y = (int) mapCoordinates.y;
 		
-		if(this.main.puzzleTable.fieldIsOccupied(row, column))
+		if(this.main.puzzleTable.fieldIsOccupied(x, y))
 		{
 			return selection;
 		}
 		
-		selection.add(new Point((int)mapCoordinates.x, (int)mapCoordinates.y));
+		selection.add(new Point(x, y));
 		double remainderX = mapCoordinates.x % 1;
 		double remainderY = mapCoordinates.y % 1;
 		//lower quadrant
 		if((remainderX > remainderY) && (remainderX < (1 - remainderY)))
 		{
-			int tracker = this.mapNumRows - (int)mapCoordinates.y;
+			int tracker = y;
 			int counter = 1;
 			while(tracker < this.mapNumRows)
 			{
-				if(this.main.puzzleTable.fieldIsOccupied(tracker, (int) mapCoordinates.x))
+				if(this.main.puzzleTable.fieldIsOccupied(tracker, y))
 				{
 					break;
 				}
-				selection.add(new Point((int)mapCoordinates.x,(int)mapCoordinates.y-counter));
+				selection.add(new Point(x, y - counter));
 				tracker++;
 				counter++;
 			}
@@ -55,15 +54,15 @@ public class PuzzleSelectionHandler extends FieldSelectionHandler {
 		//right quadrant
 		if((remainderX > remainderY) && (remainderX > (1 - remainderY)))
 		{
-			int tracker = (int)mapCoordinates.x + 1;
+			int tracker = x + 1;
 			int counter = 1;
 			while(tracker < this.mapNumColumns)
 			{
-				if(this.main.puzzleTable.fieldIsOccupied((int) this.mapNumRows - (int)mapCoordinates.y-1,tracker))
+				if(this.main.puzzleTable.fieldIsOccupied(x,tracker))
 				{
 					break;
 				}
-				selection.add(new Point((int)mapCoordinates.x+counter,(int)mapCoordinates.y));
+				selection.add(new Point(x + counter, y));
 				tracker++;
 				counter++;
 			}

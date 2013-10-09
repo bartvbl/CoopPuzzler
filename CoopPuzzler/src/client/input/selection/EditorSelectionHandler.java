@@ -23,11 +23,10 @@ public class EditorSelectionHandler extends FieldSelectionHandler {
 
 	@Override
 	public boolean handleSelection(Point mapCoordinates) {
-		Point puzzleLocation = this.getSelectedField(mapCoordinates);
-		int row = (int) puzzleLocation.row;
-		int column = (int) puzzleLocation.column;
+		int x = (int) mapCoordinates.x;
+		int y = (int) mapCoordinates.y;
 		
-		PuzzleField puzzleField = this.main.puzzleTable.puzzleTable[row][column];
+		PuzzleField puzzleField = this.main.puzzleTable.puzzleTable[x][y];
 		if((puzzleField.isFilled == false) && (puzzleField.hasIgnoreReference == false)) {
 			puzzleField.isFilled = true;
 			puzzleField.hasIgnoreReference = false;

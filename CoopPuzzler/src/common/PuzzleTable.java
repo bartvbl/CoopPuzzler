@@ -24,29 +24,30 @@ public class PuzzleTable implements BoardUpdateListener{
 		this.puzzleTable = new PuzzleField[rows][columns];
 	}
 	
-	public void createFieldAt(String message, int row, int column)
+	public void createFieldAt(String message, int x, int y)
 	{
-		this.puzzleTable[row][column] = new PuzzleField(message);
+		this.puzzleTable[x][y] = new PuzzleField(message);
 	}
 	
-	public boolean fieldIsOccupied(int row, int column)
+	public boolean fieldIsOccupied(int x, int y)
 	{
-		if(row < 0)
+		if(x < 0)
 		{
 			return false;
-		} else if(row >= this.puzzleTable.length)
+		} else if(x >= this.puzzleTable.length)
 		{
 			return false;
-		} else if (column < 0)
+		} else if (y < 0)
 		{
 			return false;
-		} else if (column >= this.puzzleTable[0].length)
+		} else if (y >= this.puzzleTable[0].length)
 		{
 			return false;
 		} else {
-			return this.puzzleTable[row][column].isFilled;
+			return this.puzzleTable[x][y].isFilled;
 		}
 	}
+	
 	public BoardUpdateEvent getFieldAsBoardUpdateMessage(int row, int column)
 	{
 		return new BoardUpdateEvent(row, column, this.puzzleTable[row][column].getCurrentValueOfField(), this.puzzleTable[row][column].getFieldTextColour());

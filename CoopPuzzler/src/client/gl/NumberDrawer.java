@@ -34,7 +34,7 @@ public class NumberDrawer {
 		{
 			char currentChar = num.charAt(i);
 			int currentValue = (int)currentChar - 48;
-			float baseY = ((table.length - row-1) * FIELD_SIZE) + 1 + OFFSETY;
+			float baseY = (row * FIELD_SIZE) + 1 + OFFSETY;
 			float baseX = column * FIELD_SIZE + OFFSETX + i*SEPARATION;
 			if(currentValue <= 4)
 			{
