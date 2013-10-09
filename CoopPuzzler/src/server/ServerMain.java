@@ -71,7 +71,7 @@ public class ServerMain implements Runnable{
 	public synchronized boolean processMessage(BoardUpdateEvent event)
 	{
 		if(!validateField(event)){return false;}
-		PuzzleField targetField = this.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
+		PuzzleField targetField = this.puzzleTable.puzzleTable[event.getX()][event.getY()];
 		if(targetField.isFilled){return false;}
 		targetField.setFieldTextColour(event.getColour());
 		targetField.setNewCharacterValue(event.getCharacterValue());
@@ -82,10 +82,10 @@ public class ServerMain implements Runnable{
 	}
 
 	private boolean validateField(BoardUpdateEvent event) {
-		return event.getRow()>= 0 &&
-		event.getRow() <= this.puzzleTable.puzzleTable.length &&
-		event.getColumn() >= 0 &&
-		event.getColumn() <= this.puzzleTable.puzzleTable[event.getRow()].length;
+		return event.getX()>= 0 &&
+		event.getX() <= this.puzzleTable.puzzleTable.length &&
+		event.getY() >= 0 &&
+		event.getY() <= this.puzzleTable.puzzleTable[event.getX()].length;
 	}
 
 	public synchronized void removeHandler(int handlerID){

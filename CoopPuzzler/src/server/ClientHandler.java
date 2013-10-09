@@ -111,11 +111,11 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 		PuzzleField[][] table = this.main.puzzleTable.puzzleTable;
 		output.write(BOARD_SIZE + " " + table.length + " " + table[0].length);
 		flush();
-		for(int row = 0; row < table.length; row++)
+		for(int x = 0; x < table.length; x++)
 		{
-			for(int column = 0; column < table[0].length; column++)
+			for(int y = 0; y < table[0].length; y++)
 			{
-				output.write(BOARD_FIELD + " " + row + " " + column + " " + table[row][column].toString());
+				output.write(BOARD_FIELD + " " + x + " " + y + " " + table[x][y].toString());
 				output.newLine();
 			}
 //			output.flush(); //periodic flush

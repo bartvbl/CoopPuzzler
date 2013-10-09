@@ -9,19 +9,19 @@ public class PuzzleTable implements BoardUpdateListener{
 		this.puzzleTable = PuzzleLoader.loadTableFromFile(src);
 	}
 	
-	public void generateEmptyMap(int rows, int columns) {
-		this.createNewMap(rows, columns);
-		for(int i = 0; i < rows; i++) {
-			for(int j = 0; j < columns; j++) {
+	public void generateEmptyMap(int sizeX, int sizeY) {
+		this.createNewMap(sizeX, sizeY);
+		for(int i = 0; i < sizeX; i++) {
+			for(int j = 0; j < sizeY; j++) {
 				this.puzzleTable[i][j] = new PuzzleField(false, -1, false);
 			}
 		}
 		ReferenceUpdater.updateReferences(this.puzzleTable);
 	}
 	
-	public void createNewMap(int rows, int columns)
+	public void createNewMap(int sizeX, int sizey)
 	{
-		this.puzzleTable = new PuzzleField[rows][columns];
+		this.puzzleTable = new PuzzleField[sizeX][sizey];
 	}
 	
 	public void createFieldAt(String message, int x, int y)
@@ -48,15 +48,15 @@ public class PuzzleTable implements BoardUpdateListener{
 		}
 	}
 	
-	public BoardUpdateEvent getFieldAsBoardUpdateMessage(int row, int column)
+	public BoardUpdateEvent getFieldAsBoardUpdateMessage(int x, int y)
 	{
-		return new BoardUpdateEvent(row, column, this.puzzleTable[row][column].getCurrentValueOfField(), this.puzzleTable[row][column].getFieldTextColour());
+		return new BoardUpdateEvent(x, y, this.puzzleTable[x][y].getCurrentValueOfField(), this.puzzleTable[x][y].getFieldTextColour());
 	}
 	
 	@Override
 	public void boardUpdated(BoardUpdateEvent event) {
-		puzzleTable[event.getRow()][event.getColumn()].setNewCharacterValue(event.getCharacterValue());
-		puzzleTable[event.getRow()][event.getColumn()].setFieldTextColour(event.getColour());
+		puzzleTable[event.getX()][event.getY()].setNewCharacterValue(event.getCharacterValue());
+		puzzleTable[event.getX()][event.getY()].setFieldTextColour(event.getColour());
 	}
 }
 

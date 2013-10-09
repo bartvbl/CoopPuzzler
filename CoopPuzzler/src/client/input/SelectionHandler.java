@@ -36,9 +36,9 @@ public class SelectionHandler {
 
 	public void init()
 	{
-		int numMapColumns = main.puzzleTable.puzzleTable[0].length;
-		int numMapRows = main.puzzleTable.puzzleTable.length;	
-		Point puzzleDimensions = new Point(numMapRows, numMapColumns);
+		int mapSizeX = main.puzzleTable.puzzleTable.length;	
+		int mapSizeY = main.puzzleTable.puzzleTable[0].length;
+		Point puzzleDimensions = new Point(mapSizeX, mapSizeY);
 		this.puzzleHandler.init(puzzleDimensions);
 		this.editorHandler.init(puzzleDimensions);
 	}

@@ -37,15 +37,15 @@ public class PuzzleSaver {
 			BufferedWriter writer = new BufferedWriter(fileWriter);
 			writer.write(table.length + "x" + table[0].length);
 			writer.newLine();
-			for(int row = 0; row < this.table.length; row++)
+			for(int x = 0; x < this.table.length; x++)
 			{
-				for(int column = 0; column < this.table[0].length; column++)
+				for(int y = 0; y < this.table[0].length; y++)
 				{
-					if(this.table[row][column].isFilled)
+					if(this.table[x][y].isFilled)
 					{
 						writer.append('*');
 					} else {
-						if(this.table[row][column].hasIgnoreReference)
+						if(this.table[x][y].hasIgnoreReference)
 						{
 							writer.append('i');
 						} else {
@@ -57,12 +57,12 @@ public class PuzzleSaver {
 			}
 			writer.write("save");
 			writer.newLine();
-			for(int row = 0; row < this.table.length; row++)
+			for(int x = 0; x < this.table.length; x++)
 			{
-				for(int column = 0; column < this.table[0].length; column++)
+				for(int y = 0; y < this.table[0].length; y++)
 				{
-					writer.append(""+this.table[row][column].getFieldTextColour().getColourIndex());
-					writer.append(this.table[row][column].getCurrentValueOfField());
+					writer.append(""+this.table[x][y].getFieldTextColour().getColourIndex());
+					writer.append(this.table[x][y].getCurrentValueOfField());
 				}
 				writer.newLine();
 			}

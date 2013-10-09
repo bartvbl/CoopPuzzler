@@ -54,7 +54,7 @@ public class InputHandler {
 	
 	public void setField(BoardUpdateEvent event)
 	{
-		PuzzleField field = this.main.puzzleTable.puzzleTable[event.getRow()][event.getColumn()];
+		PuzzleField field = this.main.puzzleTable.puzzleTable[event.getX()][event.getY()];
 		field.setNewCharacterValue(event.getCharacterValue());
 		field.setFieldTextColour(event.getColour());
 		this.main.puzzleDrawer.updateFeatureDisplayList();

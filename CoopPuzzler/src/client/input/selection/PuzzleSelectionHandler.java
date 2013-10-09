@@ -8,7 +8,7 @@ import client.ClientMain;
 import client.utils.Point;
 
 public class PuzzleSelectionHandler extends FieldSelectionHandler {
-	private int mapNumRows, mapNumColumns;
+	private int mapSizeX, mapSizeY;
 	private boolean isTyping = false;
 	
 	
@@ -40,7 +40,7 @@ public class PuzzleSelectionHandler extends FieldSelectionHandler {
 		{
 			int tracker = y;
 			int counter = 1;
-			while(tracker < this.mapNumRows)
+			while(tracker >= 0)
 			{
 				if(this.main.puzzleTable.fieldIsOccupied(tracker, y))
 				{
@@ -48,7 +48,7 @@ public class PuzzleSelectionHandler extends FieldSelectionHandler {
 				}
 				selection.add(new Point(x, y - counter));
 				tracker++;
-				counter++;
+				counter--;
 			}
 		}
 		//right quadrant
@@ -56,7 +56,7 @@ public class PuzzleSelectionHandler extends FieldSelectionHandler {
 		{
 			int tracker = x + 1;
 			int counter = 1;
-			while(tracker < this.mapNumColumns)
+			while(tracker < this.mapSizeX)
 			{
 				if(this.main.puzzleTable.fieldIsOccupied(x,tracker))
 				{

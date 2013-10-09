@@ -15,8 +15,8 @@ public class KeyboardHandler {
 	private final ClientMain main;
 	private ClientWindow window;
 	
-	private int mapNumRows;
-	private int mapNumColumns;
+	private int mapSizeX;
+	private int mapSizeY;
 	
 	public KeyboardHandler(ClientMain main) {
 		this.main = main;
@@ -25,8 +25,8 @@ public class KeyboardHandler {
 	
 	public void init()
 	{
-		this.mapNumRows = main.puzzleTable.puzzleTable.length;
-		this.mapNumColumns = main.puzzleTable.puzzleTable[0].length;
+		this.mapSizeX = main.puzzleTable.puzzleTable.length;
+		this.mapSizeY = main.puzzleTable.puzzleTable[0].length;
 	}
 
 	public void handleKeyboard(float zoomLevel, float x, float y)
@@ -71,9 +71,9 @@ public class KeyboardHandler {
 	
 	private float checkBoundsX(float x, float bound, float aspect)
 	{
-		if(x < -1*bound*aspect - this.mapNumColumns + MOVE_BOUNDARY_BORDER_INSET)
+		if(x < -1*bound*aspect - this.mapSizeY + MOVE_BOUNDARY_BORDER_INSET)
 		{
-			x = -1*bound*aspect - this.mapNumColumns + MOVE_BOUNDARY_BORDER_INSET;
+			x = -1*bound*aspect - this.mapSizeY + MOVE_BOUNDARY_BORDER_INSET;
 		}
 		if(x > bound*aspect - MOVE_BOUNDARY_BORDER_INSET)
 		{
@@ -84,9 +84,9 @@ public class KeyboardHandler {
 	
 	private float checkBoundsY(float y, float bound)
 	{
-		if(y < -1*bound - this.mapNumRows + MOVE_BOUNDARY_BORDER_INSET)
+		if(y < -1*bound - this.mapSizeX + MOVE_BOUNDARY_BORDER_INSET)
 		{
-			y = -1*bound - this.mapNumRows + MOVE_BOUNDARY_BORDER_INSET;
+			y = -1*bound - this.mapSizeX + MOVE_BOUNDARY_BORDER_INSET;
 		}
 		if(y > bound - MOVE_BOUNDARY_BORDER_INSET)
 		{

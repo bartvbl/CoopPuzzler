@@ -15,7 +15,7 @@ public class NumberDrawer {
 		this.numberTexture = new Texture("res/numbers.png");
 	}
 	
-	public void drawNumber(int number, int row, int column, PuzzleField[][] table)
+	public void drawNumber(int number, int x, int column, PuzzleField[][] table)
 	{
 		final float OFFSETX = 0.04f;
 		final float OFFSETY = -0.03f;
@@ -34,7 +34,7 @@ public class NumberDrawer {
 		{
 			char currentChar = num.charAt(i);
 			int currentValue = (int)currentChar - 48;
-			float baseY = (row * FIELD_SIZE) + 1 + OFFSETY;
+			float baseY = (x * FIELD_SIZE) + 1 + OFFSETY;
 			float baseX = column * FIELD_SIZE + OFFSETX + i*SEPARATION;
 			if(currentValue <= 4)
 			{

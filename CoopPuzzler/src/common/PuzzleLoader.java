@@ -29,19 +29,19 @@ public class PuzzleLoader {
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(src));
 		String[] dimensionStrings = reader.readLine().split("x");
-		int rows = Integer.parseInt(dimensionStrings[0]);
-		int columns = Integer.parseInt(dimensionStrings[1]);
-		char[][] board = new char[rows][columns];
+		int sizeX = Integer.parseInt(dimensionStrings[0]);
+		int sizeY = Integer.parseInt(dimensionStrings[1]);
+		char[][] board = new char[sizeX][sizeY];
 		
-		for(int row = 0; row < rows; row++)
+		for(int x = 0; x < sizeX; x++)
 		{
 			String currentRow = reader.readLine();
-			for(int column = 0; column < columns; column++)
+			for(int y = 0; y < sizeY; y++)
 			{
-				board[row][column] = currentRow.charAt(column);
+				board[x][y] = currentRow.charAt(y);
 			}
 		}
-		PuzzleField[][] table = parsePuzzleTable(board, rows, columns);
+		PuzzleField[][] table = parsePuzzleTable(board, sizeX, sizeY);
 		if(reader.ready())
 		{
 			if(reader.readLine().startsWith("save"))
@@ -54,50 +54,50 @@ public class PuzzleLoader {
 	
 	private static void readSaveGame(BufferedReader reader, PuzzleField[][] table) throws IOException {
 		String line;
-		for(int row = 0; row < table.length; row++)
+		for(int x = 0; x < table.length; x++)
 		{
 			line = reader.readLine();
 			System.out.println("["+line+"]");
-			for(int column = 0; column < table[0].length; column++)
+			for(int y = 0; y < table[0].length; y++)
 			{
-				if(!table[row][column].isFilled)
+				if(!table[x][y].isFilled)
 				{
-					if(line.charAt(column*2) != ' ')
+					if(line.charAt(y*2) != ' ')
 					{
-						table[row][column].setFieldTextColour(new FontColour(Integer.parseInt(""+line.charAt(column*2))));
-						table[row][column].setNewCharacterValue(line.charAt((column*2)+1));
+						table[x][y].setFieldTextColour(new FontColour(Integer.parseInt(""+line.charAt(y*2))));
+						table[x][y].setNewCharacterValue(line.charAt((y*2)+1));
 					}
 				}
 			}
 		}
 	}
 
-	private static PuzzleField[][] parsePuzzleTable(char[][] board, int rows, int columns)
+	private static PuzzleField[][] parsePuzzleTable(char[][] board, int sizeX, int sizeY)
 	{
 		char fieldChar;
 		int referenceID = 1;
-		PuzzleField[][] puzzle = new PuzzleField[rows][columns];
+		PuzzleField[][] puzzle = new PuzzleField[sizeX][sizeY];
 		
-		for(int row = 0; row < rows; row++)
+		for(int x = 0; x < sizeX; x++)
 		{
-			for(int column = 0; column < columns; column++)
+			for(int y = 0; y < sizeY; y++)
 			{
-				fieldChar = board[row][column];
+				fieldChar = board[x][y];
 				if(fieldChar == '*')
 				{
-					puzzle[row][column] = new PuzzleField(true, -1, false);
+					puzzle[x][y] = new PuzzleField(true, -1, false);
 				} else if (fieldChar == ' ')
 				{
-					if(ReferenceUpdater.fieldHasReference(board, row, column))
+					if(ReferenceUpdater.fieldHasReference(board, x, y))
 					{
-						puzzle[row][column] = new PuzzleField(false, referenceID, false);
+						puzzle[x][y] = new PuzzleField(false, referenceID, false);
 						referenceID++;
 					} else {
-						puzzle[row][column] = new PuzzleField(false, -1, false);
+						puzzle[x][y] = new PuzzleField(false, -1, false);
 					}
 				} else if (fieldChar == 'i') //i for ignore
 				{
-					puzzle[row][column] = new PuzzleField(false, -1, true);
+					puzzle[x][y] = new PuzzleField(false, -1, true);
 				}
 			}
 		}

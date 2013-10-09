@@ -63,8 +63,8 @@ public class EditorMainMenuPanel implements ActionListener {
 		}
 		
 		GameStartSettings settings = new GameStartSettings(OperationMode.EDITOR, "", 0, src);
-		settings.rows = rows;
-		settings.columns = columns;
+		settings.sizeY = rows;
+		settings.sizeX = columns;
 		settings.startWithEmptyEditor = startWithEmptyBoard;
 		window.disableMainMenu();
 		main.runGame(settings);

@@ -84,7 +84,7 @@ public class ClientMain implements ProtocolConstants {
 			this.puzzleTable.loadMapFromLocalFile(gameSettings.puzzleFileSrc);
 		} else if(gameSettings.operationMode == OperationMode.EDITOR) {
 			if(gameSettings.startWithEmptyEditor) {
-				this.puzzleTable.generateEmptyMap(gameSettings.rows, gameSettings.columns);
+				this.puzzleTable.generateEmptyMap(gameSettings.sizeX, gameSettings.sizeY);
 			} else {
 				this.puzzleTable.loadMapFromLocalFile(gameSettings.puzzleFileSrc);
 			}
