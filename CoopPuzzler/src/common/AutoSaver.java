@@ -6,6 +6,9 @@ import java.io.Writer;
 
 import javax.swing.Timer;
 
+import common.puzzle.PuzzleField;
+import common.puzzle.PuzzleSaver;
+
 public class AutoSaver extends PuzzleSaver implements ActionListener {
 	private Timer timer;
 	

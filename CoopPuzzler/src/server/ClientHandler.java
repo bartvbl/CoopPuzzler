@@ -12,7 +12,8 @@ import org.lwjgl.util.Timer;
 
 import common.ProtocolConstants;
 import common.BoardUpdateEvent;
-import common.PuzzleField;
+import common.puzzle.Board;
+import common.puzzle.PuzzleField;
 
 public class ClientHandler implements Runnable,ProtocolConstants {
 	public final int clientID;
@@ -108,12 +109,12 @@ public class ClientHandler implements Runnable,ProtocolConstants {
 	{
 		output.write(BOARD_TRANSFER_START);
 		output.newLine();
-		PuzzleField[][] table = this.main.puzzleTable.puzzleTable;
-		output.write(BOARD_SIZE + " " + table.length + " " + table[0].length);
+		Board board = this.main.puzzleTable.board;
+		output.write(BOARD_SIZE + " " + board.sizeX + " " + board.sizeY);
 		flush();
-		for(int x = 0; x < table.length; x++)
+		for(int x = 0; x < board.sizeX; x++)
 		{
-			for(int y = 0; y < table[0].length; y++)
+			for(int y = 0; y < board.sizeY; y++)
 			{
 				output.write(BOARD_FIELD + " " + x + " " + y + " " + table[x][y].toString());
 				output.newLine();

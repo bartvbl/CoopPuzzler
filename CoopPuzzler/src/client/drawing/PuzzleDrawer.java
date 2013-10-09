@@ -11,8 +11,8 @@ import client.gl.Texture;
 import client.input.InputHandler;
 import client.utils.Point;
 import common.FontColour;
-import common.PuzzleField;
-import common.PuzzleTable;
+import common.puzzle.PuzzleField;
+import common.puzzle.PuzzleTable;
 import static org.lwjgl.opengl.GL11.*;
 
 public class PuzzleDrawer {

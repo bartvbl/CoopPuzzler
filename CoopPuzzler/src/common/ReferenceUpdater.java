@@ -1,16 +1,19 @@
 package common;
 
+import common.puzzle.Board;
+import common.puzzle.PuzzleField;
+
 public class ReferenceUpdater {
-	public static void updateReferences(PuzzleField[][] table) {
+	public static void updateReferences(Board board) {
 		int count = 0;
-		int sizeY = table.length;
+		int sizeY = board.length;
 		for(int i = sizeY - 1; i >= 0; i--) {
-			for(int j = 0; j < table[0].length; j++) {
-				if(!table[i][j].isFilled && !table[i][j].hasIgnoreReference && fieldHasReference(table, i, j)) {
+			for(int j = 0; j < board[0].length; j++) {
+				if(!board[i][j].isFilled && !board[i][j].hasIgnoreReference && fieldHasReference(board, i, j)) {
 					count++;
-					table[i][j].questionReference = count;
+					board[i][j].questionReference = count;
 				} else {
-					table[i][j].questionReference = -1;
+					board[i][j].questionReference = -1;
 				}
 			}
 		}

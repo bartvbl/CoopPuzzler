@@ -1,4 +1,4 @@
-package common;
+package common.puzzle;
 
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;

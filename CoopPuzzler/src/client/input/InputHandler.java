@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import common.BoardUpdateEvent;
-import common.PuzzleField;
+import common.puzzle.PuzzleField;
 
 import client.ClientMain;
 import client.utils.Point;

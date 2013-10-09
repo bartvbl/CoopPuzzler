@@ -6,7 +6,7 @@ import client.GameSettings;
 import client.OperationMode;
 import client.gl.NumberDrawer;
 import client.gl.Texture;
-import common.PuzzleField;
+import common.puzzle.PuzzleField;
 import static org.lwjgl.opengl.GL11.*;
 
 public class BoardDrawer {

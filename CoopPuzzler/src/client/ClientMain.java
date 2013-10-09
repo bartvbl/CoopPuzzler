@@ -12,8 +12,8 @@ import common.AutoSaver;
 import common.BoardUpdateEvent;
 import common.ManualSaver;
 import common.ProtocolConstants;
-import common.PuzzleTable;
 import common.ReferenceUpdater;
+import common.puzzle.PuzzleTable;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

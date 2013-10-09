@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+import common.puzzle.PuzzleField;
+import common.puzzle.PuzzleSaver;
+
 import client.gl.Texture;
 import static org.lwjgl.opengl.GL11.*;
 

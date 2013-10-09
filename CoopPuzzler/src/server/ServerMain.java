@@ -11,8 +11,8 @@ import java.util.concurrent.Executors;
 import common.AutoSaver;
 import common.BoardUpdateEvent;
 import common.ProtocolConstants;
-import common.PuzzleField;
-import common.PuzzleTable;
+import common.puzzle.PuzzleField;
+import common.puzzle.PuzzleTable;
 
 public class ServerMain implements Runnable{
 	private ServerSocket serverSocket = null;

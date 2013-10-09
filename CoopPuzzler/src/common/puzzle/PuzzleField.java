@@ -1,7 +1,10 @@
-package common;
+package common.puzzle;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+
+import common.FontColour;
+import common.ProtocolConstants;
 
 public class PuzzleField {
 	public boolean isFilled;

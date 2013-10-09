@@ -2,8 +2,8 @@ package client.input.selection;
 
 import java.util.ArrayList;
 
-import common.PuzzleField;
 import common.ReferenceUpdater;
+import common.puzzle.PuzzleField;
 
 import client.ClientMain;
 import client.utils.Point;

@@ -1,4 +1,4 @@
-package common;
+package common.puzzle;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,10 +6,13 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import common.FontColour;
+import common.ReferenceUpdater;
+
 
 public class PuzzleLoader {
 
-	public static synchronized PuzzleField[][] loadTableFromFile(String src) {
+	public static synchronized Board loadTableFromFile(String src) {
 		try
 		{
 			return loadFile(src);
@@ -25,7 +28,7 @@ public class PuzzleLoader {
 		return null;
 	}
 	
-	private static PuzzleField[][] loadFile(String src) throws IOException
+	private static Board loadFile(String src) throws IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(src));
 		String[] dimensionStrings = reader.readLine().split("x");
@@ -49,7 +52,7 @@ public class PuzzleLoader {
 				readSaveGame(reader, table);
 			}
 		}
-		return table;
+		return new Board(table);
 	}
 	
 	private static void readSaveGame(BufferedReader reader, PuzzleField[][] table) throws IOException {
