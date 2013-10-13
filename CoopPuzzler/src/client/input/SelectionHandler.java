@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
-import org.lwjgl.util.Timer;
-
 import client.ClientMain;
 import client.ClientWindow;
 import client.GameSettings;
@@ -15,7 +13,6 @@ import client.drawing.TextureLibrary;
 import client.utils.CoordConverter;
 
 import common.BoardUpdateEvent;
-import common.FontColour;
 import common.PuzzleField;
 import common.PuzzleTable;
 import common.ReferenceUpdater;
