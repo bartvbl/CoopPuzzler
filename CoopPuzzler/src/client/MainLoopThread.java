@@ -21,6 +21,8 @@ import org.lwjgl.opengl.Display;
 
 public class MainLoopThread implements Runnable{
 	private ClientMain main;
+	private int previousDisplayWidth = -1;
+	private int previousDisplayHeight = -1;
 
 	public MainLoopThread(ClientMain main)
 	{
@@ -38,15 +40,15 @@ public class MainLoopThread implements Runnable{
 		renderFrame();
 		while(main.window.jframe.isVisible() && !Display.isCloseRequested()) {
 			if(main.hasInputEvent()) {
-				//update both the front and back buffer
-				renderFrame();
-				Display.update();
-				
-				renderFrame();
-				Display.update();
+				//update both the front and back buffer, so they can be redrawn without penalty.
+				for(int i = 0; i < 3; i++) {
+					renderFrame();
+					Display.update();
+				}
+				System.out.println("Redrawing..");
 			}
 			Display.update();
-			Display.sync(50);
+			Display.sync(20);
 		}
 		System.out.println("Shutting down client..");
 		Display.destroy();
