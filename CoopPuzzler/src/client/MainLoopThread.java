@@ -16,6 +16,7 @@ import java.awt.Dimension;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 public class MainLoopThread implements Runnable{
@@ -34,33 +35,16 @@ public class MainLoopThread implements Runnable{
 	
 	public void mainLoop()
 	{
-		while(main.window.jframe.isVisible())
-		{
-			Dimension windowSize = this.main.window.getSize();
-			
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-			float windowWidth, windowHeight;
-			if((windowSize.width == 0) || (windowSize.height == 0))
-			{
-				windowWidth = 100f;
-				windowHeight = 100f;
-			} else {
-				windowWidth = windowSize.width;
-				windowHeight = windowSize.height;
+		renderFrame();
+		while(main.window.jframe.isVisible() && !Display.isCloseRequested()) {
+			if(main.hasInputEvent()) {
+				//update both the front and back buffer
+				renderFrame();
+				Display.update();
+				
+				renderFrame();
+				Display.update();
 			}
-			float aspectRatio = windowWidth/windowHeight;
-			glViewport(0, 0, (int)windowWidth, (int)windowHeight);
-			gluOrtho2D(-1 * aspectRatio, 1*aspectRatio, -1, 1);
-			
-			main.doFrame();
-			
-			glOrtho(0.0f, windowWidth, 0.0f, windowHeight, -1.0f, 1.0f);
-			
-			main.handleUI();
 			Display.update();
 			Display.sync(50);
 		}
@@ -68,5 +52,33 @@ public class MainLoopThread implements Runnable{
 		Display.destroy();
 		main.communicator.close();
 		main.shutdownInternalServer();
+	}
+	
+	private void renderFrame() {
+		Dimension windowSize = this.main.window.getSize();
+		
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		float windowWidth, windowHeight;
+		if((windowSize.width == 0) || (windowSize.height == 0))
+		{
+			windowWidth = 100f;
+			windowHeight = 100f;
+		} else {
+			windowWidth = windowSize.width;
+			windowHeight = windowSize.height;
+		}
+		float aspectRatio = windowWidth/windowHeight;
+		glViewport(0, 0, (int)windowWidth, (int)windowHeight);
+		gluOrtho2D(-1 * aspectRatio, 1*aspectRatio, -1, 1);
+		
+		main.doFrame();
+		
+		glOrtho(0.0f, windowWidth, 0.0f, windowHeight, -1.0f, 1.0f);
+		
+		main.handleUI();
 	}
 }

@@ -21,6 +21,8 @@ public class InputHandler {
 	private KeyboardHandler keyboardHandler;
 	private SelectionHandler selectionHandler;
 	
+	private boolean hasInputEvent;
+	
 	public InputHandler(ClientMain main)
 	{
 		this.mouseHandler = new MouseHandler(this);
@@ -30,8 +32,18 @@ public class InputHandler {
 	
 	public void update()
 	{
+		while(Mouse.next()) {
+			hasInputEvent = true;
+		}
+		hasInputEvent = hasInputEvent || this.keyboardHandler.haveEventsOccurred();
 		this.mouseHandler.handleMouse(this.zoomLevel);
 		this.keyboardHandler.handleKeyboard(this.zoomLevel, this.x, this.y);
+	}
+	
+	public boolean hasInputUpdate() {
+		boolean temp = hasInputEvent;
+		this.hasInputEvent = false;
+		return temp;
 	}
 	
 	public void handleSelection()

@@ -130,6 +130,11 @@ public class ClientMain implements ProtocolConstants {
 		}
 		ManualSaver.draw();
 	}
+	
+	public boolean hasInputEvent() {
+		this.inputHandler.update();
+		return this.inputHandler.hasInputUpdate();
+	}
 
 	public ArrayList<BoardUpdateEvent> getEventQueueToServer() {
 		ArrayList<BoardUpdateEvent> newList = new ArrayList<BoardUpdateEvent>();
@@ -159,7 +164,6 @@ public class ClientMain implements ProtocolConstants {
 	
 	public void serverRequestsShutDown(){
 		GameSettings.operationMode = OperationMode.LOCAL_GAME;
-		
 	}
 	
 	public void exitEditorMode() {

@@ -42,6 +42,7 @@ public class KeyboardHandler {
 		if((Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LMETA)) && Keyboard.isKeyDown(Keyboard.KEY_S)) {
 			ManualSaver.doManualSave();
 		}
+		KeyboardToCharConverter.update();
 	}
 	private float handleKeyboardInputY(float y)
 	{
@@ -93,5 +94,9 @@ public class KeyboardHandler {
 			y = bound - MOVE_BOUNDARY_BORDER_INSET;
 		}
 		return y;
+	}
+
+	public boolean haveEventsOccurred() {
+		return KeyboardToCharConverter.haveKeyboardEventsOccurred();
 	}
 }
