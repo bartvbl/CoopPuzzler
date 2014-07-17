@@ -39,14 +39,15 @@ public class MainLoopThread implements Runnable{
 	{
 		renderFrame();
 		while(main.window.jframe.isVisible() && !Display.isCloseRequested()) {
-			if(main.hasInputEvent()) {
+			if(main.hasInputEvent() || (previousDisplayWidth != Display.getWidth()) || (previousDisplayHeight != Display.getHeight())) {
 				//update both the front and back buffer, so they can be redrawn without penalty.
 				for(int i = 0; i < 3; i++) {
 					renderFrame();
 					Display.update();
 				}
-				System.out.println("Redrawing..");
 			}
+			previousDisplayWidth = Display.getWidth();
+			previousDisplayHeight = Display.getHeight();
 			Display.update();
 			Display.sync(20);
 		}
